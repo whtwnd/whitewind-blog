@@ -1,6 +1,6 @@
 ![logo](https://github.com/whtwnd/whitewind-blog/assets/5365048/f07b7309-8083-43a8-bf47-219d22a35365)
 
-#WhiteWind - The AT Protocol blogging platform -
+# WhiteWind - The AT Protocol blogging platform -
 Welcome to the repository of WhiteWind!
 
 ## What's WhiteWind?
