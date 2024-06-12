@@ -26,7 +26,9 @@ For more details, visit [WhiteWind](https://whtwnd.com)
 |Editor|<img src="https://blewit.us-west.host.bsky.network/xrpc/com.atproto.sync.getBlob?did=did%3Aplc%3Afzkpgpjj7nki7r5rhtmgzrez&cid=bafkreia5wrtzkpmwka3pksyhfo4ikpd3bdem6jkl4fxykw5s55ccxaxt4e" width=500 />|
 
 ## Contribution
-Because WhiteWind is still in early stage, in order to reduce managerial overhead and maintain development speed, contribution is currently not accepted.
+Since the architecture and functions rapidly changes, currently we do not have capacity to prepare contribution guidelines, internal design docs, planned features and milestones, etc.  
+With that said, we would appreciate it if you could contribute to our platform!  
+Besides pull requests, bug reports are always welcomed.
 
 ## What is atproto?
 atproto is a protocol to build a social app developed by Bluesky, PBC.  
