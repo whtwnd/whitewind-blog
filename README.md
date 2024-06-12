@@ -17,6 +17,18 @@ i.e. WhiteWind service itself has no power to modify, hide, delete your data.
 
 For more details, visit [WhiteWind](https://whtwnd.com)
 
+## Repository Structure
+- .devcontainer
+  - A development devcontainer. It uses a golang base image with features necessary for TypeScript development.
+- backend
+  - Contains the golang code implementing WhiteWind's XRPC API.
+- cmd/relaysink
+  - Contains WhiteWind's relay consumer.
+- frontend
+  - The frontend TypeScript code for WhiteWind implemented in Next.js.
+- lexicons
+  - Contains the Lexicon JSON files.
+
 ## Gallery
 |Page|Screenshot|
 |--|--|
