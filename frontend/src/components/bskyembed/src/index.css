@@ -1,0 +1,11 @@
+.bskyComment {
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+  font-size: 16px;
+}
+
+
+.break-word {
+  word-break: break-word;
+}

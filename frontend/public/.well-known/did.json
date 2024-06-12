@@ -1,0 +1,33 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/jws-2020/v1"
+  ],
+  "id": "did:web:whtwnd.com",
+  "verificationMethod": [
+    {
+      "id": "did:web:whtwnd.com#owner",
+      "type": "JsonWebKey2020",
+      "controller": "did:web:whtwnd.com",
+      "publicKeyJwk": {
+        "kty": "EC",
+        "crv": "secp256k1",
+        "x": "cLO2a45bIXohmXXZtFgypv1eorUym7FC7hy+G+Ys2w0=",
+        "y": "L4jmrS4oA98rsNOXNfyYktkb6eTBT/e9zzsDCGeTivI="
+      }
+    }
+  ],
+  "authentication": [
+    "did:web:whtwnd.com#owner"
+  ],
+  "assertionMethod": [
+    "did:web:whtwnd.com#owner"
+  ],
+  "service": [
+    {
+      "id": "#whitewind_blog",
+      "type": "AtprotoAppView",
+      "serviceEndpoint": "https://b481a144-23e5-4fa9-83ae-e448d3593655.whtwnd.com"
+    }
+  ]
+}

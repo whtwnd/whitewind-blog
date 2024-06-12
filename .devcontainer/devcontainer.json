@@ -1,0 +1,38 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/go
+{
+	"name": "WhiteWind",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"dockerComposeFile": "docker-compose.yml",
+	"service": "devcontainer",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers/features/aws-cli:1": {},
+		"ghcr.io/devcontainers/features/terraform:1": {},
+		"ghcr.io/devcontainers-contrib/features/typescript:2": {},
+		"ghcr.io/devcontainers-contrib/features/pnpm:2": {}
+	},
+	"postCreateCommand": "export SHELL=/usr/bin/bash && pnpm setup && export PNPM_HOME=/home/vscode/.local/share/pnpm && export PATH=$PNPM_HOME:$PATH && pnpm install -g @atproto/lex-cli prettier",
+	"workspaceFolder": "/workspaces",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"golang.go",
+				"standard.vscode-standard"
+			],
+			"settings": {
+				"go.toolsManagement.checkForUpdates": "local",
+				"go.useLanguageServer": true,
+				"go.gopath": "/go",
+				"standard.engine": "ts-standard",
+				"standard.validate": [
+					"javascript",
+					"javascriptreact",
+					"typescript",
+					"typescriptreact"
+				],
+				"typescript.preferences.importModuleSpecifier": "non-relative"
+			}
+		}
+	}
+}
