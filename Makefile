@@ -59,13 +59,15 @@ gen-com:
 	lexgen --package com_autogen --prefix com.atproto --outdir backend/common/com_autogen /workspaces/lexicons
 	find backend/common/com_autogen -type f -name '*.go' -print | xargs sed -i '1 i\//go:build exclude'
 
-# generate server-side api
-gen-whtwnd:
-	lexgen --package whtwnd_autogen --prefix com.whtwnd --outdir backend/common/whtwnd_autogen /workspaces/lexicons
-#	find backend/common/whtwnd_autogen -type f -name '*.go' -print | xargs sed -i '1 i\//go:build exclude'
-#	go run ./cmd/gen
+apply_copyright:
+	scripts/apply_copyright.sh lexicons/app
+	scripts/apply_copyright.sh lexicons/com/atproto
 
-gen-client:
+# generate server-side api
+gen-whtwnd: apply_copyright
+	lexgen --package whtwnd_autogen --prefix com.whtwnd --outdir backend/common/whtwnd_autogen /workspaces/lexicons
+
+gen-client: apply_copyright
 	lex gen-api /workspaces/frontend/src/api \
 	/workspaces/lexicons/com/atproto/repo/*.json \
 	/workspaces/lexicons/com/atproto/label/*.json \
