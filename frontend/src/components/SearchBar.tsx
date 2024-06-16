@@ -18,7 +18,7 @@ export const SearchBar: FC = () => {
 
   return (
     <div className='p-4 flex flex-col justify-center items-center'>
-      <form className='flex flex-row justify-center' onSubmit={() => { void handleSubmit(onSubmit) }}>
+      <form className='flex flex-row justify-center' onSubmit={(e) => { void handleSubmit(onSubmit)(e) }}>
         <div className='w-[50vw] lg:w-[30vw] flex relative w-full'>
           <input
             className={formState.errors.identity === undefined ? normalClass : errorClass}

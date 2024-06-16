@@ -43,6 +43,7 @@ import {
 import { AtUri } from '@atproto/api'
 import { useRouter } from 'next/navigation'
 import { CTAButton } from '@/components/CTAButton'
+import '@/views/BlogEditorV2.css'
 
 interface IMenuItemProps {
   icon?: ReactNode
@@ -75,8 +76,8 @@ const MenuItem: FC<IMenuItemProps> = ({ icon, text, href, textColor, variant, di
 
   return tooltipPos === undefined ? content : <Tooltip content={renderedText} placement={tooltipPos}>{content}</Tooltip>
 }
-const normalClass = 'block w-full border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-gray-50 text-gray-900 focus:border-sky-400 focus:ring-cyan-200 p-2.5 text-sm rounded-lg'
-const errorClass = 'block w-full border disabled:cursor-not-allowed disabled:opacity-50 border-red-500 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500 p-2.5 text-sm rounded-lg'
+const normalClass = 'block w-full border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-gray-50 text-gray-900 focus:border-sky-400 focus:ring-cyan-200 p-2.5 sm:text-sm rounded-lg'
+const errorClass = 'block w-full border disabled:cursor-not-allowed disabled:opacity-50 border-red-500 bg-red-50 text-red-900 focus:border-red-500 focus:ring-red-500 p-2.5 sm:text-sm rounded-lg'
 
 interface IPictureCardProps {
   headerUrl: string
@@ -171,6 +172,7 @@ export const BlogEditorV2: FC = () => {
   const [curPage, setCurPage] = useState<'editor' | 'preview' | 'pictures'>('editor')
   const [isBusy, setIsBusy] = useState(false)
   const [toastContent, setToastContentRaw] = useState<ToastContent | undefined>()
+  const [isMobile, setIsMobile] = useState(false)
 
   // entry info
   const [content, setContent] = useState<string>(entryInfo.entry?.content ?? '')
@@ -360,7 +362,14 @@ export const BlogEditorV2: FC = () => {
   }
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden'
+    const onSizeChange = (e: MediaQueryListEvent): void => {
+      setIsMobile(!e.matches)
+      document.body.style.overflow = e.matches ? 'hidden' : 'auto'
+    }
+    const mediaQuery = window.matchMedia('(min-width: 640px)')
+    setIsMobile(!mediaQuery.matches)
+    document.body.style.overflow = mediaQuery.matches ? 'hidden' : 'auto'
+    mediaQuery.addEventListener('change', onSizeChange)
   }, [])
 
   const onEditorChange = (value?: string): void => {
@@ -459,24 +468,38 @@ export const BlogEditorV2: FC = () => {
     disableAuthorCard
                                     />, [mdHtml, theme])
 
+  const textInputTheme = (isError: boolean): any => { return { base: 'flex grow', field: { input: { colors: { gray: (!isError ? normalClass : errorClass) }, sizes: { sm: 'p-2 sm:text-md' } } } } }
+
   const editorPage = useMemo(() => {
     return (
-      <div className='w-full h-full grid grid-cols-1 md:grid-cols-2 ring-0 focus:ring-0'>
-        <div className='max-h-[calc(100vh-75px)] overflow-auto order-2 sm:order-1'><MDEditor
-          value={content}
-          height='100%'
-          // eslint-disable-next-line
-          minHeight={"100%" as any}
-          data-color-mode='light'
-          preview='edit'
-          onChange={onEditorChange}
-                                                                                   />
+      <>{
+          isMobile &&
+            <TextInput
+              theme={textInputTheme(errors.title !== undefined)}
+              type='text'
+              placeholder='Entry title'
+              sizing='sm'
+              {...register('title', { required: true, validate: validateTitle })}
+            />
+          }
+        <div className='w-full h-full grid grid-cols-1 md:grid-cols-2 ring-0 focus:ring-0'>
+          <div className='h-[calc(50vh-80px)] sm:h-full sm:max-h-[calc(100vh-75px)] overflow-auto order-2 md:order-1'>
+            <MDEditor
+              value={content}
+              height='100%'
+              // eslint-disable-next-line
+              minHeight={"100%" as any}
+              data-color-mode='light'
+              preview='edit'
+              onChange={onEditorChange}
+            />
+          </div>
+          {/* Preview */}
+          <div className='h-[calc(50vh-80px)] sm:h-full sm:max-h-[calc(100vh-75px)] overflow-auto order-1 md:order-2'>{ViewerCache}</div>
         </div>
-        {/* Preview */}
-        <div className='max-h-[calc(100vh-75px)] overflow-auto order-1 sm:order-2'>{ViewerCache}</div>
-      </div>
+      </>
     )
-  }, [content, ViewerCache])
+  }, [isMobile, content, ViewerCache, register])
 
   const previewPage = useMemo(() => {
     return (
@@ -529,8 +552,6 @@ export const BlogEditorV2: FC = () => {
   }, [blobs, authorInfo.did, authorInfo.pds, origin, setToastContent])
 
   const leftMenuTooltipPos = !isToolPanelOpen ? 'right' : undefined
-
-  const textInputTheme = (isError: boolean): any => { return { base: 'flex grow', field: { input: { colors: { gray: (!isError ? normalClass : errorClass) } } } } }
 
   // used to show settings cog in red
   const errorInSettings = (errors.ogpUrl ?? errors.ogpWidth ?? errors.ogpHeight ?? errors.theme) !== undefined
@@ -588,20 +609,24 @@ export const BlogEditorV2: FC = () => {
   const headerItems = useMemo(() => generateToolPanelItems(true), [generateToolPanelItems])
 
   const backdropZoneRef = useRef<HTMLDivElement>(null)
+  const formOnSubmit = handleSubmit(async (d) => await onSubmit(d))
   return (
-    <form className='flex flex-col h-[100vh]' onSubmit={() => { void handleSubmit(async (d) => await onSubmit(d)) }}>
-      <Header hidePostNewEntry mainAreaClassName='px-10 grow hidden sm:flex gap-4 align-center items-center' mobileChildren={headerItems} disableSwitchAccount>
+    <form className='flex flex-col h-[100vh]' onSubmit={(e) => { void formOnSubmit(e) }}>
+      <Header title={isMobile ? '' : undefined} hidePostNewEntry mainAreaClassName='px-0 sm:px-10 sm:grow gap-4 align-center items-center' mobileChildren={headerItems} disableSwitchAccount>
         <div className='max-w-[40vw] flex items-center gap-2 relative w-full'>
           {/* Title textbox */}
-          <TextInput
-            theme={textInputTheme(errors.title !== undefined)}
-            type='text'
-            placeholder='Entry title'
-            {...register('title', { required: true, validate: validateTitle })}
-          />
+          {
+          !isMobile &&
+            <TextInput
+              theme={textInputTheme(errors.title !== undefined)}
+              type='text'
+              placeholder='Entry title'
+              {...register('title', { required: true, validate: validateTitle })}
+            />
+          }
           {errors.title !== undefined && <ErrorMessage>{errors.title.message}</ErrorMessage>}
           {/* Visibility dropdown */}
-          <div className='h-fit w-16 text-nowrap'>
+          <div className='h-fit sm:w-16 px-2 sm:px-2 text-nowrap'>
             <Dropdown
               arrowIcon={false}
               inline
