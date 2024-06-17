@@ -114,7 +114,7 @@ export const LoginModal: FC<ILoginModalProps> = ({ open, onClose }) => {
             <div className='w-full'>
               <button
                 className='flex flex-row rounded-lg bg-sky-400 text-white px-4 py-2 transition duration-200 hover:bg-sky-500 focus:ring-4 focus:ring-cyan-200'
-                onClick={() => { void handleSubmit(loginHandler) }}
+                onClick={(e) => { void handleSubmit(loginHandler)(e) }}
                 disabled={loginState === 'loggingIn'}
               >
                 <p>Log in</p>

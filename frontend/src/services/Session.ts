@@ -167,20 +167,26 @@ export const GenerateSessionManager = (): SessionManager => {
         throw new Error('Could not open session')
       }
     }
-    let sess = await getSession(did, client)
-    if (sess !== undefined) {
-      try {
+    let sess: UserData | undefined
+    try {
+      sess = await getSession(did, client)
+      if (sess !== undefined) {
         client.setHeader('Authorization', `Bearer ${sess.refreshJwt}`)
         await client.com.atproto.server.deleteSession()
+      }
+    } catch (err) {
+      console.warn(err)
+    }
+    if (sess === undefined) {
+      try {
+        sess = await getSessionStorageData(did)
       } catch (err) {
         console.warn(err)
       }
-    } else {
-      sess = await getSessionStorageData(did)
-      if (sess === undefined) {
-        // no such session is stored
-        return
-      }
+    }
+    if (sess === undefined) {
+      // no such session is stored
+      return
     }
 
     const transaction = db.transaction([SessionStore], 'readwrite')

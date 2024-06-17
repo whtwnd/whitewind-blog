@@ -129,7 +129,7 @@ export const BlueskyShareArea: FC<IBlueskyShareButtonProps> = () => {
   return (
     <Card>
       <h3 className='pb-1 text-xl font-semibold text-gray-700'>Post reaction in Bluesky</h3>
-      <form className='space-y-2' onSubmit={() => { void handleSubmit(onSubmit) }}>
+      <form className='space-y-2' onSubmit={(e) => { void handleSubmit(onSubmit)(e) }}>
         <Textarea
           id='comment'
           placeholder='Leave a comment...'
