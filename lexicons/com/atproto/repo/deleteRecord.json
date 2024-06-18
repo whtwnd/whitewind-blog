@@ -1,53 +1,52 @@
 {
-  "description": "© 2024 Bluesky, PBC. All rights reserved. | https://github.com/bluesky-social/atproto/blob/main/LICENSE-MIT.txt",
-  "lexicon": 1,
-  "id": "com.atproto.repo.deleteRecord",
-  "defs": {
-    "main": {
-      "type": "procedure",
-      "description": "Delete a record, or ensure it doesn't exist.",
-      "input": {
-        "encoding": "application/json",
-        "schema": {
-          "type": "object",
-          "required": [
-            "repo",
-            "collection",
-            "rkey"
-          ],
-          "properties": {
-            "repo": {
-              "type": "string",
-              "format": "at-identifier",
-              "description": "The handle or DID of the repo."
+    "lexicon": 1,
+    "id": "com.atproto.repo.deleteRecord",
+    "defs": {
+        "main": {
+            "type": "procedure",
+            "description": "Delete a record, or ensure it doesn't exist.",
+            "input": {
+                "encoding": "application/json",
+                "schema": {
+                    "type": "object",
+                    "required": [
+                        "repo",
+                        "collection",
+                        "rkey"
+                    ],
+                    "properties": {
+                        "repo": {
+                            "type": "string",
+                            "format": "at-identifier",
+                            "description": "The handle or DID of the repo."
+                        },
+                        "collection": {
+                            "type": "string",
+                            "format": "nsid",
+                            "description": "The NSID of the record collection."
+                        },
+                        "rkey": {
+                            "type": "string",
+                            "description": "The key of the record."
+                        },
+                        "swapRecord": {
+                            "type": "string",
+                            "format": "cid",
+                            "description": "Compare and swap with the previous record by CID."
+                        },
+                        "swapCommit": {
+                            "type": "string",
+                            "format": "cid",
+                            "description": "Compare and swap with the previous commit by CID."
+                        }
+                    }
+                }
             },
-            "collection": {
-              "type": "string",
-              "format": "nsid",
-              "description": "The NSID of the record collection."
-            },
-            "rkey": {
-              "type": "string",
-              "description": "The key of the record."
-            },
-            "swapRecord": {
-              "type": "string",
-              "format": "cid",
-              "description": "Compare and swap with the previous record by CID."
-            },
-            "swapCommit": {
-              "type": "string",
-              "format": "cid",
-              "description": "Compare and swap with the previous commit by CID."
-            }
-          }
+            "errors": [
+                {
+                    "name": "InvalidSwap"
+                }
+            ]
         }
-      },
-      "errors": [
-        {
-          "name": "InvalidSwap"
-        }
-      ]
     }
-  }
 }

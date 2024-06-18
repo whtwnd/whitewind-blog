@@ -1,33 +1,18 @@
 {
-  "description": "© 2024 Bluesky, PBC. All rights reserved. | https://github.com/bluesky-social/atproto/blob/main/LICENSE-MIT.txt",
   "lexicon": 1,
   "id": "app.bsky.feed.defs",
   "defs": {
     "postView": {
       "type": "object",
-      "required": [
-        "uri",
-        "cid",
-        "author",
-        "record",
-        "indexedAt"
-      ],
+      "required": ["uri", "cid", "author", "record", "indexedAt"],
       "properties": {
-        "uri": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "cid": {
-          "type": "string",
-          "format": "cid"
-        },
+        "uri": { "type": "string", "format": "at-uri" },
+        "cid": { "type": "string", "format": "cid" },
         "author": {
           "type": "ref",
           "ref": "app.bsky.actor.defs#profileViewBasic"
         },
-        "record": {
-          "type": "unknown"
-        },
+        "record": { "type": "unknown" },
         "embed": {
           "type": "union",
           "refs": [
@@ -37,73 +22,34 @@
             "app.bsky.embed.recordWithMedia#view"
           ]
         },
-        "replyCount": {
-          "type": "integer"
-        },
-        "repostCount": {
-          "type": "integer"
-        },
-        "likeCount": {
-          "type": "integer"
-        },
-        "indexedAt": {
-          "type": "string",
-          "format": "datetime"
-        },
-        "viewer": {
-          "type": "ref",
-          "ref": "#viewerState"
-        },
+        "replyCount": { "type": "integer" },
+        "repostCount": { "type": "integer" },
+        "likeCount": { "type": "integer" },
+        "indexedAt": { "type": "string", "format": "datetime" },
+        "viewer": { "type": "ref", "ref": "#viewerState" },
         "labels": {
           "type": "array",
-          "items": {
-            "type": "ref",
-            "ref": "com.atproto.label.defs#label"
-          }
+          "items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
         },
-        "threadgate": {
-          "type": "ref",
-          "ref": "#threadgateView"
-        }
+        "threadgate": { "type": "ref", "ref": "#threadgateView" }
       }
     },
     "viewerState": {
       "type": "object",
       "description": "Metadata about the requesting account's relationship with the subject content. Only has meaningful content for authed requests.",
       "properties": {
-        "repost": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "like": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "replyDisabled": {
-          "type": "boolean"
-        }
+        "repost": { "type": "string", "format": "at-uri" },
+        "like": { "type": "string", "format": "at-uri" },
+        "replyDisabled": { "type": "boolean" }
       }
     },
     "feedViewPost": {
       "type": "object",
-      "required": [
-        "post"
-      ],
+      "required": ["post"],
       "properties": {
-        "post": {
-          "type": "ref",
-          "ref": "#postView"
-        },
-        "reply": {
-          "type": "ref",
-          "ref": "#replyRef"
-        },
-        "reason": {
-          "type": "union",
-          "refs": [
-            "#reasonRepost"
-          ]
-        },
+        "post": { "type": "ref", "ref": "#postView" },
+        "reply": { "type": "ref", "ref": "#replyRef" },
+        "reason": { "type": "union", "refs": ["#reasonRepost"] },
         "feedContext": {
           "type": "string",
           "description": "Context provided by feed generator that may be passed back alongside interactions.",
@@ -113,162 +59,78 @@
     },
     "replyRef": {
       "type": "object",
-      "required": [
-        "root",
-        "parent"
-      ],
+      "required": ["root", "parent"],
       "properties": {
         "root": {
           "type": "union",
-          "refs": [
-            "#postView",
-            "#notFoundPost",
-            "#blockedPost"
-          ]
+          "refs": ["#postView", "#notFoundPost", "#blockedPost"]
         },
         "parent": {
           "type": "union",
-          "refs": [
-            "#postView",
-            "#notFoundPost",
-            "#blockedPost"
-          ]
+          "refs": ["#postView", "#notFoundPost", "#blockedPost"]
         }
       }
     },
     "reasonRepost": {
       "type": "object",
-      "required": [
-        "by",
-        "indexedAt"
-      ],
+      "required": ["by", "indexedAt"],
       "properties": {
-        "by": {
-          "type": "ref",
-          "ref": "app.bsky.actor.defs#profileViewBasic"
-        },
-        "indexedAt": {
-          "type": "string",
-          "format": "datetime"
-        }
+        "by": { "type": "ref", "ref": "app.bsky.actor.defs#profileViewBasic" },
+        "indexedAt": { "type": "string", "format": "datetime" }
       }
     },
     "threadViewPost": {
       "type": "object",
-      "required": [
-        "post"
-      ],
+      "required": ["post"],
       "properties": {
-        "post": {
-          "type": "ref",
-          "ref": "#postView"
-        },
+        "post": { "type": "ref", "ref": "#postView" },
         "parent": {
           "type": "union",
-          "refs": [
-            "#threadViewPost",
-            "#notFoundPost",
-            "#blockedPost"
-          ]
+          "refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"]
         },
         "replies": {
           "type": "array",
           "items": {
             "type": "union",
-            "refs": [
-              "#threadViewPost",
-              "#notFoundPost",
-              "#blockedPost"
-            ]
+            "refs": ["#threadViewPost", "#notFoundPost", "#blockedPost"]
           }
         }
       }
     },
     "notFoundPost": {
       "type": "object",
-      "required": [
-        "uri",
-        "notFound"
-      ],
+      "required": ["uri", "notFound"],
       "properties": {
-        "uri": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "notFound": {
-          "type": "boolean",
-          "const": true
-        }
+        "uri": { "type": "string", "format": "at-uri" },
+        "notFound": { "type": "boolean", "const": true }
       }
     },
     "blockedPost": {
       "type": "object",
-      "required": [
-        "uri",
-        "blocked",
-        "author"
-      ],
+      "required": ["uri", "blocked", "author"],
       "properties": {
-        "uri": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "blocked": {
-          "type": "boolean",
-          "const": true
-        },
-        "author": {
-          "type": "ref",
-          "ref": "#blockedAuthor"
-        }
+        "uri": { "type": "string", "format": "at-uri" },
+        "blocked": { "type": "boolean", "const": true },
+        "author": { "type": "ref", "ref": "#blockedAuthor" }
       }
     },
     "blockedAuthor": {
       "type": "object",
-      "required": [
-        "did"
-      ],
+      "required": ["did"],
       "properties": {
-        "did": {
-          "type": "string",
-          "format": "did"
-        },
-        "viewer": {
-          "type": "ref",
-          "ref": "app.bsky.actor.defs#viewerState"
-        }
+        "did": { "type": "string", "format": "did" },
+        "viewer": { "type": "ref", "ref": "app.bsky.actor.defs#viewerState" }
       }
     },
     "generatorView": {
       "type": "object",
-      "required": [
-        "uri",
-        "cid",
-        "did",
-        "creator",
-        "displayName",
-        "indexedAt"
-      ],
+      "required": ["uri", "cid", "did", "creator", "displayName", "indexedAt"],
       "properties": {
-        "uri": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "cid": {
-          "type": "string",
-          "format": "cid"
-        },
-        "did": {
-          "type": "string",
-          "format": "did"
-        },
-        "creator": {
-          "type": "ref",
-          "ref": "app.bsky.actor.defs#profileView"
-        },
-        "displayName": {
-          "type": "string"
-        },
+        "uri": { "type": "string", "format": "at-uri" },
+        "cid": { "type": "string", "format": "cid" },
+        "did": { "type": "string", "format": "did" },
+        "creator": { "type": "ref", "ref": "app.bsky.actor.defs#profileView" },
+        "displayName": { "type": "string" },
         "description": {
           "type": "string",
           "maxGraphemes": 300,
@@ -276,64 +138,31 @@
         },
         "descriptionFacets": {
           "type": "array",
-          "items": {
-            "type": "ref",
-            "ref": "app.bsky.richtext.facet"
-          }
+          "items": { "type": "ref", "ref": "app.bsky.richtext.facet" }
         },
-        "avatar": {
-          "type": "string",
-          "format": "uri"
-        },
-        "likeCount": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "acceptsInteractions": {
-          "type": "boolean"
-        },
+        "avatar": { "type": "string", "format": "uri" },
+        "likeCount": { "type": "integer", "minimum": 0 },
+        "acceptsInteractions": { "type": "boolean" },
         "labels": {
           "type": "array",
-          "items": {
-            "type": "ref",
-            "ref": "com.atproto.label.defs#label"
-          }
+          "items": { "type": "ref", "ref": "com.atproto.label.defs#label" }
         },
-        "viewer": {
-          "type": "ref",
-          "ref": "#generatorViewerState"
-        },
-        "indexedAt": {
-          "type": "string",
-          "format": "datetime"
-        }
+        "viewer": { "type": "ref", "ref": "#generatorViewerState" },
+        "indexedAt": { "type": "string", "format": "datetime" }
       }
     },
     "generatorViewerState": {
       "type": "object",
       "properties": {
-        "like": {
-          "type": "string",
-          "format": "at-uri"
-        }
+        "like": { "type": "string", "format": "at-uri" }
       }
     },
     "skeletonFeedPost": {
       "type": "object",
-      "required": [
-        "post"
-      ],
+      "required": ["post"],
       "properties": {
-        "post": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "reason": {
-          "type": "union",
-          "refs": [
-            "#skeletonReasonRepost"
-          ]
-        },
+        "post": { "type": "string", "format": "at-uri" },
+        "reason": { "type": "union", "refs": ["#skeletonReasonRepost"] },
         "feedContext": {
           "type": "string",
           "description": "Context that will be passed through to client and may be passed to feed generator back alongside interactions.",
@@ -343,46 +172,27 @@
     },
     "skeletonReasonRepost": {
       "type": "object",
-      "required": [
-        "repost"
-      ],
+      "required": ["repost"],
       "properties": {
-        "repost": {
-          "type": "string",
-          "format": "at-uri"
-        }
+        "repost": { "type": "string", "format": "at-uri" }
       }
     },
     "threadgateView": {
       "type": "object",
       "properties": {
-        "uri": {
-          "type": "string",
-          "format": "at-uri"
-        },
-        "cid": {
-          "type": "string",
-          "format": "cid"
-        },
-        "record": {
-          "type": "unknown"
-        },
+        "uri": { "type": "string", "format": "at-uri" },
+        "cid": { "type": "string", "format": "cid" },
+        "record": { "type": "unknown" },
         "lists": {
           "type": "array",
-          "items": {
-            "type": "ref",
-            "ref": "app.bsky.graph.defs#listViewBasic"
-          }
+          "items": { "type": "ref", "ref": "app.bsky.graph.defs#listViewBasic" }
         }
       }
     },
     "interaction": {
       "type": "object",
       "properties": {
-        "item": {
-          "type": "string",
-          "format": "at-uri"
-        },
+        "item": { "type": "string", "format": "at-uri" },
         "event": {
           "type": "string",
           "knownValues": [
