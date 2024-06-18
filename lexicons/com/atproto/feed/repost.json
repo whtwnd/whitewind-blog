@@ -1,5 +1,4 @@
 {
-  "description": "© 2024 Bluesky, PBC. | https://github.com/bluesky-social/atproto/blob/main/LICENSE-MIT.txt",
   "lexicon": 1,
   "id": "app.bsky.feed.repost",
   "defs": {
@@ -9,19 +8,10 @@
       "key": "tid",
       "record": {
         "type": "object",
-        "required": [
-          "subject",
-          "createdAt"
-        ],
+        "required": ["subject", "createdAt"],
         "properties": {
-          "subject": {
-            "type": "ref",
-            "ref": "com.atproto.repo.strongRef"
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "datetime"
-          }
+          "subject": { "type": "ref", "ref": "com.atproto.repo.strongRef" },
+          "createdAt": { "type": "string", "format": "datetime" }
         }
       }
     }

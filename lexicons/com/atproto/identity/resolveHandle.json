@@ -1,39 +1,38 @@
 {
-  "description": "© 2024 Bluesky, PBC. | https://github.com/bluesky-social/atproto/blob/main/LICENSE-MIT.txt",
-  "lexicon": 1,
-  "id": "com.atproto.identity.resolveHandle",
-  "defs": {
-    "main": {
-      "type": "query",
-      "description": "Resolves a handle (domain name) to a DID.",
-      "parameters": {
-        "type": "params",
-        "required": [
-          "handle"
-        ],
-        "properties": {
-          "handle": {
-            "type": "string",
-            "format": "handle",
-            "description": "The handle to resolve."
-          }
-        }
-      },
-      "output": {
-        "encoding": "application/json",
-        "schema": {
-          "type": "object",
-          "required": [
-            "did"
-          ],
-          "properties": {
-            "did": {
-              "type": "string",
-              "format": "did"
+    "lexicon": 1,
+    "id": "com.atproto.identity.resolveHandle",
+    "defs": {
+        "main": {
+            "type": "query",
+            "description": "Resolves a handle (domain name) to a DID.",
+            "parameters": {
+                "type": "params",
+                "required": [
+                    "handle"
+                ],
+                "properties": {
+                    "handle": {
+                        "type": "string",
+                        "format": "handle",
+                        "description": "The handle to resolve."
+                    }
+                }
+            },
+            "output": {
+                "encoding": "application/json",
+                "schema": {
+                    "type": "object",
+                    "required": [
+                        "did"
+                    ],
+                    "properties": {
+                        "did": {
+                            "type": "string",
+                            "format": "did"
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     }
-  }
 }

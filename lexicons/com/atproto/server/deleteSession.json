@@ -1,11 +1,10 @@
 {
-  "description": "© 2024 Bluesky, PBC. | https://github.com/bluesky-social/atproto/blob/main/LICENSE-MIT.txt",
-  "lexicon": 1,
-  "id": "com.atproto.server.deleteSession",
-  "defs": {
-    "main": {
-      "type": "procedure",
-      "description": "Delete the current session. Requires auth."
+    "lexicon": 1,
+    "id": "com.atproto.server.deleteSession",
+    "defs": {
+        "main": {
+            "type": "procedure",
+            "description": "Delete the current session. Requires auth."
+        }
     }
-  }
 }

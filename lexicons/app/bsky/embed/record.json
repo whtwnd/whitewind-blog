@@ -1,50 +1,50 @@
 {
-  "description": "© 2024 Bluesky, PBC. | https://github.com/bluesky-social/atproto/blob/main/LICENSE-MIT.txt",
-  "lexicon": 1,
-  "id": "app.bsky.embed.record",
-  "defs": {
-    "main": {
-      "type": "object",
-      "required": [
-        "record"
-      ],
-      "properties": {
-        "record": {
-          "type": "ref",
-          "ref": "com.atproto.repo.strongRef"
-        }
-      }
-    },
-    "view": {
-      "type": "object",
-      "required": [
-        "record"
-      ],
-      "properties": {
-        "record": {
-          "type": "union",
-          "refs": [
-            "#viewNotFound"
-          ]
-        }
-      }
-    },
-    "viewNotFound": {
-      "type": "object",
-      "required": [
-        "uri",
-        "notFound"
-      ],
-      "properties": {
-        "uri": {
-          "type": "string",
-          "format": "at-uri"
+    "lexicon": 1,
+    "id": "app.bsky.embed.record",
+    "description": "A representation of a record embedded in a Bluesky record (eg, a post). For example, a quote-post, or sharing a feed generator record.",
+    "defs": {
+        "main": {
+            "type": "object",
+            "required": [
+                "record"
+            ],
+            "properties": {
+                "record": {
+                    "type": "ref",
+                    "ref": "com.atproto.repo.strongRef"
+                }
+            }
         },
-        "notFound": {
-          "type": "boolean",
-          "const": true
+        "view": {
+            "type": "object",
+            "required": [
+                "record"
+            ],
+            "properties": {
+                "record": {
+                    "type": "union",
+                    "refs": [
+                        "#viewNotFound"
+                    ]
+                }
+            }
+        },
+        "viewNotFound": {
+            "type": "object",
+            "required": [
+                "uri",
+                "notFound"
+            ],
+            "properties": {
+                "uri": {
+                    "type": "string",
+                    "format": "at-uri"
+                },
+                "notFound": {
+                    "type": "boolean",
+                    "const": true
+                }
+            }
         }
-      }
     }
-  }
 }

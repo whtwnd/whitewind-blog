@@ -1,72 +1,71 @@
 {
-  "description": "© 2024 Bluesky, PBC. | https://github.com/bluesky-social/atproto/blob/main/LICENSE-MIT.txt",
-  "lexicon": 1,
-  "id": "app.bsky.feed.post",
-  "defs": {
-    "main": {
-      "type": "record",
-      "description": "Record containing a Bluesky post.",
-      "key": "tid",
-      "record": {
-        "type": "object",
-        "required": [
-          "text",
-          "createdAt"
-        ],
-        "properties": {
-          "text": {
-            "type": "string",
-            "maxLength": 3000,
-            "maxGraphemes": 300,
-            "description": "The primary post content. May be an empty string, if there are embeds."
-          },
-          "facets": {
-            "type": "array",
-            "description": "Annotations of text (mentions, URLs, hashtags, etc)",
-            "items": {
-              "type": "ref",
-              "ref": "app.bsky.richtext.facet"
+    "lexicon": 1,
+    "id": "app.bsky.feed.post",
+    "defs": {
+        "main": {
+            "type": "record",
+            "description": "Record containing a Bluesky post.",
+            "key": "tid",
+            "record": {
+                "type": "object",
+                "required": [
+                    "text",
+                    "createdAt"
+                ],
+                "properties": {
+                    "text": {
+                        "type": "string",
+                        "maxLength": 3000,
+                        "maxGraphemes": 300,
+                        "description": "The primary post content. May be an empty string, if there are embeds."
+                    },
+                    "facets": {
+                        "type": "array",
+                        "description": "Annotations of text (mentions, URLs, hashtags, etc)",
+                        "items": {
+                            "type": "ref",
+                            "ref": "app.bsky.richtext.facet"
+                        }
+                    },
+                    "embed": {
+                        "type": "union",
+                        "refs": [
+                            "app.bsky.embed.external"
+                        ]
+                    },
+                    "langs": {
+                        "type": "array",
+                        "description": "Indicates human language of post primary text content.",
+                        "maxLength": 3,
+                        "items": {
+                            "type": "string",
+                            "format": "language"
+                        }
+                    },
+                    "labels": {
+                        "type": "union",
+                        "description": "Self-label values for this post. Effectively content warnings.",
+                        "refs": [
+                            "com.atproto.label.defs#selfLabels"
+                        ]
+                    },
+                    "tags": {
+                        "type": "array",
+                        "description": "Additional hashtags, in addition to any included in post text and facets.",
+                        "maxLength": 8,
+                        "items": {
+                            "type": "string",
+                            "maxLength": 640,
+                            "maxGraphemes": 64
+                        }
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "datetime",
+                        "description": "Client-declared timestamp when this post was originally created."
+                    }
+                }
             }
-          },
-          "embed": {
-            "type": "union",
-            "refs": [
-              "app.bsky.embed.external"
-            ]
-          },
-          "langs": {
-            "type": "array",
-            "description": "Indicates human language of post primary text content.",
-            "maxLength": 3,
-            "items": {
-              "type": "string",
-              "format": "language"
-            }
-          },
-          "labels": {
-            "type": "union",
-            "description": "Self-label values for this post. Effectively content warnings.",
-            "refs": [
-              "com.atproto.label.defs#selfLabels"
-            ]
-          },
-          "tags": {
-            "type": "array",
-            "description": "Additional hashtags, in addition to any included in post text and facets.",
-            "maxLength": 8,
-            "items": {
-              "type": "string",
-              "maxLength": 640,
-              "maxGraphemes": 64
-            }
-          },
-          "createdAt": {
-            "type": "string",
-            "format": "datetime",
-            "description": "Client-declared timestamp when this post was originally created."
-          }
         }
-      }
     }
-  }
 }
