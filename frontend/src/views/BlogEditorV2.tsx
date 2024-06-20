@@ -173,6 +173,7 @@ export const BlogEditorV2: FC = () => {
   const [isBusy, setIsBusy] = useState(false)
   const [toastContent, setToastContentRaw] = useState<ToastContent | undefined>()
   const [isMobile, setIsMobile] = useState(false)
+  const isDirtyRef = useRef(false)
 
   // entry info
   const [content, setContent] = useState<string>(entryInfo.entry?.content ?? '')
@@ -320,6 +321,7 @@ export const BlogEditorV2: FC = () => {
       setIsBusy(false)
       return
     }
+    isDirtyRef.current = false
 
     const aturi = new AtUri(createResult.uri)
 
@@ -370,6 +372,19 @@ export const BlogEditorV2: FC = () => {
     setIsMobile(!mediaQuery.matches)
     document.body.style.overflow = mediaQuery.matches ? 'hidden' : 'auto'
     mediaQuery.addEventListener('change', onSizeChange)
+
+    const onBeforeUnload = (e: BeforeUnloadEvent): string | undefined => {
+      if (!isDirtyRef.current) {
+        return
+      }
+      e.preventDefault()
+      return ''
+    }
+    window.addEventListener('beforeunload', onBeforeUnload)
+    return () => {
+      mediaQuery.removeEventListener('change', onSizeChange)
+      window.removeEventListener('beforeunload', onBeforeUnload)
+    }
   }, [])
 
   const onEditorChange = (value?: string): void => {
@@ -377,6 +392,7 @@ export const BlogEditorV2: FC = () => {
     contentRef.current = value ?? ''
   }
   const onContentChange = (): void => {
+    isDirtyRef.current = true
     if (previewTimerRef.current !== undefined) {
       return
     }
