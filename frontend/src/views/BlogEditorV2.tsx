@@ -373,7 +373,7 @@ export const BlogEditorV2: FC = () => {
     document.body.style.overflow = mediaQuery.matches ? 'hidden' : 'auto'
     mediaQuery.addEventListener('change', onSizeChange)
 
-    const onLeave = (e: BeforeUnloadEvent | PageTransitionEvent | PopStateEvent): string | undefined => {
+    const onLeave = (e: BeforeUnloadEvent | PageTransitionEvent): string | undefined => {
       if (!isDirtyRef.current) {
         return
       }
