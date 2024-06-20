@@ -373,17 +373,19 @@ export const BlogEditorV2: FC = () => {
     document.body.style.overflow = mediaQuery.matches ? 'hidden' : 'auto'
     mediaQuery.addEventListener('change', onSizeChange)
 
-    const onBeforeUnload = (e: BeforeUnloadEvent): string | undefined => {
+    const onLeave = (e: BeforeUnloadEvent | PageTransitionEvent): string | undefined => {
       if (!isDirtyRef.current) {
         return
       }
       e.preventDefault()
       return ''
     }
-    window.addEventListener('beforeunload', onBeforeUnload)
+    window.addEventListener('beforeunload', onLeave)
+    window.addEventListener('pagehide', onLeave)
     return () => {
       mediaQuery.removeEventListener('change', onSizeChange)
-      window.removeEventListener('beforeunload', onBeforeUnload)
+      window.removeEventListener('beforeunload', onLeave)
+      window.removeEventListener('pagehide', onLeave)
     }
   }, [])
 
