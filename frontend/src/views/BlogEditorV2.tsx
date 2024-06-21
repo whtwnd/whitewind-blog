@@ -38,7 +38,8 @@ import {
   IoCloseCircle,
   IoAlertCircle,
   IoOpenOutline,
-  IoListOutline
+  IoListOutline,
+  IoHelpOutline
 } from 'react-icons/io5'
 import { AtUri } from '@atproto/api'
 import { useRouter } from 'next/navigation'
@@ -174,6 +175,7 @@ export const BlogEditorV2: FC = () => {
   const [toastContent, setToastContentRaw] = useState<ToastContent | undefined>()
   const [isMobile, setIsMobile] = useState(false)
   const isDirtyRef = useRef(false)
+  const [langCode, setLangCode] = useState('en-US')
 
   // entry info
   const [content, setContent] = useState<string>(entryInfo.entry?.content ?? '')
@@ -364,6 +366,8 @@ export const BlogEditorV2: FC = () => {
   }
 
   useEffect(() => {
+    setLangCode(window.navigator.language)
+
     const onSizeChange = (e: MediaQueryListEvent): void => {
       setIsMobile(!e.matches)
       document.body.style.overflow = e.matches ? 'hidden' : 'auto'
@@ -591,12 +595,17 @@ export const BlogEditorV2: FC = () => {
     ]
 
     const forthItems: IMenuItemProps[] = [
-      // { text: 'Help', icon: <IoHelpOutline size={20} color='#374151' />, onClick: undefined },
       { text: 'Open article', icon: <IoOpenOutline size={20} color='#374151' />, onClick: undefined, href: `/${authorInfo.handle as string}/${entryInfo.rkey as string}`, disabled: entryInfo.rkey === undefined },
       { text: 'Open entry list', icon: <IoListOutline size={20} color='#374151' />, onClick: undefined, href: `/${authorInfo.handle ?? ''}` }
     ]
 
-    const allItems = [firstItems, secondItems, thirdItems, forthItems]
+    const enUsage = '/whtwnd.com/3kt3lixripz2s'
+    const jaUsage = '/whtwnd.com/3kt3kd3pq5k2y'
+    const fifthItems: IMenuItemProps[] = [
+      { text: 'Usage', icon: <IoHelpOutline size={20} color='#374151' />, onClick: undefined, href: langCode.startsWith('ja') ? jaUsage : enUsage }
+    ]
+
+    const allItems = [firstItems, secondItems, thirdItems, forthItems, fifthItems]
 
     return (
       <>
@@ -651,8 +660,8 @@ export const BlogEditorV2: FC = () => {
               label={<VisibilityBadge visibility={visibility} showPublic />}
             >
               <Dropdown.Item className='cursor-pointer' onClick={() => { setVisibility('public') }}><VisibilityBadge visibility='public' showPublic /></Dropdown.Item>
-              <Dropdown.Item className='cursor-pointer' onClick={() => setVisibility('url')}><VisibilityBadge visibility='url' showPublic /></Dropdown.Item>
-              <Dropdown.Item className='cursor-pointer' onClick={() => setVisibility('author')}><VisibilityBadge visibility='author' showPublic /></Dropdown.Item>
+              <Tooltip content={<p>This only applies to whtwnd.com. The raw data is public.<br />For details, visit usage page.</p>} placement={!isMobile ? 'left' : 'bottom'}><Dropdown.Item className='cursor-pointer' onClick={() => setVisibility('url')}><VisibilityBadge visibility='url' showPublic /></Dropdown.Item></Tooltip>
+              <Tooltip content={<p>This only applies to whtwnd.com. The raw data is public.<br />For details, visit usage page.</p>} placement={!isMobile ? 'left' : 'bottom'}><Dropdown.Item className='cursor-pointer' onClick={() => setVisibility('author')}><VisibilityBadge visibility='author' showPublic /></Dropdown.Item></Tooltip>
             </Dropdown>
           </div>
         </div>
