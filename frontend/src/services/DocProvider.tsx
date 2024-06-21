@@ -127,8 +127,8 @@ const customSchema = {
       'dataInstgrmVersion'
     ],
     iframe: [
-      'width', 'height', 'title', 'frameborder', 'allow', 'referrerpolicy', 'allowfullscreen',
-      ['src', /https:\/\/www.youtube.com\/.*/]
+      'width', 'height', 'title', 'frameborder', 'allow', 'referrerpolicy', 'allowfullscreen', 'style', 'seamless',
+      ['src', /https:\/\/(www.youtube.com|bandcamp.com)\/.*/]
     ]
   },
   tagNames: [...(defaultSchema.tagNames ?? []), 'font', 'mark', 'iframe']
