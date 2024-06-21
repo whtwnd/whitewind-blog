@@ -11,7 +11,7 @@ export function middleware (request: NextRequest): NextResponse {
   font-src 'self' data:;
   connect-src 'self' https: */xrpc/; 
   object-src 'none'; 
-  frame-src 'self' embed.bsky.app platform.twitter.com www.youtube.com www.instagram.com
+  frame-src 'self' embed.bsky.app platform.twitter.com www.youtube.com www.instagram.com bandcamp.com
 `
 
   const cspHeaderProd = `
@@ -23,7 +23,7 @@ export function middleware (request: NextRequest): NextResponse {
   font-src 'self' data:;
   connect-src 'self' https: */xrpc/; 
   object-src 'none'; 
-  frame-src 'self' embed.bsky.app platform.twitter.com www.youtube.com www.instagram.com
+  frame-src 'self' embed.bsky.app platform.twitter.com www.youtube.com www.instagram.com bandcamp.com
 `
   const cspHeader = process.env.NODE_ENV === 'development' ? cspHeaderDev : cspHeaderProd
   // Replace newline characters and spaces
