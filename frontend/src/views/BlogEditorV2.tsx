@@ -691,7 +691,7 @@ export const BlogEditorV2: FC = () => {
               ? <Tooltip content='Saving changes'><IoRadioButtonOnOutline color='#9ca3af' /></Tooltip>
               : isDirtyRef.current
                 ? <Tooltip content='Changes not saved'><IoRadioButtonOnOutline color='#fbbf24' /></Tooltip>
-                : <Tooltip content='Saved'><IoRadioButtonOffOutline color='#0369a1' /></Tooltip>
+                : <Tooltip content='Saved'><IoRadioButtonOffOutline color='#9ca3af' /></Tooltip>
             }
           </div>
         </div>
