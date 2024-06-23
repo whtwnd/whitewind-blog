@@ -90,7 +90,12 @@ function BlogViewer ({ mdHtml, disableComments, disableAuthorCard, disableShareB
                             <BlueskyShareIconButton color='rgb(10,122,255)' tooltipDirection='bottom' />
                             <TwitterShareIconButton color='black' tooltipDirection='bottom' />
                             <ThreadsShareIconButton color='black' tooltipDirection='bottom' />
-                            <PermalinkIconButton tooltipDirection='bottom' />
+                            <div className='group relative cursor-pointer flex flex-row gap-1'>
+                              <PermalinkIconButton tooltipDirection='right' />
+                              <div className='hidden absolute top-12 group-hover:block'>
+                                <PermalinkIconButton strict color='#030712' tooltipDirection='right' />
+                              </div>
+                            </div>
                           </div>
                     }
         </section>

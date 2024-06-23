@@ -7,6 +7,7 @@ export interface IEntryContextValue {
   rkey?: string
   cid?: string
   comments?: number
+  strictNotFound?: boolean
 }
 
 export const EntryContext = createContext<IEntryContextValue>({})

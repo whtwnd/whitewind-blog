@@ -27,7 +27,17 @@ export default async function Page ({ params: { authorIdentity, rkey } }: { para
 export async function PageSkeleton (authorIdentity: string, rkey: string, cid?: string): Promise<JSX.Element> {
   const ident = decodeURIComponent(authorIdentity)
 
-  const { contextWrapperProps, docRaw } = await PrepareContext({ ident, rkey, cid })
+  let { contextWrapperProps, docRaw } = await PrepareContext({ ident, rkey, cid })
+  let contentChanged = false
+  if (docRaw === undefined && cid !== undefined) {
+    // fallback if entry is not found and cid is specified
+    const result = (await PrepareContext({ ident, rkey }))
+    contextWrapperProps = result.contextWrapperProps
+    docRaw = result.docRaw
+    if (contextWrapperProps !== undefined) {
+      contentChanged = true
+    }
+  }
   if (contextWrapperProps.did === undefined) {
     throw new Error(`Could not find did for ${ident}`)
   }
@@ -52,8 +62,8 @@ export async function PageSkeleton (authorIdentity: string, rkey: string, cid?: 
     <ContextWrapper {...contextWrapperProps}>
       {
             docRaw.isDraft !== true && docRaw.visibility !== 'author'
-              ? <BlogViewerPage docRaw={docRaw} authorInfo={authorInfo} aturi={aturi} scripts={scripts} mdHtml={mdHtml.result} nonce={nonce ?? undefined} />
-              : <BlogViewerGuard aturi={aturi} pds={contextWrapperProps.pds} ogpUrl={docRaw.ogp?.url} />
+              ? <BlogViewerPage docRaw={docRaw} authorInfo={authorInfo} aturi={aturi} scripts={scripts} mdHtml={mdHtml.result} nonce={nonce ?? undefined} contentChanged={contentChanged} />
+              : <BlogViewerGuard aturi={aturi} cid={cid} />
         }
     </ContextWrapper>
   )

@@ -3,7 +3,6 @@
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
 import { SessionContext } from '@/contexts/SessionContext'
 import { createClient } from '@/services/clientUtils'
-import { BlogViewerProps } from '@/views/BlogViewer'
 import { AtUri } from '@atproto/api'
 import { Spinner } from 'flowbite-react'
 import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
@@ -12,13 +11,19 @@ import { MarkdownToHtml } from '@/services/DocProvider'
 import { BlogViewerPage } from '@/services/commonComponentUtils'
 import Header from '@/components/Headers/Header'
 
-export const BlogViewerGuard: FC<Omit<BlogViewerProps, 'mdHtml'>> = (props) => {
+export interface IBlogViewerGuardProps {
+  aturi: string
+  cid?: string
+}
+
+export const BlogViewerGuard: FC<IBlogViewerGuardProps> = (props) => {
   const authorInfo = useContext(AuthorInfoContext)
   const manager = useContext(SessionContext)
   const [isAuthor, setIsAuthor] = useState<boolean | undefined>(undefined)
   const [mdHtml, setMdHtml] = useState<JSX.Element | undefined>()
   const [docRaw, setDocRaw] = useState<ComWhtwndBlogEntry.Record | undefined>()
   const [scripts, setScripts] = useState<string[]>([])
+  const [contentChanged, setContentChanged] = useState(false)
   const fetching = useRef(false)
   const LoadingCache = useMemo(() => (
     <div className='flex flex-col h-screen'>
@@ -43,7 +48,22 @@ export const BlogViewerGuard: FC<Omit<BlogViewerProps, 'mdHtml'>> = (props) => {
       return
     }
     const aturi = new AtUri(props.aturi)
-    const body = await client.com.whtwnd.blog.entry.get({ repo: authorInfo.did, rkey: aturi.rkey })
+    let body: Awaited<ReturnType<typeof client.com.whtwnd.blog.entry.get>> | undefined
+    try {
+      body = await client.com.whtwnd.blog.entry.get({ repo: authorInfo.did, rkey: aturi.rkey, cid: props.cid })
+    } catch (err) {
+      if (props.cid === undefined) {
+        console.error(err)
+        throw err
+      }
+    }
+    if (body === undefined && props.cid !== undefined) {
+      body = await client.com.whtwnd.blog.entry.get({ repo: authorInfo.did, rkey: aturi.rkey })
+      setContentChanged(true)
+    }
+    if (body === undefined) {
+      throw new Error('Could not retrieve entry')
+    }
     const docRaw = body.value
 
     const scripts: string[] = []
@@ -75,7 +95,7 @@ export const BlogViewerGuard: FC<Omit<BlogViewerProps, 'mdHtml'>> = (props) => {
     if (!isAuthor || (mdHtml === undefined) || docRaw === undefined || authorInfo.did === undefined) {
       return <></>
     }
-    return <BlogViewerPage docRaw={docRaw} authorInfo={authorInfo} aturi={props.aturi ?? ''} scripts={scripts} mdHtml={mdHtml} />
+    return <BlogViewerPage docRaw={docRaw} authorInfo={authorInfo} aturi={props.aturi ?? ''} scripts={scripts} mdHtml={mdHtml} contentChanged={contentChanged} />
   }, [isAuthor, LoadingCache, authorInfo, docRaw, mdHtml, props.aturi, scripts])
 
   return Elem

@@ -34,7 +34,12 @@ const LeftOverlayBlogViewer: React.FC<LeftOverlayProps> = () => {
       <BlueskyShareIconButton />
       <TwitterShareIconButton />
       <ThreadsShareIconButton />
-      <PermalinkIconButton />
+      <div className='group relative cursor-pointer flex flex-row gap-1'>
+        <PermalinkIconButton tooltipDirection='top' />
+        <div className='hidden absolute left-12 group-hover:block'>
+          <PermalinkIconButton strict color='#030712' tooltipDirection='top' />
+        </div>
+      </div>
       <div className='flex align-center items-center h-10'>
         <ChatBubbleIcon color='action' />
         <span className='ml-1'>{numComments}</span>

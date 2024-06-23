@@ -18,9 +18,10 @@ export interface BuildBlogViewerArgs {
   scripts: string[]
   mdHtml: JSX.Element
   nonce?: string
+  contentChanged?: boolean
 }
 
-export const BlogViewerPage: FC<BuildBlogViewerArgs> = ({ docRaw, authorInfo, aturi, scripts, mdHtml, nonce }) => {
+export const BlogViewerPage: FC<BuildBlogViewerArgs> = ({ docRaw, authorInfo, aturi, scripts, mdHtml, nonce, contentChanged }) => {
   return (
     <>
       <ThreeColumnBlogView
@@ -31,6 +32,7 @@ export const BlogViewerPage: FC<BuildBlogViewerArgs> = ({ docRaw, authorInfo, at
           lastUpdate={docRaw.createdAt ?? new Date().toISOString()}
           ogpUrl={docRaw.ogp?.url}
           visibility={docRaw.isDraft === true ? 'author' : docRaw.visibility}
+          contentChanged={contentChanged}
               />}
         left={<LeftOverlayBlogViewer
           authorIdentity={authorInfo.did ?? ''}

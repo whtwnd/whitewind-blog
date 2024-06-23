@@ -1,4 +1,5 @@
 import { ComWhtwndBlogEntry } from '@/api'
+import ContentsChangeBadge from '@/components/ContentsChangeBadge'
 import LocalTime from '@/components/LocalTime'
 import VisibilityBadge from '@/components/VisibilityBadge'
 import { GetReplacedGetBlobURL } from '@/services/commonUtils'
@@ -11,9 +12,10 @@ export interface IEntryHeroSectionProps {
   lastUpdate: string
   ogpUrl?: string
   visibility?: ComWhtwndBlogEntry.Record['visibility']
+  contentChanged?: boolean
 }
 
-export const EntryHeroSection: FC<IEntryHeroSectionProps> = ({ title, did, handle, lastUpdate, ogpUrl, visibility }) => {
+export const EntryHeroSection: FC<IEntryHeroSectionProps> = ({ title, did, handle, lastUpdate, ogpUrl, visibility, contentChanged }) => {
   const titleLines = title.split('\n')
   const isOgpEmpty = ogpUrl === undefined || ogpUrl.length === 0
 
@@ -48,8 +50,9 @@ export const EntryHeroSection: FC<IEntryHeroSectionProps> = ({ title, did, handl
             <h2 className={subtitleClassName}><time><LocalTime datetime={lastUpdate} datetimeFallback={<p>{lastUpdate}</p>} /></time></h2>
 
             {/* badge area */}
-            <div>
+            <div className='flex flex-row gap-1'>
               {visibility === 'author' && <VisibilityBadge visibility='author' />}
+              {contentChanged === true && <ContentsChangeBadge />}
             </div>
           </div>
         </div>
