@@ -182,7 +182,7 @@ export const BlogEditorV2: FC = () => {
   // entry info
   const [content, setContent] = useState<string>(entryInfo.entry?.content ?? '')
   const [blobs, setBlobs] = useState(entryInfo.entry?.blobs)
-  const [visibility, setVisibility] = useState(entryInfo.entry?.isDraft === true ? 'author' : (entryInfo.entry?.visibility ?? 'public'))
+  const [visibility, setVisibility] = useState(entryInfo.entry?.isDraft === true ? 'author' : (entryInfo.entry?.visibility ?? 'author'))
 
   const sessManager = useMemo(GenerateSessionManager, [])
 
