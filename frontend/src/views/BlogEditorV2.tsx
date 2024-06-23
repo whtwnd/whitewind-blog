@@ -39,7 +39,9 @@ import {
   IoAlertCircle,
   IoOpenOutline,
   IoListOutline,
-  IoHelpOutline
+  IoHelpOutline,
+  IoRadioButtonOnOutline,
+  IoRadioButtonOffOutline
 } from 'react-icons/io5'
 import { AtUri } from '@atproto/api'
 import { useRouter } from 'next/navigation'
@@ -186,7 +188,7 @@ export const BlogEditorV2: FC = () => {
 
   const router = useRouter()
 
-  const { handleSubmit, register, watch, control } = useForm<FormValues>({
+  const { handleSubmit, register, watch, control, getValues } = useForm<FormValues>({
     defaultValues: {
       title: entryInfo.entry?.title,
       theme: entryInfo.entry?.theme ?? 'github-light',
@@ -202,7 +204,9 @@ export const BlogEditorV2: FC = () => {
   const { title, theme, ogpUrl } = watch()
 
   const PREVIEW_TIMER_MILLISECONDS = 500
+  const AUTOSAVE_TIMER_MILLISECONDS = 10 * 1000
   const previewTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>()
+  const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>()
   const contentRef = useRef(content)
   const [mdHtml, setMdHtml] = useState<JSX.Element | undefined>()
 
@@ -218,21 +222,27 @@ export const BlogEditorV2: FC = () => {
     }, 5000)
   }, [])
 
-  const onSubmit = useCallback(async (value: FormValues, picFile?: File): Promise<void> => {
+  const onSubmit = useCallback(async (value: FormValues, picFile?: File, disableToast?: boolean): Promise<void> => {
     if (isBusy) {
       return
     }
+    const showToast = (content: ToastContent): void => {
+      if (disableToast === true) {
+        return
+      }
+      setToastContent(content)
+    }
     if (authorInfo.did === undefined) {
-      setToastContent({ message: 'Please login to save', severity: 'error' })
+      showToast({ message: 'Please login to save', severity: 'error' })
       requestAuth()
       return
     }
     if (content === undefined) {
-      setToastContent({ message: 'Content data is undefined', severity: 'error' })
+      showToast({ message: 'Content data is undefined', severity: 'error' })
       return
     }
     if (authorInfo.pds === undefined) {
-      setToastContent({ message: 'Could not resolve PDS of the author', severity: 'error' })
+      showToast({ message: 'Could not resolve PDS of the author', severity: 'error' })
       return
     }
     setIsBusy(true)
@@ -246,10 +256,10 @@ export const BlogEditorV2: FC = () => {
     try {
       sess = await sessManager.getSession(did, client)
     } catch (err) {
-      setToastContent({ message: `Failed to login (${(err as Error).message})`, severity: 'error' })
+      showToast({ message: `Failed to login (${(err as Error).message})`, severity: 'error' })
     }
     if (sess === undefined) {
-      setToastContent({ message: 'Session expired. Please fill in login info.', severity: 'warning' })
+      showToast({ message: 'Session expired. Please fill in login info.', severity: 'warning' })
       requestAuth()
       setIsBusy(false)
       return
@@ -261,14 +271,14 @@ export const BlogEditorV2: FC = () => {
     let newBlobMetadata: BlobMetadata | undefined
     let newBlobRefs: BlobMetadata[] | undefined = blobs
     if (picFile !== undefined) {
-      setToastContent({ message: 'Uploading picture...', severity: 'info' })
+      showToast({ message: 'Uploading picture...', severity: 'info' })
 
       const picData = new Uint8Array(await picFile.arrayBuffer())
       let uploadBlobResult: ComAtprotoRepoUploadBlob.Response | undefined
       try {
         uploadBlobResult = await client.com.atproto.repo.uploadBlob(picData, { encoding: picFile.type })
       } catch (err) {
-        setToastContent({ message: `Failed to upload picture (${(err as Error).message}) `, severity: 'error' })
+        showToast({ message: `Failed to upload picture (${(err as Error).message}) `, severity: 'error' })
         setIsBusy(false)
         return
       }
@@ -312,14 +322,14 @@ export const BlogEditorV2: FC = () => {
     let createResult: { uri: string, cid: string }
 
     try {
-      setToastContent({ message: 'Writing record...', severity: 'info' })
+      showToast({ message: 'Writing record...', severity: 'info' })
       if (entryInfo.rkey === undefined) {
         createResult = await client.com.whtwnd.blog.entry.create({ repo: did, collection: 'com.whtwnd.blog.entry', validate: false }, blogEntry)
       } else {
         createResult = (await client.com.atproto.repo.putRecord({ repo: did, collection: 'com.whtwnd.blog.entry', rkey: entryInfo.rkey, record: blogEntry, validate: false })).data
       }
     } catch (err) {
-      setToastContent({ message: `Failed to write record (${(err as Error).message}) `, severity: 'error' })
+      showToast({ message: `Failed to write record (${(err as Error).message}) `, severity: 'error' })
       setIsBusy(false)
       return
     }
@@ -335,7 +345,7 @@ export const BlogEditorV2: FC = () => {
     try {
       await appViewClient.com.whtwnd.blog.notifyOfNewEntry({ entryUri: createResult.uri })
     } catch (err) {
-      setToastContent({ message: `Failed to notify WhiteWind of new entry (${(err as Error).message}) `, severity: 'error' })
+      showToast({ message: `Failed to notify WhiteWind of new entry (${(err as Error).message}) `, severity: 'error' })
       return
     } finally {
       setIsBusy(false)
@@ -344,10 +354,10 @@ export const BlogEditorV2: FC = () => {
     // if current url author part or rkey part is different from selected profile in header, navigate to the url
     if (authorInfo.did !== did || entryInfo.rkey !== aturi.rkey) {
       const newUri = `/${authorInfo.handle ?? authorInfo.did}/${aturi.rkey}/edit`
-      setToastContent({ message: 'Succeeded in writing the entry! Refreshing editor...', severity: 'success' })
+      showToast({ message: 'Succeeded in writing the entry! Refreshing editor...', severity: 'success' })
       router.push(newUri)
     } else {
-      setToastContent({ message: 'Succeeded in writing the entry!', severity: 'success' })
+      showToast({ message: 'Succeeded in writing the entry!', severity: 'success' })
     }
   }, [isBusy, blobs, content, entryInfo.rkey, requestAuth, sessManager, visibility, authorInfo.did, authorInfo.handle, router, authorInfo.pds, setToastContent])
 
@@ -394,22 +404,32 @@ export const BlogEditorV2: FC = () => {
   }, [])
 
   const onEditorChange = (value?: string): void => {
+    isDirtyRef.current = true
     setContent(value ?? '')
     contentRef.current = value ?? ''
   }
-  const onContentChange = (): void => {
-    isDirtyRef.current = true
-    if (previewTimerRef.current !== undefined) {
-      return
+  const onContentChange = useCallback((): void => {
+    if (previewTimerRef.current === undefined) {
+      // preview PREVIEW_TIMER_MILLISECONDS later since first change
+      previewTimerRef.current = setTimeout(() => {
+        void MarkdownToHtml(contentRef.current ?? '')
+          .then(ret => {
+            setMdHtml(ret.result)
+            previewTimerRef.current = undefined
+          })
+      }, PREVIEW_TIMER_MILLISECONDS)
     }
-    previewTimerRef.current = setTimeout(() => {
-      void MarkdownToHtml(contentRef.current ?? '')
-        .then(ret => {
-          setMdHtml(ret.result)
-          previewTimerRef.current = undefined
-        })
-    }, PREVIEW_TIMER_MILLISECONDS)
-  }
+    // auto save
+    // save AUTOSAVE_TIMER_MILLISECONDS later since last change
+    if (autosaveTimerRef.current !== undefined) {
+      clearTimeout(autosaveTimerRef.current)
+    }
+    autosaveTimerRef.current = setTimeout(() => {
+      onSubmit(getValues(), undefined, true).finally(() => {
+        autosaveTimerRef.current = undefined
+      })
+    }, AUTOSAVE_TIMER_MILLISECONDS)
+  }, [onSubmit, getValues])
   useEffect(() => onContentChange(), [content])
 
   const onDeleteConfirmationModalClose = (confirmed: boolean): void => {
@@ -653,7 +673,7 @@ export const BlogEditorV2: FC = () => {
           }
           {errors.title !== undefined && <ErrorMessage>{errors.title.message}</ErrorMessage>}
           {/* Visibility dropdown */}
-          <div className='h-fit sm:w-16 px-2 sm:px-2 text-nowrap'>
+          <div className='h-fit px-2 sm:px-2 text-nowrap'>
             <Dropdown
               arrowIcon={false}
               inline
@@ -663,6 +683,16 @@ export const BlogEditorV2: FC = () => {
               <Tooltip content={<p>This only applies to whtwnd.com. The raw data is public.<br />For details, visit usage page.</p>} placement={!isMobile ? 'left' : 'bottom'}><Dropdown.Item className='cursor-pointer' onClick={() => setVisibility('url')}><VisibilityBadge visibility='url' showPublic /></Dropdown.Item></Tooltip>
               <Tooltip content={<p>This only applies to whtwnd.com. The raw data is public.<br />For details, visit usage page.</p>} placement={!isMobile ? 'left' : 'bottom'}><Dropdown.Item className='cursor-pointer' onClick={() => setVisibility('author')}><VisibilityBadge visibility='author' showPublic /></Dropdown.Item></Tooltip>
             </Dropdown>
+          </div>
+          {/* Auto save */}
+          <div>
+            {
+            isBusy
+              ? <Tooltip content='Saving changes'><IoRadioButtonOnOutline color='#9ca3af' /></Tooltip>
+              : isDirtyRef.current
+                ? <Tooltip content='Changes not saved'><IoRadioButtonOnOutline color='#fbbf24' /></Tooltip>
+                : <Tooltip content='Saved'><IoRadioButtonOffOutline color='#9ca3af' /></Tooltip>
+            }
           </div>
         </div>
       </Header>
