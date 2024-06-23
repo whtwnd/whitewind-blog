@@ -419,6 +419,9 @@ export const BlogEditorV2: FC = () => {
           })
       }, PREVIEW_TIMER_MILLISECONDS)
     }
+    if (title === undefined || title.length === 0) {
+      return
+    }
     // auto save
     // save AUTOSAVE_TIMER_MILLISECONDS later since last change
     if (autosaveTimerRef.current !== undefined) {
@@ -496,7 +499,6 @@ export const BlogEditorV2: FC = () => {
       })
     } catch (err) {
       setToastContent({ message: `Failed to delete the entry (${(err as Error).message})`, severity: 'error' })
-    } finally {
       setIsBusy(false)
     }
   }, [isBusy, authorInfo.did, authorInfo.handle, authorInfo.pds, curProfile, entryInfo.rkey, requestAuth, router, sessManager, setToastContent])
