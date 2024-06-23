@@ -419,9 +419,6 @@ export const BlogEditorV2: FC = () => {
           })
       }, PREVIEW_TIMER_MILLISECONDS)
     }
-    if (entryInfo.rkey === undefined) {
-      return
-    }
     // auto save
     // save AUTOSAVE_TIMER_MILLISECONDS later since last change
     if (autosaveTimerRef.current !== undefined) {
