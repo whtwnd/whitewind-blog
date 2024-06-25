@@ -178,6 +178,7 @@ export const BlogEditorV2: FC = () => {
   const [isMobile, setIsMobile] = useState(false)
   const isDirtyRef = useRef(false)
   const [langCode, setLangCode] = useState('en-US')
+  const cursorPosRef = useRef(0)
 
   // entry info
   const [content, setContent] = useState<string>(entryInfo.entry?.content ?? '')
@@ -222,7 +223,7 @@ export const BlogEditorV2: FC = () => {
     }, 5000)
   }, [])
 
-  const onSubmit = useCallback(async (value: FormValues, picFile?: File, disableToast?: boolean): Promise<void> => {
+  const onSubmit = useCallback(async (value: FormValues, pic?: { file: File, autoInsert: boolean }, disableToast?: boolean): Promise<void> => {
     if (isBusy) {
       return
     }
@@ -270,13 +271,13 @@ export const BlogEditorV2: FC = () => {
     // upload image if any
     let newBlobMetadata: BlobMetadata | undefined
     let newBlobRefs: BlobMetadata[] | undefined = blobs
-    if (picFile !== undefined) {
+    if (pic?.file !== undefined) {
       showToast({ message: 'Uploading picture...', severity: 'info' })
 
-      const picData = new Uint8Array(await picFile.arrayBuffer())
+      const picData = new Uint8Array(await pic.file.arrayBuffer())
       let uploadBlobResult: ComAtprotoRepoUploadBlob.Response | undefined
       try {
-        uploadBlobResult = await client.com.atproto.repo.uploadBlob(picData, { encoding: picFile.type })
+        uploadBlobResult = await client.com.atproto.repo.uploadBlob(picData, { encoding: pic.file.type })
       } catch (err) {
         showToast({ message: `Failed to upload picture (${(err as Error).message}) `, severity: 'error' })
         setIsBusy(false)
@@ -285,13 +286,19 @@ export const BlogEditorV2: FC = () => {
       if (uploadBlobResult !== undefined) {
         newBlobMetadata = {
           blobref: uploadBlobResult.data.blob,
-          encoding: picFile.type,
-          name: picFile.name
+          encoding: pic.file.type,
+          name: pic.file.name
         }
         newBlobRefs =
           blobs !== undefined
             ? [...blobs, newBlobMetadata]
             : [newBlobMetadata]
+        if (pic.autoInsert) {
+          const picLink = `![](https://${authorInfo.pds}/xrpc/com.atproto.sync.getBlob?did=${encodeURIComponent(did)}&cid=${uploadBlobResult.data.blob.ref.toString()})`
+          const newContent = contentRef.current.slice(0, cursorPosRef.current) + picLink + contentRef.current.slice(cursorPosRef.current)
+          contentRef.current = newContent
+          setContent(contentRef.current)
+        }
       }
     }
     if (newBlobRefs !== undefined) {
@@ -304,7 +311,7 @@ export const BlogEditorV2: FC = () => {
 
     // create record
     const blogEntry: BlogEntry = {
-      content,
+      content: contentRef.current,
       createdAt: (new Date()).toISOString(),
       title: value.title,
       theme: value.theme === NO_THEME ? undefined : value.theme,
@@ -367,12 +374,12 @@ export const BlogEditorV2: FC = () => {
       return
     }
     const file = files[0]
-    void handleSubmit(async (data: FormValues) => await onSubmit(data, file))(event)
+    void handleSubmit(async (data: FormValues) => await onSubmit(data, { file, autoInsert: false }))(event)
     event.target.value = ''
   }, [handleSubmit, onSubmit])
 
   const onDropPic = (f: File): void => {
-    void handleSubmit(async (data: FormValues) => await onSubmit(data, f))()
+    void handleSubmit(async (data: FormValues) => await onSubmit(data, { file: f, autoInsert: true }))()
   }
 
   useEffect(() => {
@@ -536,6 +543,9 @@ export const BlogEditorV2: FC = () => {
               data-color-mode='light'
               preview='edit'
               onChange={onEditorChange}
+              textareaProps={{
+                onSelect: (e) => { cursorPosRef.current = e.currentTarget.selectionStart }
+              }}
             />
           </div>
           {/* Preview */}
