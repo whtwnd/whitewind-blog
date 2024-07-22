@@ -44,19 +44,19 @@ const RetrieveEntries = async (metadata: EntryMetadata[], top = 10, orderby: 'da
 
   const results = await Promise.all(target.map(async (meta) => {
     do {
-      const rkey = meta.rkey
-      const pds = pdsMap.get(meta.authorDid) ?? (await ResolvePDS(meta.authorDid))
-      const profile = profileMap.get(meta.authorDid) ?? (await agent.getProfile({ actor: meta.authorDid })).data
-      // store it in case cache miss
-      profileMap.set(meta.authorDid, profile)
-      if (pds === undefined) {
-        meta = reserved[0]
-        reserved = reserved.slice(1)
-        continue
-      }
-      const client = createClient(pds)
       for (let i = 0; i < 3; i++) {
         try {
+          const rkey = meta.rkey
+          const pds = pdsMap.get(meta.authorDid) ?? (await ResolvePDS(meta.authorDid))
+          const profile = profileMap.get(meta.authorDid) ?? (await agent.getProfile({ actor: meta.authorDid })).data
+          // store it in case cache miss
+          profileMap.set(meta.authorDid, profile)
+          if (pds === undefined) {
+            meta = reserved[0]
+            reserved = reserved.slice(1)
+            continue
+          }
+          const client = createClient(pds)
           const result = await client.com.whtwnd.blog.entry.get({ repo: meta.authorDid, rkey }).then(entry => { return { entry: entry.value, pds, rkey, comments: meta.comments, profile } })
           if (result.entry.isDraft === true || result.entry.visibility === 'url' || result.entry.visibility === 'author') {
             break // treat as failed
