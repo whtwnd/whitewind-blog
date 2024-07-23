@@ -36,6 +36,8 @@ export const Header: FC<IHeaderProps> = ({ title, children, mobileChildren, hide
   const prevScrollPos = useRef(0)
   const [visible, setVisible] = useState(true)
 
+  const isLoggedIn = profiles[selected] !== undefined;
+
   const handleScroll = useCallback(() => {
     const currentScrollPos = window.scrollY
 
@@ -53,7 +55,7 @@ export const Header: FC<IHeaderProps> = ({ title, children, mobileChildren, hide
   }, [])
 
   const onPostNewEntryClick = useCallback(() => {
-    if (profiles[selected] !== undefined) {
+    if (isLoggedIn) {
       router.push(`/${profiles[selected].handle}/edit`)
       return
     }
@@ -168,7 +170,7 @@ export const Header: FC<IHeaderProps> = ({ title, children, mobileChildren, hide
           })}
           <Dropdown.Divider />
           {
-                        profiles[selected] !== undefined &&
+                        isLoggedIn &&
                           <a href={`/${profiles[selected].handle}`}>
                             <Dropdown.Item>
                               View my entries
@@ -179,12 +181,12 @@ export const Header: FC<IHeaderProps> = ({ title, children, mobileChildren, hide
             Post new entry
           </Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item onClick={() => setIsLoginModalOpen(true)}>Sign in with Bluesky account</Dropdown.Item>
-          {profiles[selected] !== undefined && <Dropdown.Item onClick={() => setIsLogoutModalOpen(true)}>Sign out</Dropdown.Item>}
-          <Dropdown.Divider />
-          <a href='https://bsky.app' target='_blank' rel='noreferrer'>
+          {!isLoggedIn && <Dropdown.Item onClick={() => setIsLoginModalOpen(true)}>Sign in with Bluesky account</Dropdown.Item>}
+          { isLoggedIn && <Dropdown.Item onClick={() => setIsLogoutModalOpen(true)}>Sign out</Dropdown.Item>}
+          {!isLoggedIn && <Dropdown.Divider />}
+          {!isLoggedIn && <a href='https://bsky.app' target='_blank' rel='noreferrer'>
             <Dropdown.Item>Sign up (opens Bluesky)</Dropdown.Item>
-          </a>
+          </a>}
         </Dropdown>
         <Navbar.Toggle onClick={(e) => { e.preventDefault(); collapseOpenRef.current = !collapseOpen; setCollapseOpen(!collapseOpen) }} />
       </div>
@@ -205,7 +207,7 @@ export const Header: FC<IHeaderProps> = ({ title, children, mobileChildren, hide
       </Navbar.Collapse>
       <LoginModal open={isLoginModalOpen} onClose={onLoginModalClose} />
       {
-                profiles[selected] !== undefined && <LogoutModal
+                isLoggedIn && <LogoutModal
                   identity={profiles[selected].did}
                   open={isLogoutModalOpen}
                   onClose={onLogoutModalClose}
