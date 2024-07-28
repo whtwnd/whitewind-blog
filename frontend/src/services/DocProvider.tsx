@@ -33,7 +33,11 @@ const production = {
   components: {
     script: () => <></>,
     ul: (props: JSX.IntrinsicElements['ul']) => <ul {...props} className='list-disc text-gray-700' />,
-    ol: (props: JSX.IntrinsicElements['ol']) => <ol {...props} className='list-decimal text-gray-700' />
+    ol: (props: JSX.IntrinsicElements['ol']) => <ol {...props} className='list-decimal text-gray-700' />,
+    p: (props: JSX.IntrinsicElements['p']) => <p {...props} className='leading-7' />,
+    iframe: (props: JSX.IntrinsicElements['iframe']) => {
+      return <div className='w-full flex justify-center'><iframe {...props} className='max-w-full' /></div>
+    }
   }
 }
 
@@ -89,11 +93,13 @@ const GenerateRehypeScriptDetect = (scripts: string[]): Plugin<any, Root, Node> 
   return rehypeScriptDetector
 }
 
-const recursiveGetBlobReplacer = (child: Node): void => {
+const recursiveModifier = (child: Node): void => {
   if (child.type !== 'element') {
     return
   }
   const elem = child as Element
+
+  // Replace image URL that starts with com.atproto.sync.getBlob with our CDN one
   const src = elem.properties.src
   if (src !== undefined && typeof src === 'string') {
     const replaced = GetReplacedGetBlobURL(src)
@@ -101,12 +107,12 @@ const recursiveGetBlobReplacer = (child: Node): void => {
       elem.properties.src = replaced
     }
   }
-  elem.children.forEach(child => recursiveGetBlobReplacer(child))
+  elem.children.forEach(child => recursiveModifier(child))
 }
 
 const rehypeGetBlobReplacer: Plugin<any, Root, Node> = () => {
   return (tree) => {
-    tree.children.forEach(child => recursiveGetBlobReplacer(child))
+    tree.children.forEach(child => recursiveModifier(child))
   }
 }
 
