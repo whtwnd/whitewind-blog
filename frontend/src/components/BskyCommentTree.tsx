@@ -37,17 +37,18 @@ export const BskyCommentTree: FC<IBskyCommentTreeProps> = ({ thread }) => {
         <Post thread={curThread} onExpandClick={onExpandClick} />
       </div>
     )
-    const newHiddenStack = [...foldStack, curHidden || (states.get(cur.thread.post.cid) === true)]
+    const newHiddenStack = [...foldStack, curHidden || (states.get(curThread.post.cid) === true)]
 
     threads.push(elem)
-    if (cur.thread.replies === undefined) {
+    if (curThread.replies === undefined) {
       continue
     }
-    for (const reply of cur.thread.replies.reverse()) {
+    for (let i = 0; i < curThread.replies.length; i++) {
+      const reply = curThread.replies[curThread.replies.length - 1 - i]
       if (isThreadViewPost(reply)) {
-        remain.push({ thread: reply, level: cur.level + 1, foldStack: newHiddenStack })
+        remain.push({ thread: reply, level: level + 1, foldStack: newHiddenStack })
       }
     }
   }
-  return <>{threads}</>
+  return <div>{threads}</div>
 }
