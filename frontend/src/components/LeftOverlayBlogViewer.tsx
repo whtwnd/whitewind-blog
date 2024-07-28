@@ -30,7 +30,7 @@ const LeftOverlayBlogViewer: React.FC<LeftOverlayProps> = () => {
   }
 
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div className='flex flex-col items-center'>
       <BlueskyShareIconButton />
       <TwitterShareIconButton />
       <ThreadsShareIconButton />
