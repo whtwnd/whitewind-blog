@@ -4,6 +4,7 @@ import { AppBskyFeedDefs, AppBskyFeedPost, RichText } from '@atproto/api'
 import LikeIcon from '../../assets/heart2_filled_stroke2_corner0_rounded.svg'
 import Logo from '../../assets/logo.svg'
 import RepostIcon from '../../assets/repost_stroke2_corner2_rounded.svg'
+import ReplyIcon from '../../assets/bubble_filled_stroke2_corner2_rounded.svg'
 import { CONTENT_LABELS } from '../labels'
 import { getRkey, niceDate } from '../utils'
 import { Container } from './container'
@@ -14,9 +15,10 @@ import { useEffect, useState } from 'react'
 interface Props {
   thread: AppBskyFeedDefs.ThreadViewPost
   error?: boolean
+  onExpandClick?: () => void
 }
 
-export function Post ({ thread, error }: Props) {
+export function Post ({ thread, error, onExpandClick }: Props) {
   const post = thread.post
   const [date, setDate] = useState('')
   useEffect(() => {
@@ -107,20 +109,34 @@ export function Post ({ thread, error }: Props) {
         </div>
         <PostContent record={record} />
         <Embed content={post.embed} labels={post.labels} />
-        <div className='flex items-center gap-1 cursor-pointer'>
-          {!!post.likeCount && (<>
-            <LikeIcon className='w-5 h-5' />
-            <p className='font-bold text-neutral-500 mb-px'>
-              {post.likeCount}
-            </p>
-          </>)}
-          {!!post.repostCount && (<>
-            <RepostIcon className='w-5 h-5' />
-            <p className='font-bold text-neutral-500 mb-px'>
-              {post.repostCount}
-            </p>
-          </>
+        <div className='flex items-center gap-1'>
+          {(post.likeCount ?? 0) > 0 && (
+            <>
+              <LikeIcon className='w-5 h-5' />
+              <p className='font-bold text-neutral-500 mb-px'>
+                {post.likeCount}
+              </p>
+            </>
           )}
+          {(post.repostCount ?? 0) > 0 && (
+            <>
+              <RepostIcon className='w-5 h-5' />
+              <p className='font-bold text-neutral-500 mb-px'>
+                {post.repostCount}
+              </p>
+            </>
+          )}
+          {
+            onExpandClick !== undefined && (post.replyCount ?? 0) > 0 &&
+              <>
+                <button className='flex items-center gap-1 hover:underline' onClick={onExpandClick}>
+                  <ReplyIcon className='w-5 h-5' />
+                  <p className='font-bold text-sky-600 mb-px'>
+                    {post.replyCount}
+                  </p>
+                </button>
+              </>
+          }
         </div>
         <div className='flex-1' />
         <div className='border-t w-full pt-2.5 flex items-center gap-5 text-sm cursor-pointer' />
