@@ -39,9 +39,9 @@ export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }
       const authors = [...(new Set(mentionAtUris.map(aturi => aturi.hostname)))]
 
       // fetch mention bodies
-      const postUris = []
-      const entryUris = []
-      const otherUris = []
+      const postUris: AtUri[] = []
+      const entryUris: AtUri[] = []
+      const otherUris: AtUri[] = []
       for (const uri of mentionAtUris) {
         if (uri.collection === 'app.bsky.feed.post') {
           postUris.push(uri)
@@ -59,6 +59,7 @@ export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }
           cid: string
           value: ComWhtwndBlogEntry.Record
         }
+        uri?: AtUri
       }
       const threadPromise = Promise.all(postUris.map(async uri => {
         const response = await (agent.getPostThread({
@@ -90,6 +91,7 @@ export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }
       const profiles = new Map(rawProfiles.map(profile => [profile.did, profile]))
 
       // render
+      threadOrEntries.push(...otherUris.map(uri => ({ uri })))
       threadOrEntries.push(...entries)
       // oldest first (because we will pop this array from tail)
       threadOrEntries.sort((a_, b_) => {
@@ -108,21 +110,22 @@ export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }
       const seen = new Set<string>()
       while (threadOrEntries.length > 0) {
         const threadOrEntry = threadOrEntries.pop()
-        if (threadOrEntry instanceof AtUri) {
-          if (!seen.has(threadOrEntry.toString())) {
+        if (threadOrEntry?.uri !== undefined) {
+          const uri = threadOrEntry.uri
+          if (!seen.has(uri.toString())) {
             const newThread: FallbackData = {
-              uri: threadOrEntry.toString(),
-              profile: profiles.get(threadOrEntry.hostname),
+              uri: uri.toString(),
+              profile: profiles.get(uri.hostname),
               entry: undefined
             }
             newThreads.push(newThread)
-            seen.add(threadOrEntry.toString())
+            seen.add(uri.toString())
           }
           continue
         }
-        if (isRecord(threadOrEntry?.entry)) {
+        if (isRecord(threadOrEntry?.entry?.value)) {
           const entry = threadOrEntry.entry
-          if (!seen.has(entry.uri)) {
+          if (!seen.has(entry.uri) && entry.value.visibility === 'public') {
             newThreads.push({
               uri: entry.uri,
               entry: entry.value,
@@ -175,9 +178,9 @@ export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }
                   if (isThreadViewPost(threadOrEntry)) {
                     return <BskyCommentTree thread={threadOrEntry} key={threadOrEntry.post.uri} />
                   } else if (threadOrEntry?.entry !== undefined) {
-                    return <div className='bskyComment' key={threadOrEntry.uri}><BlogEntry {...threadOrEntry} key={threadOrEntry.uri} /></div>
+                    return <BlogEntry {...threadOrEntry} key={threadOrEntry.uri} />
                   } else {
-                    return <div className='bskyComment' key={threadOrEntry.uri}><Fallback {...threadOrEntry} key={threadOrEntry.uri} /></div>
+                    return <Fallback {...threadOrEntry} key={threadOrEntry.uri} />
                   }
                 }
                 )}
