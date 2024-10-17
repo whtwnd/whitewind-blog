@@ -17,7 +17,7 @@ export function LinkatBoard ({ entry, uri, profile }: LinkatBoardProps): ReactNo
   const aturi = new AtUri(uri)
   const href = `https://linkat.blue/${profile?.handle ?? aturi.hostname}`
 
-  const cardText = entry.cards.filter(card => card.url?.includes(window.location.pathname))[0].text
+  const cardText = entry.cards.filter(card => card.url?.includes(window.location.pathname))[0]?.text
 
   return (
     <Container>
