@@ -35,6 +35,7 @@ import * as ComWhtwndBlogGetAuthorPosts from './types/com/whtwnd/blog/getAuthorP
 import * as ComWhtwndBlogGetEntryMetadataByName from './types/com/whtwnd/blog/getEntryMetadataByName'
 import * as ComWhtwndBlogGetMentionsByEntry from './types/com/whtwnd/blog/getMentionsByEntry'
 import * as ComWhtwndBlogNotifyOfNewEntry from './types/com/whtwnd/blog/notifyOfNewEntry'
+import * as BlueLinkatBoard from './types/blue/linkat/board'
 
 export * as ComAtprotoRepoApplyWrites from './types/com/atproto/repo/applyWrites'
 export * as ComAtprotoRepoCreateRecord from './types/com/atproto/repo/createRecord'
@@ -64,6 +65,7 @@ export * as ComWhtwndBlogGetAuthorPosts from './types/com/whtwnd/blog/getAuthorP
 export * as ComWhtwndBlogGetEntryMetadataByName from './types/com/whtwnd/blog/getEntryMetadataByName'
 export * as ComWhtwndBlogGetMentionsByEntry from './types/com/whtwnd/blog/getMentionsByEntry'
 export * as ComWhtwndBlogNotifyOfNewEntry from './types/com/whtwnd/blog/notifyOfNewEntry'
+export * as BlueLinkatBoard from './types/blue/linkat/board'
 
 export class AtpBaseClient {
   xrpc: XrpcClient = new XrpcClient()
@@ -82,12 +84,14 @@ export class AtpServiceClient {
   xrpc: XrpcServiceClient
   com: ComNS
   app: AppNS
+  blue: BlueNS
 
   constructor(baseClient: AtpBaseClient, xrpcService: XrpcServiceClient) {
     this._baseClient = baseClient
     this.xrpc = xrpcService
     this.com = new ComNS(this)
     this.app = new AppNS(this)
+    this.blue = new BlueNS(this)
   }
 
   setHeader(key: string, value: string): void {
@@ -615,5 +619,86 @@ export class AppBskyEmbedNS {
 
   constructor(service: AtpServiceClient) {
     this._service = service
+  }
+}
+
+export class BlueNS {
+  _service: AtpServiceClient
+  linkat: BlueLinkatNS
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+    this.linkat = new BlueLinkatNS(service)
+  }
+}
+
+export class BlueLinkatNS {
+  _service: AtpServiceClient
+  board: BoardRecord
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+    this.board = new BoardRecord(service)
+  }
+}
+
+export class BoardRecord {
+  _service: AtpServiceClient
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+  }
+
+  async list(
+    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
+  ): Promise<{
+    cursor?: string
+    records: { uri: string; value: BlueLinkatBoard.Record }[]
+  }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
+      collection: 'blue.linkat.board',
+      ...params,
+    })
+    return res.data
+  }
+
+  async get(
+    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
+  ): Promise<{ uri: string; cid: string; value: BlueLinkatBoard.Record }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
+      collection: 'blue.linkat.board',
+      ...params,
+    })
+    return res.data
+  }
+
+  async create(
+    params: Omit<
+      ComAtprotoRepoCreateRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: BlueLinkatBoard.Record,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    record.$type = 'blue.linkat.board'
+    const res = await this._service.xrpc.call(
+      'com.atproto.repo.createRecord',
+      undefined,
+      { collection: 'blue.linkat.board', rkey: 'self', ...params, record },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async delete(
+    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
+    headers?: Record<string, string>,
+  ): Promise<void> {
+    await this._service.xrpc.call(
+      'com.atproto.repo.deleteRecord',
+      undefined,
+      { collection: 'blue.linkat.board', ...params },
+      { headers },
+    )
   }
 }

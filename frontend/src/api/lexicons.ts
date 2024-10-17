@@ -1762,6 +1762,44 @@ export const schemaDict = {
       },
     },
   },
+  BlueLinkatBoard: {
+    lexicon: 1,
+    id: 'blue.linkat.board',
+    defs: {
+      main: {
+        type: 'record',
+        description: 'Record containing a cards of your profile.',
+        key: 'literal:self',
+        record: {
+          type: 'object',
+          required: ['cards'],
+          properties: {
+            cards: {
+              type: 'array',
+              description: 'List of cards in the board.',
+              items: {
+                type: 'ref',
+                ref: 'lex:blue.linkat.board#card',
+              },
+            },
+          },
+        },
+      },
+      card: {
+        type: 'object',
+        properties: {
+          url: {
+            type: 'string',
+            description: 'URL of the link',
+          },
+          text: {
+            type: 'string',
+            description: 'Text of the card',
+          },
+        },
+      },
+    },
+  },
 }
 export const schemas: LexiconDoc[] = Object.values(schemaDict) as LexiconDoc[]
 export const lexicons: Lexicons = new Lexicons(schemas)
@@ -1794,4 +1832,5 @@ export const ids = {
   ComWhtwndBlogGetEntryMetadataByName: 'com.whtwnd.blog.getEntryMetadataByName',
   ComWhtwndBlogGetMentionsByEntry: 'com.whtwnd.blog.getMentionsByEntry',
   ComWhtwndBlogNotifyOfNewEntry: 'com.whtwnd.blog.notifyOfNewEntry',
+  BlueLinkatBoard: 'blue.linkat.board',
 }
