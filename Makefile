@@ -76,4 +76,5 @@ gen-client:
 	/workspaces/lexicons/app/bsky/feed/*.json \
 	/workspaces/lexicons/app/bsky/richtext/*.json \
 	/workspaces/lexicons/app/bsky/embed/*.json \
-	/workspaces/lexicons/com/whtwnd/blog/*.json
+	/workspaces/lexicons/com/whtwnd/blog/*.json \
+	/workspaces/lexicons/blue/linkat/*.json
