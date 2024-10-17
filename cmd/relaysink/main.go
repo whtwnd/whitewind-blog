@@ -289,16 +289,16 @@ func commitConsumer(commits chan *atproto.SyncSubscribeRepos_Commit, newMatcher 
 				// this is not the matched record or there is some error
 				continue
 			}
-			// this is the matched record
-			cid, rec, err := repo.GetRecord(context.TODO(), op.Path)
-			if err != nil {
-				logger.Error("getrecord_error", slog.String("err", err.Error()))
-				continue
-			}
 			isWhtWnd := false
 			if strings.HasPrefix(op.Path, "com.whtwnd.blog.entry") {
 				isWhtWnd = true
 				logger.Info("whitewind_blogpost")
+				// this is the matched record
+				cid, rec, err := repo.GetRecord(context.TODO(), op.Path)
+				if err != nil {
+					logger.Error("getrecord_error", slog.String("err", err.Error()))
+					continue
+				}
 				title := ""
 				entry := (rec).(*whtwnd_autogen.BlogEntry)
 				if entry.Title != nil {
@@ -342,6 +342,12 @@ func commitConsumer(commits chan *atproto.SyncSubscribeRepos_Commit, newMatcher 
 				patterns[key] = pattern
 				patDirty = true
 			} else if strings.HasPrefix(op.Path, "app.bsky.feed.post") {
+				// this is the matched record
+				_, rec, err := repo.GetRecord(context.TODO(), op.Path)
+				if err != nil {
+					logger.Error("getrecord_error", slog.String("err", err.Error()))
+					continue
+				}
 				post := (rec).(*bsky.FeedPost)
 				logger.Info("post", slog.String("createdAt", post.CreatedAt), slog.String("text", post.Text), slog.String("repo", evt.Repo))
 			}
