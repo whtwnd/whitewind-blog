@@ -93,7 +93,7 @@ const GenerateRehypeScriptDetect = (scripts: string[]): Plugin<any, Root, Node> 
   return rehypeScriptDetector
 }
 
-const recursiveModifier = (child: Node): void => {
+const replaceGetBlobAndFixFootnote = (child: Node): void => {
   if (child.type !== 'element') {
     return
   }
@@ -107,12 +107,21 @@ const recursiveModifier = (child: Node): void => {
       elem.properties.src = replaced
     }
   }
-  elem.children.forEach(child => recursiveModifier(child))
+  // Fix footnote link
+  // rehypeGfm creates link #user-content-fn-1 or something like that. It also adds ids like #user-content-fn-1 to footnote <li> elements
+  // rehypeSanitize adds "user-content-" to all HTML ids. As a result, li elements will have ids like #user-content-user-content-fn-1
+  // this fixes that
+  const id = elem.properties.id
+  const PREFIX = 'user-content-user-content-fn-'
+  if (id !== undefined && typeof id === 'string' && id.startsWith(PREFIX)) {
+    elem.properties.id = id.replace(PREFIX, 'user-content-fn-')
+  }
+  elem.children.forEach(child => replaceGetBlobAndFixFootnote(child))
 }
 
-const rehypeGetBlobReplacer: Plugin<any, Root, Node> = () => {
+const rehypeReplaceGetBlobAndFixFootnote: Plugin<any, Root, Node> = () => {
   return (tree) => {
-    tree.children.forEach(child => recursiveModifier(child))
+    tree.children.forEach(child => replaceGetBlobAndFixFootnote(child))
   }
 }
 
@@ -135,9 +144,10 @@ const customSchema = {
     iframe: [
       'width', 'height', 'title', 'frameborder', 'allow', 'referrerpolicy', 'allowfullscreen', 'style', 'seamless',
       ['src', /https:\/\/(www.youtube.com|bandcamp.com)\/.*/]
-    ]
+    ],
+    section: ['dataFootnotes', 'className']
   },
-  tagNames: [...(defaultSchema.tagNames ?? []), 'font', 'mark', 'iframe']
+  tagNames: [...(defaultSchema.tagNames ?? []), 'font', 'mark', 'iframe', 'section']
 }
 export const MarkdownToPlaintext = async (markdownContent: string): Promise<any> => {
   return await remark()
@@ -157,7 +167,7 @@ export const MarkdownToHtml = async (markdownContent: string, scripts?: string[]
     .use(rehypeSanitize, customSchema as Schema)
     .use(rehypeHighlight)
   // .use(rehypeStringify)
-    .use(rehypeGetBlobReplacer)
+    .use(rehypeReplaceGetBlobAndFixFootnote)
     .use(rehypeReact, production)
     .process(markdownContent)
 }
