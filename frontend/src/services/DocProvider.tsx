@@ -112,9 +112,9 @@ const replaceGetBlobAndFixFootnote = (child: Node): void => {
   // rehypeSanitize adds "user-content-" to all HTML ids. As a result, li elements will have ids like #user-content-user-content-fn-1
   // this fixes that
   const id = elem.properties.id
-  const PREFIX = 'user-content-user-content-fn-'
+  const PREFIX = 'user-content-user-content-'
   if (id !== undefined && typeof id === 'string' && id.startsWith(PREFIX)) {
-    elem.properties.id = id.replace(PREFIX, 'user-content-fn-')
+    elem.properties.id = id.replace(PREFIX, 'user-content-')
   }
   elem.children.forEach(child => replaceGetBlobAndFixFootnote(child))
 }
