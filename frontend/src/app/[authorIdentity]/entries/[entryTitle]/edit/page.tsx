@@ -7,6 +7,10 @@ export const metadata: Metadata = {
   robots: { index: false }
 }
 
+// prevent resolved rkey from being cached
+// when duplicate name entry exists, even when one of them is deleted, the cache returns deleted rkey
+export const fetchCache = 'default-no-store'
+
 export default async function Page ({ params }: { params: { authorIdentity: string, entryTitle: string } }): Promise<JSX.Element> {
   params.authorIdentity = decodeURIComponent(params.authorIdentity)
   const entryMetadata = await ResolveEntryMetadata(params.authorIdentity, decodeURIComponent(params.entryTitle))
