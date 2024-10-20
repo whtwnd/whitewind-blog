@@ -47,7 +47,7 @@
     "highlight.js": "^11.9.0",
     "html-react-parser": "^5.1.7",
     "multiformats": "^13.0.1",
-    "next": "^14.1.3",
+    "next": "^14.2.10",
     "next-nprogress-bar": "^2.3.4",
     "next-remove-imports": "^1.0.12",
     "preact": "^10.20.2",
