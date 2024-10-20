@@ -106,6 +106,14 @@ const PictureCard: FC<IPictureCardProps> = ({ headerUrl, blobUrl, name, onDelete
       }, 1000)
     })
   }
+  useEffect(() => {
+    return () => {
+      if (checkMarkTimer.current !== undefined) {
+        clearTimeout(checkMarkTimer.current)
+        checkMarkTimer.current = undefined
+      }
+    }
+  }, [])
   const onThumbnailClick: EventHandler<FormEvent> = (e) => {
     e.preventDefault()
     setModalOpen(true)
@@ -208,10 +216,10 @@ export const BlogEditorV2: FC = () => {
   const AUTOSAVE_TIMER_MILLISECONDS = 10 * 1000
   const previewTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>()
   const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>()
+  const toastHideTimer = useRef<ReturnType<typeof setTimeout>>()
   const contentRef = useRef(content)
   const [mdHtml, setMdHtml] = useState<JSX.Element | undefined>()
 
-  const toastHideTimer = useRef<ReturnType<typeof setTimeout>>()
   const setToastContent = useCallback((content: ToastContent): void => {
     if (toastHideTimer.current !== undefined) {
       clearTimeout(toastHideTimer.current)
@@ -415,9 +423,24 @@ export const BlogEditorV2: FC = () => {
     setContent(value ?? '')
     contentRef.current = value ?? ''
   }
-  const onContentChange = useCallback((): void => {
+
+  const clearTimers = useCallback(() => {
+    for (const timerRef of [
+      previewTimerRef,
+      autosaveTimerRef
+    ]) {
+      if (timerRef.current === undefined) {
+        continue
+      }
+      clearTimeout(timerRef.current)
+      timerRef.current = undefined
+    }
+  }, [])
+
+  // on content change
+  useEffect(() => {
+    // preview PREVIEW_TIMER_MILLISECONDS later since first change
     if (previewTimerRef.current === undefined) {
-      // preview PREVIEW_TIMER_MILLISECONDS later since first change
       previewTimerRef.current = setTimeout(() => {
         void MarkdownToHtml(contentRef.current ?? '')
           .then(ret => {
@@ -430,21 +453,27 @@ export const BlogEditorV2: FC = () => {
       return
     }
     // auto save
-    // save AUTOSAVE_TIMER_MILLISECONDS later since last change
     if (autosaveTimerRef.current !== undefined) {
       clearTimeout(autosaveTimerRef.current)
     }
     autosaveTimerRef.current = setTimeout(() => {
-      onSubmit(getValues(), undefined, true).finally(() => {
+      if (!isDirtyRef.current) {
         autosaveTimerRef.current = undefined
-      })
+        return
+      }
+      void onSubmit(getValues(), undefined, true)
+        .finally(() => { autosaveTimerRef.current = undefined })
     }, AUTOSAVE_TIMER_MILLISECONDS)
-  }, [onSubmit, getValues])
-  useEffect(() => onContentChange(), [content])
+
+    // clear timer on page leave or next content change
+    return clearTimers
+  }, [content, onSubmit, getValues])
 
   const onDeleteConfirmationModalClose = (confirmed: boolean): void => {
     setIsDeleteConfirmationModalOpen(false)
     if (confirmed) {
+      // suppress autosave etc. immediately when the deletion is confirmed
+      clearTimers()
       void onDeleteClick()
     }
   }
@@ -508,7 +537,7 @@ export const BlogEditorV2: FC = () => {
       setToastContent({ message: `Failed to delete the entry (${(err as Error).message})`, severity: 'error' })
       setIsBusy(false)
     }
-  }, [isBusy, authorInfo.did, authorInfo.handle, authorInfo.pds, curProfile, entryInfo.rkey, requestAuth, router, sessManager, setToastContent])
+  }, [isBusy, authorInfo.did, authorInfo.handle, authorInfo.pds, curProfile, entryInfo.rkey, requestAuth, router, sessManager, setToastContent, clearTimers])
 
   // Pages
   const ViewerCache = useMemo(() => <BlogViewer
