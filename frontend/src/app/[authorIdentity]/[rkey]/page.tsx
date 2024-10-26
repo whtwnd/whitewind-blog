@@ -60,6 +60,7 @@ export async function PageSkeleton (authorIdentity: string, rkey: string, cid?: 
 
   return (
     <ContextWrapper {...contextWrapperProps}>
+      <link rel="alternate" href={aturi} />
       {
             docRaw.isDraft !== true && docRaw.visibility !== 'author'
               ? <BlogViewerPage docRaw={docRaw} authorInfo={authorInfo} aturi={aturi} scripts={scripts} mdHtml={mdHtml.result} nonce={nonce ?? undefined} contentChanged={contentChanged} />
