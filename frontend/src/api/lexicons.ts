@@ -1800,6 +1800,104 @@ export const schemaDict = {
       },
     },
   },
+  FyiUnravelFrontpageComment: {
+    lexicon: 1,
+    id: 'fyi.unravel.frontpage.comment',
+    defs: {
+      main: {
+        type: 'record',
+        description: 'Record containing a Frontpage comment.',
+        key: 'tid',
+        record: {
+          type: 'object',
+          required: ['content', 'createdAt', 'post'],
+          properties: {
+            content: {
+              type: 'string',
+              maxLength: 100000,
+              maxGraphemes: 10000,
+              description: 'The content of the comment.',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'datetime',
+              description:
+                'Client-declared timestamp when this comment was originally created.',
+            },
+            parent: {
+              type: 'ref',
+              ref: 'lex:com.atproto.repo.strongRef',
+            },
+            post: {
+              type: 'ref',
+              ref: 'lex:com.atproto.repo.strongRef',
+            },
+          },
+        },
+      },
+    },
+  },
+  FyiUnravelFrontpagePost: {
+    lexicon: 1,
+    id: 'fyi.unravel.frontpage.post',
+    defs: {
+      main: {
+        type: 'record',
+        description: 'Record containing a Frontpage post.',
+        key: 'tid',
+        record: {
+          type: 'object',
+          required: ['title', 'url', 'createdAt'],
+          properties: {
+            title: {
+              type: 'string',
+              maxLength: 3000,
+              maxGraphemes: 300,
+              description: 'The title of the post.',
+            },
+            url: {
+              type: 'string',
+              format: 'uri',
+              description: 'The URL of the post.',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'datetime',
+              description:
+                'Client-declared timestamp when this post was originally created.',
+            },
+          },
+        },
+      },
+    },
+  },
+  FyiUnravelFrontpageVote: {
+    lexicon: 1,
+    id: 'fyi.unravel.frontpage.vote',
+    defs: {
+      main: {
+        type: 'record',
+        description: 'Record containing a Frontpage vote.',
+        key: 'tid',
+        record: {
+          type: 'object',
+          required: ['subject', 'createdAt'],
+          properties: {
+            subject: {
+              type: 'ref',
+              ref: 'lex:com.atproto.repo.strongRef',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'datetime',
+              description:
+                'Client-declared timestamp when this vote was originally created.',
+            },
+          },
+        },
+      },
+    },
+  },
 }
 export const schemas: LexiconDoc[] = Object.values(schemaDict) as LexiconDoc[]
 export const lexicons: Lexicons = new Lexicons(schemas)
@@ -1833,4 +1931,7 @@ export const ids = {
   ComWhtwndBlogGetMentionsByEntry: 'com.whtwnd.blog.getMentionsByEntry',
   ComWhtwndBlogNotifyOfNewEntry: 'com.whtwnd.blog.notifyOfNewEntry',
   BlueLinkatBoard: 'blue.linkat.board',
+  FyiUnravelFrontpageComment: 'fyi.unravel.frontpage.comment',
+  FyiUnravelFrontpagePost: 'fyi.unravel.frontpage.post',
+  FyiUnravelFrontpageVote: 'fyi.unravel.frontpage.vote',
 }
