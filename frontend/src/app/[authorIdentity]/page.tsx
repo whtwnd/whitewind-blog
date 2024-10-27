@@ -41,7 +41,7 @@ export default async function Page ({ params }: IPageProps): Promise<JSX.Element
   }
   return (
     <ContextWrapper {...contextWrapperProps}>
-      <link rel="alternate" href={`at://${contextWrapperProps.did}`} />
+      <link rel='alternate' href={`at://${contextWrapperProps.did as string}`} />
       <ThreeColumnListView
         hero={<ListHeroSection authorInfo={authorInfo} newtab />}
         center={<BlogListView
