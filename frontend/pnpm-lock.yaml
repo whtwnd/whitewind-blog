@@ -21,8 +21,8 @@ importers:
         specifier: ^0.1.5
         version: 0.1.5
       '@atproto/xrpc':
-        specifier: ^0.4.1
-        version: 0.4.1
+        specifier: ^0.6.3
+        version: 0.6.3
       '@aws-sdk/client-dynamodb':
         specifier: ^3.540.0
         version: 3.540.0
@@ -216,17 +216,20 @@ packages:
   '@atproto/common-web@0.3.0':
     resolution: {integrity: sha512-67VnV6JJyX+ZWyjV7xFQMypAgDmjVaR9ZCuU/QW+mqlqI7fex2uL4Fv+7/jHadgzhuJHVd6OHOvNn0wR5WZYtA==}
 
+  '@atproto/common-web@0.3.1':
+    resolution: {integrity: sha512-N7wiTnus5vAr+lT//0y8m/FaHHLJ9LpGuEwkwDAeV3LCiPif4m/FS8x/QOYrx1PdZQwKso95RAPzCGWQBH5j6Q==}
+
   '@atproto/crypto@0.3.0':
     resolution: {integrity: sha512-bhcxRTL4fgRY2YX/St0x4o0oDUp18QIPD7ek+7v8UKA0HpsCGQYbo8w9d9hUvwwty5X5p00cYF2tbggUWaPy7A==}
 
   '@atproto/identity@0.3.2':
     resolution: {integrity: sha512-xZSyB3gHn/avwdAIV+mECvjjvMYXxPSvSgVBUsETMvMY72H9d84utDD58y5aAU/9mL+founaNZmniKDaR633CQ==}
 
-  '@atproto/lexicon@0.3.1':
-    resolution: {integrity: sha512-yLy6GUNP4pn0mGUIyUHvN0UeBza0S03AgjTXVR6KliC4ut2+7SjNMe4cI4G1M8/bJMaccC6ooQSm2kvwiOdr3A==}
-
   '@atproto/lexicon@0.4.0':
     resolution: {integrity: sha512-RvCBKdSI4M8qWm5uTNz1z3R2yIvIhmOsMuleOj8YR6BwRD+QbtUBy3l+xQ7iXf4M5fdfJFxaUNa6Ty0iRwdKqQ==}
+
+  '@atproto/lexicon@0.4.2':
+    resolution: {integrity: sha512-CXoOkhcdF3XVUnR2oNgCs2ljWfo/8zUjxL5RIhJW/UNLp/FSl+KpF8Jm5fbk8Y/XXVPGRAsv9OYfxyU/14N/pw==}
 
   '@atproto/syntax@0.1.5':
     resolution: {integrity: sha512-pbY5lOnThoAbsmrdbN9LC/dNmckfqODJiX9zjW2t3BIHYFeGBc6w9bK3Vre8A0Hg8yWkQpv6gaBLu+ykgi2DJQ==}
@@ -234,11 +237,11 @@ packages:
   '@atproto/syntax@0.3.0':
     resolution: {integrity: sha512-Weq0ZBxffGHDXHl9U7BQc2BFJi/e23AL+k+i5+D9hUq/bzT4yjGsrCejkjq0xt82xXDjmhhvQSZ0LqxyZ5woxA==}
 
-  '@atproto/xrpc@0.4.1':
-    resolution: {integrity: sha512-EMRGiu6oDvFL03Hk2rG/WCL3QK0GjZs9psH80JVf8z2nfdsGON6yn0hw3jvRB26CBXqi58U8Uicyq8Ej5pVTAA==}
-
   '@atproto/xrpc@0.5.0':
     resolution: {integrity: sha512-swu+wyOLvYW4l3n+VAuJbHcPcES+tin2Lsrp8Bw5aIXIICiuFn1YMFlwK9JwVUzTH21Py1s1nHEjr4CJeElJog==}
+
+  '@atproto/xrpc@0.6.3':
+    resolution: {integrity: sha512-S3tRvOdA9amPkKLll3rc4vphlDitLrkN5TwWh5Tu/jzk7mnobVVE3akYgICV9XCNHKjWM+IAPxFFI2qi+VW6nQ==}
 
   '@aws-crypto/crc32@3.0.0':
     resolution: {integrity: sha512-IzSgsrxUcsrejQbPVilIKy16kAT52EwB6zSaI+M3xxIhKh5+aldEyvI+z6erM7TCLB2BJsFrtHjp6/4/sr+3dA==}
@@ -4378,6 +4381,9 @@ packages:
   zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
 
+  zod@3.23.8:
+    resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -4415,6 +4421,13 @@ snapshots:
       uint8arrays: 3.0.0
       zod: 3.22.4
 
+  '@atproto/common-web@0.3.1':
+    dependencies:
+      graphemer: 1.4.0
+      multiformats: 9.9.0
+      uint8arrays: 3.0.0
+      zod: 3.23.8
+
   '@atproto/crypto@0.3.0':
     dependencies:
       '@noble/curves': 1.3.0
@@ -4429,14 +4442,6 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@atproto/lexicon@0.3.1':
-    dependencies:
-      '@atproto/common-web': 0.2.3
-      '@atproto/syntax': 0.1.5
-      iso-datestring-validator: 2.2.2
-      multiformats: 9.9.0
-      zod: 3.22.4
-
   '@atproto/lexicon@0.4.0':
     dependencies:
       '@atproto/common-web': 0.3.0
@@ -4445,21 +4450,29 @@ snapshots:
       multiformats: 9.9.0
       zod: 3.22.4
 
+  '@atproto/lexicon@0.4.2':
+    dependencies:
+      '@atproto/common-web': 0.3.1
+      '@atproto/syntax': 0.3.0
+      iso-datestring-validator: 2.2.2
+      multiformats: 9.9.0
+      zod: 3.23.8
+
   '@atproto/syntax@0.1.5':
     dependencies:
       '@atproto/common-web': 0.2.3
 
   '@atproto/syntax@0.3.0': {}
 
-  '@atproto/xrpc@0.4.1':
-    dependencies:
-      '@atproto/lexicon': 0.3.1
-      zod: 3.22.4
-
   '@atproto/xrpc@0.5.0':
     dependencies:
       '@atproto/lexicon': 0.4.0
       zod: 3.22.4
+
+  '@atproto/xrpc@0.6.3':
+    dependencies:
+      '@atproto/lexicon': 0.4.2
+      zod: 3.23.8
 
   '@aws-crypto/crc32@3.0.0':
     dependencies:
@@ -9865,5 +9878,7 @@ snapshots:
   yocto-queue@1.0.0: {}
 
   zod@3.22.4: {}
+
+  zod@3.23.8: {}
 
   zwitch@2.0.4: {}
