@@ -29,7 +29,7 @@
     "@atproto/lexicon": "^0.4.0",
     "@atproto/syntax": "^0.1.5",
     "@atproto/xrpc": "^0.4.1",
-    "@aws-sdk/client-dynamodb": "^3.540.0",
+    "@aws-sdk/client-dynamodb": "^3.679.0",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.15.10",
