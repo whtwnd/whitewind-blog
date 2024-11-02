@@ -30,7 +30,7 @@ export function BlogEntry ({ entry, uri, profile }: BlogEntryProps): ReactNode {
     <Container>
       <div className='flex-1 flex-col flex gap-2'>
         <div className='flex gap-2.5 items-center cursor-pointer'>
-          <Link href={`/profile/${aturi.hostname}`} className='rounded-full'>
+          <Link href={`https://whtwnd.com/${aturi.hostname}`} className='rounded-full'>
             <div className='w-10 h-10 overflow-hidden rounded-full bg-neutral-300 shrink-0'>
               <img
                 src={profile?.avatar}
@@ -39,14 +39,14 @@ export function BlogEntry ({ entry, uri, profile }: BlogEntryProps): ReactNode {
           </Link>
           <div>
             <Link
-              href={`/profile/${aturi.hostname}`}
+              href={`https://whtwnd.com/${aturi.hostname}`}
               className='font-bold text-[17px] leading-5 line-clamp-1 hover:underline underline-offset-2 decoration-2'
             >
               <p>{profile?.displayName}</p>
             </Link>
             <p>
               <Link
-                href={`/profile/${aturi.hostname}`}
+                href={`https://whtwnd.com/${aturi.hostname}`}
                 className='text-[15px] text-textLight hover:underline'
               >
                 @{profile?.handle}
