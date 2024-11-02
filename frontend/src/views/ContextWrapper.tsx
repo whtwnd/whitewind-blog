@@ -2,7 +2,7 @@
 
 import { ComWhtwndBlogEntry } from '@/api'
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
-import { CommentContext, CommentData } from '@/contexts/CommentContext'
+import { CommentContext, MentioningRecord } from '@/contexts/CommentContext'
 import { EntryContext } from '@/contexts/EntryContext'
 import { SessionContextWrapper } from '@/contexts/SessionContext'
 import { HeaderContextWrapper } from '@/views/HeaderContextWrapper'
@@ -34,7 +34,7 @@ export const ContextWrapper: FC<IContextWrapperProps> = ({
   const [entry, setEntry] = useState(entryString !== undefined ? jsonToLex(entryString) as ComWhtwndBlogEntry.Record : undefined)
 
   const profile = profileString !== undefined ? jsonToLex(profileString) as ProfileViewDetailed : undefined
-  const [comments, setComments] = useState<CommentData[]>([])
+  const [comments, setComments] = useState<MentioningRecord[]>([])
 
   const contextValue = useMemo(() => {
     return {

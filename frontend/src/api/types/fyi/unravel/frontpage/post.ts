@@ -7,8 +7,12 @@ import { lexicons } from '../../../../lexicons'
 import { CID } from 'multiformats/cid'
 
 export interface Record {
-  content: string
-  entryUri: string
+  /** The title of the post. */
+  title: string
+  /** The URL of the post. */
+  url: string
+  /** Client-declared timestamp when this post was originally created. */
+  createdAt: string
   [k: string]: unknown
 }
 
@@ -16,11 +20,11 @@ export function isRecord(v: unknown): v is Record {
   return (
     isObj(v) &&
     hasProp(v, '$type') &&
-    (v.$type === 'com.whtwnd.blog.comment#main' ||
-      v.$type === 'com.whtwnd.blog.comment')
+    (v.$type === 'fyi.unravel.frontpage.post#main' ||
+      v.$type === 'fyi.unravel.frontpage.post')
   )
 }
 
 export function validateRecord(v: unknown): ValidationResult {
-  return lexicons.validate('com.whtwnd.blog.comment#main', v)
+  return lexicons.validate('fyi.unravel.frontpage.post#main', v)
 }

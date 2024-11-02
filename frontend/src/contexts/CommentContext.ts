@@ -1,14 +1,22 @@
-import { FallbackData } from '@/components/CommentList'
-import { BlogEntryProps } from '@/components/bskyembed/src/components/blogEntry'
-import { LinkatBoardProps } from '@/components/bskyembed/src/components/linkatEntry'
-import { ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs'
+import { BlueLinkatBoard, ComWhtwndBlogEntry, FyiUnravelFrontpagePost } from '@/api'
+import { AtUri } from '@atproto/api'
+import { ProfileViewDetailed } from '@atproto/api/dist/client/types/app/bsky/actor/defs'
+import { BlockedPost, NotFoundPost, ThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs'
 import { Dispatch, SetStateAction, createContext } from 'react'
 
-export type CommentData = ThreadViewPost | BlogEntryProps | LinkatBoardProps | FallbackData
+export interface MentioningRecord {
+  uri: AtUri
+  date: string
+  profile?: ProfileViewDetailed
+  bsky?: ThreadViewPost | NotFoundPost | BlockedPost | {}
+  whtwnd?: ComWhtwndBlogEntry.Record
+  linkat?: BlueLinkatBoard.Record
+  frontpage?: FyiUnravelFrontpagePost.Record
+}
 
 export interface CommentContextValue {
-  comments: CommentData[]
-  setComments: Dispatch<SetStateAction<CommentData[]>>
+  comments: MentioningRecord[]
+  setComments: Dispatch<SetStateAction<MentioningRecord[]>>
 }
 
 export const CommentContext = createContext<CommentContextValue>({ comments: [], setComments: () => {} })

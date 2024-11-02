@@ -72,9 +72,7 @@ gen-client:
 	/workspaces/lexicons/com/atproto/server/*.json \
 	/workspaces/lexicons/com/atproto/sync/*.json \
 	/workspaces/lexicons/com/atproto/identity/*.json \
-	/workspaces/lexicons/app/bsky/actor/*.json \
-	/workspaces/lexicons/app/bsky/feed/*.json \
 	/workspaces/lexicons/app/bsky/richtext/*.json \
-	/workspaces/lexicons/app/bsky/embed/*.json \
 	/workspaces/lexicons/com/whtwnd/blog/*.json \
-	/workspaces/lexicons/blue/linkat/*.json
+	/workspaces/lexicons/blue/linkat/*.json \
+	/workspaces/lexicons/fyi/unravel/frontpage/*.json

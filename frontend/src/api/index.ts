@@ -22,13 +22,7 @@ import * as ComAtprotoServerDescribeServer from './types/com/atproto/server/desc
 import * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession'
 import * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob'
 import * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle'
-import * as AppBskyActorDefs from './types/app/bsky/actor/defs'
-import * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile'
-import * as AppBskyFeedPost from './types/app/bsky/feed/post'
 import * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet'
-import * as AppBskyEmbedExternal from './types/app/bsky/embed/external'
-import * as AppBskyEmbedRecord from './types/app/bsky/embed/record'
-import * as ComWhtwndBlogComment from './types/com/whtwnd/blog/comment'
 import * as ComWhtwndBlogDefs from './types/com/whtwnd/blog/defs'
 import * as ComWhtwndBlogEntry from './types/com/whtwnd/blog/entry'
 import * as ComWhtwndBlogGetAuthorPosts from './types/com/whtwnd/blog/getAuthorPosts'
@@ -36,6 +30,9 @@ import * as ComWhtwndBlogGetEntryMetadataByName from './types/com/whtwnd/blog/ge
 import * as ComWhtwndBlogGetMentionsByEntry from './types/com/whtwnd/blog/getMentionsByEntry'
 import * as ComWhtwndBlogNotifyOfNewEntry from './types/com/whtwnd/blog/notifyOfNewEntry'
 import * as BlueLinkatBoard from './types/blue/linkat/board'
+import * as FyiUnravelFrontpageComment from './types/fyi/unravel/frontpage/comment'
+import * as FyiUnravelFrontpagePost from './types/fyi/unravel/frontpage/post'
+import * as FyiUnravelFrontpageVote from './types/fyi/unravel/frontpage/vote'
 
 export * as ComAtprotoRepoApplyWrites from './types/com/atproto/repo/applyWrites'
 export * as ComAtprotoRepoCreateRecord from './types/com/atproto/repo/createRecord'
@@ -52,13 +49,7 @@ export * as ComAtprotoServerDescribeServer from './types/com/atproto/server/desc
 export * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession'
 export * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob'
 export * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle'
-export * as AppBskyActorDefs from './types/app/bsky/actor/defs'
-export * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile'
-export * as AppBskyFeedPost from './types/app/bsky/feed/post'
 export * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet'
-export * as AppBskyEmbedExternal from './types/app/bsky/embed/external'
-export * as AppBskyEmbedRecord from './types/app/bsky/embed/record'
-export * as ComWhtwndBlogComment from './types/com/whtwnd/blog/comment'
 export * as ComWhtwndBlogDefs from './types/com/whtwnd/blog/defs'
 export * as ComWhtwndBlogEntry from './types/com/whtwnd/blog/entry'
 export * as ComWhtwndBlogGetAuthorPosts from './types/com/whtwnd/blog/getAuthorPosts'
@@ -66,6 +57,9 @@ export * as ComWhtwndBlogGetEntryMetadataByName from './types/com/whtwnd/blog/ge
 export * as ComWhtwndBlogGetMentionsByEntry from './types/com/whtwnd/blog/getMentionsByEntry'
 export * as ComWhtwndBlogNotifyOfNewEntry from './types/com/whtwnd/blog/notifyOfNewEntry'
 export * as BlueLinkatBoard from './types/blue/linkat/board'
+export * as FyiUnravelFrontpageComment from './types/fyi/unravel/frontpage/comment'
+export * as FyiUnravelFrontpagePost from './types/fyi/unravel/frontpage/post'
+export * as FyiUnravelFrontpageVote from './types/fyi/unravel/frontpage/vote'
 
 export class AtpBaseClient {
   xrpc: XrpcClient = new XrpcClient()
@@ -85,6 +79,7 @@ export class AtpServiceClient {
   com: ComNS
   app: AppNS
   blue: BlueNS
+  fyi: FyiNS
 
   constructor(baseClient: AtpBaseClient, xrpcService: XrpcServiceClient) {
     this._baseClient = baseClient
@@ -92,6 +87,7 @@ export class AtpServiceClient {
     this.com = new ComNS(this)
     this.app = new AppNS(this)
     this.blue = new BlueNS(this)
+    this.fyi = new FyiNS(this)
   }
 
   setHeader(key: string, value: string): void {
@@ -314,12 +310,10 @@ export class ComWhtwndNS {
 
 export class ComWhtwndBlogNS {
   _service: AtpServiceClient
-  comment: CommentRecord
   entry: EntryRecord
 
   constructor(service: AtpServiceClient) {
     this._service = service
-    this.comment = new CommentRecord(service)
     this.entry = new EntryRecord(service)
   }
 
@@ -365,67 +359,6 @@ export class ComWhtwndBlogNS {
       .catch((e) => {
         throw ComWhtwndBlogNotifyOfNewEntry.toKnownErr(e)
       })
-  }
-}
-
-export class CommentRecord {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-
-  async list(
-    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
-  ): Promise<{
-    cursor?: string
-    records: { uri: string; value: ComWhtwndBlogComment.Record }[]
-  }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
-      collection: 'com.whtwnd.blog.comment',
-      ...params,
-    })
-    return res.data
-  }
-
-  async get(
-    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
-  ): Promise<{ uri: string; cid: string; value: ComWhtwndBlogComment.Record }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
-      collection: 'com.whtwnd.blog.comment',
-      ...params,
-    })
-    return res.data
-  }
-
-  async create(
-    params: Omit<
-      ComAtprotoRepoCreateRecord.InputSchema,
-      'collection' | 'record'
-    >,
-    record: ComWhtwndBlogComment.Record,
-    headers?: Record<string, string>,
-  ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'com.whtwnd.blog.comment'
-    const res = await this._service.xrpc.call(
-      'com.atproto.repo.createRecord',
-      undefined,
-      { collection: 'com.whtwnd.blog.comment', ...params, record },
-      { encoding: 'application/json', headers },
-    )
-    return res.data
-  }
-
-  async delete(
-    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
-    headers?: Record<string, string>,
-  ): Promise<void> {
-    await this._service.xrpc.call(
-      'com.atproto.repo.deleteRecord',
-      undefined,
-      { collection: 'com.whtwnd.blog.comment', ...params },
-      { headers },
-    )
   }
 }
 
@@ -502,119 +435,15 @@ export class AppNS {
 
 export class AppBskyNS {
   _service: AtpServiceClient
-  actor: AppBskyActorNS
-  feed: AppBskyFeedNS
   richtext: AppBskyRichtextNS
-  embed: AppBskyEmbedNS
 
   constructor(service: AtpServiceClient) {
     this._service = service
-    this.actor = new AppBskyActorNS(service)
-    this.feed = new AppBskyFeedNS(service)
     this.richtext = new AppBskyRichtextNS(service)
-    this.embed = new AppBskyEmbedNS(service)
-  }
-}
-
-export class AppBskyActorNS {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-
-  getProfile(
-    params?: AppBskyActorGetProfile.QueryParams,
-    opts?: AppBskyActorGetProfile.CallOptions,
-  ): Promise<AppBskyActorGetProfile.Response> {
-    return this._service.xrpc
-      .call('app.bsky.actor.getProfile', params, undefined, opts)
-      .catch((e) => {
-        throw AppBskyActorGetProfile.toKnownErr(e)
-      })
-  }
-}
-
-export class AppBskyFeedNS {
-  _service: AtpServiceClient
-  post: PostRecord
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-    this.post = new PostRecord(service)
-  }
-}
-
-export class PostRecord {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-
-  async list(
-    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
-  ): Promise<{
-    cursor?: string
-    records: { uri: string; value: AppBskyFeedPost.Record }[]
-  }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
-      collection: 'app.bsky.feed.post',
-      ...params,
-    })
-    return res.data
-  }
-
-  async get(
-    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
-  ): Promise<{ uri: string; cid: string; value: AppBskyFeedPost.Record }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
-      collection: 'app.bsky.feed.post',
-      ...params,
-    })
-    return res.data
-  }
-
-  async create(
-    params: Omit<
-      ComAtprotoRepoCreateRecord.InputSchema,
-      'collection' | 'record'
-    >,
-    record: AppBskyFeedPost.Record,
-    headers?: Record<string, string>,
-  ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'app.bsky.feed.post'
-    const res = await this._service.xrpc.call(
-      'com.atproto.repo.createRecord',
-      undefined,
-      { collection: 'app.bsky.feed.post', ...params, record },
-      { encoding: 'application/json', headers },
-    )
-    return res.data
-  }
-
-  async delete(
-    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
-    headers?: Record<string, string>,
-  ): Promise<void> {
-    await this._service.xrpc.call(
-      'com.atproto.repo.deleteRecord',
-      undefined,
-      { collection: 'app.bsky.feed.post', ...params },
-      { headers },
-    )
   }
 }
 
 export class AppBskyRichtextNS {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-}
-
-export class AppBskyEmbedNS {
   _service: AtpServiceClient
 
   constructor(service: AtpServiceClient) {
@@ -698,6 +527,235 @@ export class BoardRecord {
       'com.atproto.repo.deleteRecord',
       undefined,
       { collection: 'blue.linkat.board', ...params },
+      { headers },
+    )
+  }
+}
+
+export class FyiNS {
+  _service: AtpServiceClient
+  unravel: FyiUnravelNS
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+    this.unravel = new FyiUnravelNS(service)
+  }
+}
+
+export class FyiUnravelNS {
+  _service: AtpServiceClient
+  frontpage: FyiUnravelFrontpageNS
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+    this.frontpage = new FyiUnravelFrontpageNS(service)
+  }
+}
+
+export class FyiUnravelFrontpageNS {
+  _service: AtpServiceClient
+  comment: CommentRecord
+  post: PostRecord
+  vote: VoteRecord
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+    this.comment = new CommentRecord(service)
+    this.post = new PostRecord(service)
+    this.vote = new VoteRecord(service)
+  }
+}
+
+export class CommentRecord {
+  _service: AtpServiceClient
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+  }
+
+  async list(
+    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
+  ): Promise<{
+    cursor?: string
+    records: { uri: string; value: FyiUnravelFrontpageComment.Record }[]
+  }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
+      collection: 'fyi.unravel.frontpage.comment',
+      ...params,
+    })
+    return res.data
+  }
+
+  async get(
+    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
+  ): Promise<{
+    uri: string
+    cid: string
+    value: FyiUnravelFrontpageComment.Record
+  }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
+      collection: 'fyi.unravel.frontpage.comment',
+      ...params,
+    })
+    return res.data
+  }
+
+  async create(
+    params: Omit<
+      ComAtprotoRepoCreateRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: FyiUnravelFrontpageComment.Record,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    record.$type = 'fyi.unravel.frontpage.comment'
+    const res = await this._service.xrpc.call(
+      'com.atproto.repo.createRecord',
+      undefined,
+      { collection: 'fyi.unravel.frontpage.comment', ...params, record },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async delete(
+    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
+    headers?: Record<string, string>,
+  ): Promise<void> {
+    await this._service.xrpc.call(
+      'com.atproto.repo.deleteRecord',
+      undefined,
+      { collection: 'fyi.unravel.frontpage.comment', ...params },
+      { headers },
+    )
+  }
+}
+
+export class PostRecord {
+  _service: AtpServiceClient
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+  }
+
+  async list(
+    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
+  ): Promise<{
+    cursor?: string
+    records: { uri: string; value: FyiUnravelFrontpagePost.Record }[]
+  }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
+      collection: 'fyi.unravel.frontpage.post',
+      ...params,
+    })
+    return res.data
+  }
+
+  async get(
+    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
+  ): Promise<{
+    uri: string
+    cid: string
+    value: FyiUnravelFrontpagePost.Record
+  }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
+      collection: 'fyi.unravel.frontpage.post',
+      ...params,
+    })
+    return res.data
+  }
+
+  async create(
+    params: Omit<
+      ComAtprotoRepoCreateRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: FyiUnravelFrontpagePost.Record,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    record.$type = 'fyi.unravel.frontpage.post'
+    const res = await this._service.xrpc.call(
+      'com.atproto.repo.createRecord',
+      undefined,
+      { collection: 'fyi.unravel.frontpage.post', ...params, record },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async delete(
+    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
+    headers?: Record<string, string>,
+  ): Promise<void> {
+    await this._service.xrpc.call(
+      'com.atproto.repo.deleteRecord',
+      undefined,
+      { collection: 'fyi.unravel.frontpage.post', ...params },
+      { headers },
+    )
+  }
+}
+
+export class VoteRecord {
+  _service: AtpServiceClient
+
+  constructor(service: AtpServiceClient) {
+    this._service = service
+  }
+
+  async list(
+    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
+  ): Promise<{
+    cursor?: string
+    records: { uri: string; value: FyiUnravelFrontpageVote.Record }[]
+  }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
+      collection: 'fyi.unravel.frontpage.vote',
+      ...params,
+    })
+    return res.data
+  }
+
+  async get(
+    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
+  ): Promise<{
+    uri: string
+    cid: string
+    value: FyiUnravelFrontpageVote.Record
+  }> {
+    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
+      collection: 'fyi.unravel.frontpage.vote',
+      ...params,
+    })
+    return res.data
+  }
+
+  async create(
+    params: Omit<
+      ComAtprotoRepoCreateRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: FyiUnravelFrontpageVote.Record,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    record.$type = 'fyi.unravel.frontpage.vote'
+    const res = await this._service.xrpc.call(
+      'com.atproto.repo.createRecord',
+      undefined,
+      { collection: 'fyi.unravel.frontpage.vote', ...params, record },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async delete(
+    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
+    headers?: Record<string, string>,
+  ): Promise<void> {
+    await this._service.xrpc.call(
+      'com.atproto.repo.deleteRecord',
+      undefined,
+      { collection: 'fyi.unravel.frontpage.vote', ...params },
       { headers },
     )
   }
