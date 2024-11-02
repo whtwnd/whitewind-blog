@@ -104,7 +104,7 @@ export function Post ({ thread, error, onExpandClick }: Props) {
             href={href}
             className='transition-transform hover:scale-110 shrink-0 self-start'
           >
-            <Logo className='h-8' />
+            <Logo className='w-10 pr-2' />
           </Link>
         </div>
         <PostContent record={record} />

@@ -23,9 +23,9 @@ const LeftOverlayBlogViewer: React.FC<LeftOverlayProps> = () => {
   let reposts = 0
   const numComments = comments.length
   for (const comment of comments) {
-    if (isThreadViewPost(comment)) {
-      likes += comment.post.likeCount ?? 0
-      reposts += comment.post.repostCount ?? 0
+    if (isThreadViewPost(comment.bsky)) {
+      likes += comment.bsky.post.likeCount ?? 0
+      reposts += comment.bsky.post.repostCount ?? 0
     }
   }
 

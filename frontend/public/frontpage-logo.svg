@@ -1,13 +1,7 @@
-<svg width="334" height="334" viewBox="0 0 334 334" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg viewBox="0 0 334 334" fill="none" xmlns="http://www.w3.org/2000/svg">
 <style>
   .stop-2 {
     stop-color: #040818;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    .stop-2 {
-      stop-color: #fff;
-    }
   }
 </style>
 <path d="M95 225.903V101L162 62.0968V32L69 86V241L95 225.903Z" fill="url(#paint0_linear_8_11)" style=""/>

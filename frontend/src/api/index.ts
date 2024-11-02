@@ -22,13 +22,7 @@ import * as ComAtprotoServerDescribeServer from './types/com/atproto/server/desc
 import * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession'
 import * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob'
 import * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle'
-import * as AppBskyActorDefs from './types/app/bsky/actor/defs'
-import * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile'
-import * as AppBskyFeedPost from './types/app/bsky/feed/post'
 import * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet'
-import * as AppBskyEmbedExternal from './types/app/bsky/embed/external'
-import * as AppBskyEmbedRecord from './types/app/bsky/embed/record'
-import * as ComWhtwndBlogComment from './types/com/whtwnd/blog/comment'
 import * as ComWhtwndBlogDefs from './types/com/whtwnd/blog/defs'
 import * as ComWhtwndBlogEntry from './types/com/whtwnd/blog/entry'
 import * as ComWhtwndBlogGetAuthorPosts from './types/com/whtwnd/blog/getAuthorPosts'
@@ -55,13 +49,7 @@ export * as ComAtprotoServerDescribeServer from './types/com/atproto/server/desc
 export * as ComAtprotoServerRefreshSession from './types/com/atproto/server/refreshSession'
 export * as ComAtprotoSyncGetBlob from './types/com/atproto/sync/getBlob'
 export * as ComAtprotoIdentityResolveHandle from './types/com/atproto/identity/resolveHandle'
-export * as AppBskyActorDefs from './types/app/bsky/actor/defs'
-export * as AppBskyActorGetProfile from './types/app/bsky/actor/getProfile'
-export * as AppBskyFeedPost from './types/app/bsky/feed/post'
 export * as AppBskyRichtextFacet from './types/app/bsky/richtext/facet'
-export * as AppBskyEmbedExternal from './types/app/bsky/embed/external'
-export * as AppBskyEmbedRecord from './types/app/bsky/embed/record'
-export * as ComWhtwndBlogComment from './types/com/whtwnd/blog/comment'
 export * as ComWhtwndBlogDefs from './types/com/whtwnd/blog/defs'
 export * as ComWhtwndBlogEntry from './types/com/whtwnd/blog/entry'
 export * as ComWhtwndBlogGetAuthorPosts from './types/com/whtwnd/blog/getAuthorPosts'
@@ -322,12 +310,10 @@ export class ComWhtwndNS {
 
 export class ComWhtwndBlogNS {
   _service: AtpServiceClient
-  comment: CommentRecord
   entry: EntryRecord
 
   constructor(service: AtpServiceClient) {
     this._service = service
-    this.comment = new CommentRecord(service)
     this.entry = new EntryRecord(service)
   }
 
@@ -373,67 +359,6 @@ export class ComWhtwndBlogNS {
       .catch((e) => {
         throw ComWhtwndBlogNotifyOfNewEntry.toKnownErr(e)
       })
-  }
-}
-
-export class CommentRecord {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-
-  async list(
-    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
-  ): Promise<{
-    cursor?: string
-    records: { uri: string; value: ComWhtwndBlogComment.Record }[]
-  }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
-      collection: 'com.whtwnd.blog.comment',
-      ...params,
-    })
-    return res.data
-  }
-
-  async get(
-    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
-  ): Promise<{ uri: string; cid: string; value: ComWhtwndBlogComment.Record }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
-      collection: 'com.whtwnd.blog.comment',
-      ...params,
-    })
-    return res.data
-  }
-
-  async create(
-    params: Omit<
-      ComAtprotoRepoCreateRecord.InputSchema,
-      'collection' | 'record'
-    >,
-    record: ComWhtwndBlogComment.Record,
-    headers?: Record<string, string>,
-  ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'com.whtwnd.blog.comment'
-    const res = await this._service.xrpc.call(
-      'com.atproto.repo.createRecord',
-      undefined,
-      { collection: 'com.whtwnd.blog.comment', ...params, record },
-      { encoding: 'application/json', headers },
-    )
-    return res.data
-  }
-
-  async delete(
-    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
-    headers?: Record<string, string>,
-  ): Promise<void> {
-    await this._service.xrpc.call(
-      'com.atproto.repo.deleteRecord',
-      undefined,
-      { collection: 'com.whtwnd.blog.comment', ...params },
-      { headers },
-    )
   }
 }
 
@@ -510,119 +435,15 @@ export class AppNS {
 
 export class AppBskyNS {
   _service: AtpServiceClient
-  actor: AppBskyActorNS
-  feed: AppBskyFeedNS
   richtext: AppBskyRichtextNS
-  embed: AppBskyEmbedNS
 
   constructor(service: AtpServiceClient) {
     this._service = service
-    this.actor = new AppBskyActorNS(service)
-    this.feed = new AppBskyFeedNS(service)
     this.richtext = new AppBskyRichtextNS(service)
-    this.embed = new AppBskyEmbedNS(service)
-  }
-}
-
-export class AppBskyActorNS {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-
-  getProfile(
-    params?: AppBskyActorGetProfile.QueryParams,
-    opts?: AppBskyActorGetProfile.CallOptions,
-  ): Promise<AppBskyActorGetProfile.Response> {
-    return this._service.xrpc
-      .call('app.bsky.actor.getProfile', params, undefined, opts)
-      .catch((e) => {
-        throw AppBskyActorGetProfile.toKnownErr(e)
-      })
-  }
-}
-
-export class AppBskyFeedNS {
-  _service: AtpServiceClient
-  post: PostRecord
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-    this.post = new PostRecord(service)
-  }
-}
-
-export class PostRecord {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-
-  async list(
-    params: Omit<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
-  ): Promise<{
-    cursor?: string
-    records: { uri: string; value: AppBskyFeedPost.Record }[]
-  }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.listRecords', {
-      collection: 'app.bsky.feed.post',
-      ...params,
-    })
-    return res.data
-  }
-
-  async get(
-    params: Omit<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
-  ): Promise<{ uri: string; cid: string; value: AppBskyFeedPost.Record }> {
-    const res = await this._service.xrpc.call('com.atproto.repo.getRecord', {
-      collection: 'app.bsky.feed.post',
-      ...params,
-    })
-    return res.data
-  }
-
-  async create(
-    params: Omit<
-      ComAtprotoRepoCreateRecord.InputSchema,
-      'collection' | 'record'
-    >,
-    record: AppBskyFeedPost.Record,
-    headers?: Record<string, string>,
-  ): Promise<{ uri: string; cid: string }> {
-    record.$type = 'app.bsky.feed.post'
-    const res = await this._service.xrpc.call(
-      'com.atproto.repo.createRecord',
-      undefined,
-      { collection: 'app.bsky.feed.post', ...params, record },
-      { encoding: 'application/json', headers },
-    )
-    return res.data
-  }
-
-  async delete(
-    params: Omit<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
-    headers?: Record<string, string>,
-  ): Promise<void> {
-    await this._service.xrpc.call(
-      'com.atproto.repo.deleteRecord',
-      undefined,
-      { collection: 'app.bsky.feed.post', ...params },
-      { headers },
-    )
   }
 }
 
 export class AppBskyRichtextNS {
-  _service: AtpServiceClient
-
-  constructor(service: AtpServiceClient) {
-    this._service = service
-  }
-}
-
-export class AppBskyEmbedNS {
   _service: AtpServiceClient
 
   constructor(service: AtpServiceClient) {

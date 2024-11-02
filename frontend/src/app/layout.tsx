@@ -1,3 +1,4 @@
+import { Source_Serif_4, Source_Sans_3 } from 'next/font/google'
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter'
 import type { Metadata } from 'next'
 import { ThemeProvider } from '@mui/material/styles'
@@ -11,6 +12,19 @@ import { TailwindIndicator } from '@/components/TailwindIndicator'
 import Script from 'next/script'
 import { headers } from 'next/headers'
 import { GA_TAG_ID } from '@/libs/gtag'
+const sourceSerif = Source_Serif_4({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-source_serif',
+  weight: ['400', '500']
+})
+
+const sourceSans = Source_Sans_3({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-source_sans',
+  weight: ['400', '500']
+})
 
 export const metadata: Metadata = {
   title: {
@@ -55,6 +69,6 @@ export default function RootLayout ({
     </AppRouterCacheProvider>
   )
   return (
-    <html lang='en'><head><Suspense fallback={<></>}><GoogleAnalytics>{GAScripts}</GoogleAnalytics></Suspense></head><body className='bg-gray-100'>{markup}</body></html>
+    <html lang='en' className={`${sourceSerif.variable} ${sourceSans.variable}`}><head><Suspense fallback={<></>}><GoogleAnalytics>{GAScripts}</GoogleAnalytics></Suspense></head><body className='bg-gray-100'>{markup}</body></html>
   )
 }

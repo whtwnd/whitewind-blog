@@ -66,7 +66,7 @@ export function BlogEntry ({ entry, uri, profile }: BlogEntryProps): ReactNode {
           <div className='flex-1' />
           <Link
             href={`https://whtwnd.com${href}`}
-            className='transition-transform hover:scale-110 shrink-0 self-start'
+            className='transition-transform hover:scale-110 shrink-0 self-start pr-2'
           >
             <Logo className='h-8 rounded-full' />
           </Link>
