@@ -52,7 +52,7 @@ export function BlogEntry ({ entry, uri, profile }: BlogEntryProps): ReactNode {
                 @{profile?.handle}
               </Link>
               ・
-              <Link href={href}>
+              <Link href={`https://whtwnd.com${href}`}>
                 <time
                   dateTime={entry.createdAt !== undefined ? new Date(entry.createdAt).toISOString() : ''}
                   className='text-textLight mt-1 text-sm hover:underline'
