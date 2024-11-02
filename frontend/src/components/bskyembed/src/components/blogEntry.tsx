@@ -24,7 +24,7 @@ export function BlogEntry ({ entry, uri, profile }: BlogEntryProps): ReactNode {
   }, [entry])
 
   const aturi = new AtUri(uri)
-  const href = `/${aturi.hostname}/${entry.title !== undefined ? `entries/${entry.title}` : aturi.rkey}`
+  const href = `/${aturi.hostname}/${entry.title !== undefined ? `entries/${encodeURIComponent(entry.title)}` : aturi.rkey}`
 
   return (
     <Container>
