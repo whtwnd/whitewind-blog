@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@atproto/api": "^0.12.5",
+    "@atproto/api": "^0.13.14",
     "@atproto/identity": "^0.3.2",
     "@atproto/lexicon": "^0.4.0",
     "@atproto/syntax": "^0.1.5",
