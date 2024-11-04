@@ -27,7 +27,7 @@
     "@atproto/api": "^0.12.5",
     "@atproto/identity": "^0.3.2",
     "@atproto/lexicon": "^0.4.0",
-    "@atproto/syntax": "^0.1.5",
+    "@atproto/syntax": "^0.3.0",
     "@atproto/xrpc": "^0.6.3",
     "@aws-sdk/client-dynamodb": "^3.679.0",
     "@emotion/react": "^11.11.3",

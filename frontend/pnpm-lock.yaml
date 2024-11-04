@@ -18,8 +18,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.0
       '@atproto/syntax':
-        specifier: ^0.1.5
-        version: 0.1.5
+        specifier: ^0.3.0
+        version: 0.3.0
       '@atproto/xrpc':
         specifier: ^0.6.3
         version: 0.6.3
@@ -233,9 +233,6 @@ packages:
 
   '@atproto/lexicon@0.4.2':
     resolution: {integrity: sha512-CXoOkhcdF3XVUnR2oNgCs2ljWfo/8zUjxL5RIhJW/UNLp/FSl+KpF8Jm5fbk8Y/XXVPGRAsv9OYfxyU/14N/pw==}
-
-  '@atproto/syntax@0.1.5':
-    resolution: {integrity: sha512-pbY5lOnThoAbsmrdbN9LC/dNmckfqODJiX9zjW2t3BIHYFeGBc6w9bK3Vre8A0Hg8yWkQpv6gaBLu+ykgi2DJQ==}
 
   '@atproto/syntax@0.3.0':
     resolution: {integrity: sha512-Weq0ZBxffGHDXHl9U7BQc2BFJi/e23AL+k+i5+D9hUq/bzT4yjGsrCejkjq0xt82xXDjmhhvQSZ0LqxyZ5woxA==}
@@ -4454,10 +4451,6 @@ snapshots:
       iso-datestring-validator: 2.2.2
       multiformats: 9.9.0
       zod: 3.23.8
-
-  '@atproto/syntax@0.1.5':
-    dependencies:
-      '@atproto/common-web': 0.2.3
 
   '@atproto/syntax@0.3.0': {}
 
