@@ -81,8 +81,8 @@ importers:
         specifier: ^14.2.10
         version: 14.2.10(@babel/core@7.24.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-nprogress-bar:
-        specifier: ^2.3.14
-        version: 2.3.14
+        specifier: ^2.3.15
+        version: 2.3.15
       next-remove-imports:
         specifier: ^1.0.12
         version: 1.0.12(webpack@5.90.3)
@@ -3405,8 +3405,8 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  next-nprogress-bar@2.3.14:
-    resolution: {integrity: sha512-r2zdo5SFakm1CSYLBo2/+9X2F5NRnbV/LI1b/Iu3mFLa9ln+Dlwx3vjJc3kVHI4i42jRC0an++obVHeWkYU6gA==}
+  next-nprogress-bar@2.3.15:
+    resolution: {integrity: sha512-8s8slKMUXvDrl7wWzKyWt6BJQThOJREpCicdbi66xAOzQ23DeIauEzMGPg1BMixnqlIRY3ayUO/ey9dafkgWcA==}
 
   next-remove-imports@1.0.12:
     resolution: {integrity: sha512-3tdL6VuSykJ/mcUwxfjQ+Fd4OpEmrwWVHtLZ/fhNcSaToWCutUp7nrfIww7/4CURe9I7BDCQE9AWl4fkY3YZOQ==}
@@ -8672,7 +8672,7 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next-nprogress-bar@2.3.14:
+  next-nprogress-bar@2.3.15:
     dependencies:
       nprogress: 0.2.0
 
