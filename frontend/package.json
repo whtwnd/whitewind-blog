@@ -26,7 +26,7 @@
   "dependencies": {
     "@atproto/api": "^0.13.14",
     "@atproto/identity": "^0.3.2",
-    "@atproto/lexicon": "^0.4.0",
+    "@atproto/lexicon": "^0.4.2",
     "@atproto/syntax": "^0.3.0",
     "@atproto/xrpc": "^0.6.3",
     "@aws-sdk/client-dynamodb": "^3.682.0",

@@ -15,8 +15,8 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
       '@atproto/lexicon':
-        specifier: ^0.4.0
-        version: 0.4.0
+        specifier: ^0.4.2
+        version: 0.4.2
       '@atproto/syntax':
         specifier: ^0.3.0
         version: 0.3.0
@@ -216,9 +216,6 @@ packages:
   '@atproto/common-web@0.2.3':
     resolution: {integrity: sha512-k9VKGYUqjsRlI3wS31XyCbeb2U7ddS4X/eFgzos2CE5rIbk/uQGyKH+0Jcn1JIwRkvI1BemyNuUVrS8Ok3wiuw==}
 
-  '@atproto/common-web@0.3.0':
-    resolution: {integrity: sha512-67VnV6JJyX+ZWyjV7xFQMypAgDmjVaR9ZCuU/QW+mqlqI7fex2uL4Fv+7/jHadgzhuJHVd6OHOvNn0wR5WZYtA==}
-
   '@atproto/common-web@0.3.1':
     resolution: {integrity: sha512-N7wiTnus5vAr+lT//0y8m/FaHHLJ9LpGuEwkwDAeV3LCiPif4m/FS8x/QOYrx1PdZQwKso95RAPzCGWQBH5j6Q==}
 
@@ -227,9 +224,6 @@ packages:
 
   '@atproto/identity@0.3.2':
     resolution: {integrity: sha512-xZSyB3gHn/avwdAIV+mECvjjvMYXxPSvSgVBUsETMvMY72H9d84utDD58y5aAU/9mL+founaNZmniKDaR633CQ==}
-
-  '@atproto/lexicon@0.4.0':
-    resolution: {integrity: sha512-RvCBKdSI4M8qWm5uTNz1z3R2yIvIhmOsMuleOj8YR6BwRD+QbtUBy3l+xQ7iXf4M5fdfJFxaUNa6Ty0iRwdKqQ==}
 
   '@atproto/lexicon@0.4.2':
     resolution: {integrity: sha512-CXoOkhcdF3XVUnR2oNgCs2ljWfo/8zUjxL5RIhJW/UNLp/FSl+KpF8Jm5fbk8Y/XXVPGRAsv9OYfxyU/14N/pw==}
@@ -4370,9 +4364,6 @@ packages:
     resolution: {integrity: sha512-9bnSc/HEW2uRy67wc+T8UwauLuPJVn28jb+GtJY16iiKWyvmYJRXVT4UamsAEGQfPohgr2q4Tq0sQbQlxTfi1g==}
     engines: {node: '>=12.20'}
 
-  zod@3.22.4:
-    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
@@ -4406,14 +4397,7 @@ snapshots:
       graphemer: 1.4.0
       multiformats: 9.9.0
       uint8arrays: 3.0.0
-      zod: 3.22.4
-
-  '@atproto/common-web@0.3.0':
-    dependencies:
-      graphemer: 1.4.0
-      multiformats: 9.9.0
-      uint8arrays: 3.0.0
-      zod: 3.22.4
+      zod: 3.23.8
 
   '@atproto/common-web@0.3.1':
     dependencies:
@@ -4435,14 +4419,6 @@ snapshots:
       axios: 0.27.2
     transitivePeerDependencies:
       - debug
-
-  '@atproto/lexicon@0.4.0':
-    dependencies:
-      '@atproto/common-web': 0.3.0
-      '@atproto/syntax': 0.3.0
-      iso-datestring-validator: 2.2.2
-      multiformats: 9.9.0
-      zod: 3.22.4
 
   '@atproto/lexicon@0.4.2':
     dependencies:
@@ -9858,8 +9834,6 @@ snapshots:
   yocto-queue@0.1.0: {}
 
   yocto-queue@1.0.0: {}
-
-  zod@3.22.4: {}
 
   zod@3.23.8: {}
 
