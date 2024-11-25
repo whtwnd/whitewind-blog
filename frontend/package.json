@@ -31,7 +31,7 @@
     "@atproto/xrpc": "^0.6.3",
     "@aws-sdk/client-dynamodb": "^3.682.0",
     "@emotion/react": "^11.11.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/styled": "^11.13.5",
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.15.11",
