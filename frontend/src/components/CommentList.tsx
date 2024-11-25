@@ -54,7 +54,7 @@ export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }
 
       // fetch mention bodies
       const clientCache = new Map<string, ReturnType<typeof createClient>>()
-      const mentionPromise: Promise<MentioningRecord[]> = Promise.all(mentionAtUris.map(async uri => {
+      const mentionPromise = Promise.allSettled(mentionAtUris.map(async uri => {
         if (uri.collection === 'app.bsky.feed.post') {
           const response = await (agent.getPostThread({
             uri: uri.toString(),
@@ -100,12 +100,13 @@ export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }
           return { uri, date: now } // will show fallback
         }
       }))
-      const profilePromise = Promise.all(authors.map(async author => await agent.getProfile({ actor: author }).then(resp => resp.data)))
-      const [mentions, rawProfiles] = await Promise.all([
+      const profilePromise = Promise.allSettled(authors.map(async author => await agent.getProfile({ actor: author }).then(resp => resp.data)))
+      const [mentionsRaw, rawProfiles] = await Promise.all([
         mentionPromise,
         profilePromise
       ])
-      const profiles = new Map(rawProfiles.map(profile => [profile.did, profile]))
+      const profiles = new Map(rawProfiles.filter(a => a.status === 'fulfilled').map(profile => [profile.value.did, profile.value]))
+      const mentions: MentioningRecord[] = mentionsRaw.filter(a => a.status === 'fulfilled').map(a => a.value)
 
       // render
       // oldest first (because we will pop this array from tail)
