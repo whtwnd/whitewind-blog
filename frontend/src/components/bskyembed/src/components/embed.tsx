@@ -9,12 +9,14 @@ import {
   AppBskyGraphDefs,
   AppBskyLabelerDefs
 } from '@atproto/api'
-import { ReactNode, useMemo } from 'react'
+import { ReactNode, useContext, useMemo } from 'react'
 
 import InfoIcon from '../../assets/circleInfo_stroke2_corner0_rounded.svg'
 import { CONTENT_LABELS, labelsToInfo } from '../labels'
 import { getRkey } from '../utils'
 import { Link } from './link'
+import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
+import { EntryContext } from '@/contexts/EntryContext'
 
 export function Embed ({
   content,
@@ -26,6 +28,8 @@ export function Embed ({
   hideRecord?: boolean
 }) {
   const labelInfo = useMemo(() => labelsToInfo(labels), [labels])
+  const authorInfo=useContext(AuthorInfoContext)
+  const entryInfo=useContext(EntryContext)
 
   if (content == null) return null
 
@@ -37,6 +41,27 @@ export function Embed ({
 
     // Case 2: External link
     if (AppBskyEmbedExternal.isView(content)) {
+      // link to this entry
+      // omit large ogp
+      if(content.external.uri.startsWith('https://whtwnd.com')){
+        const url=new URL(content.external.uri)
+        const identityVariants=[authorInfo.did as string]
+        if(authorInfo.handle!==undefined){
+          identityVariants.push(authorInfo.handle)
+        }
+        const titleVariants=[entryInfo.rkey as string]
+        if(entryInfo.entry?.title!==undefined){
+          titleVariants.push(encodeURIComponent(entryInfo.entry.title))
+        }
+        for(const identity of identityVariants){
+          for(const entryTitle of titleVariants){
+            if(url.pathname.startsWith(`/${identity}/${entryTitle}`) || url.pathname.startsWith(`/${identity}/entries/${entryTitle}`)){
+              return null
+            }
+          }
+        }
+      }
+
       return <ExternalEmbed content={content} labelInfo={labelInfo} />
     }
 
