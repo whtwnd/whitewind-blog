@@ -3,7 +3,6 @@ import * as prod from 'react/jsx-runtime'
 
 import { AtUri, isValidRecordKey } from '@atproto/syntax'
 
-// import rehypeStringify from "rehype-stringify";
 import rehypeReact from 'rehype-react'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
@@ -22,11 +21,8 @@ import strip from 'strip-markdown'
 import { GetReplacedGetBlobURL } from '@/services/commonUtils'
 
 const production = {
-  // @ts-expect-error: the react types are missing.
   Fragment: prod.Fragment,
-  // @ts-expect-error: the react types are missing.
   jsx: prod.jsx,
-  // @ts-expect-error: the react types are missing.
   jsxs: prod.jsxs,
   components: {
     script: () => <></>,
@@ -166,7 +162,7 @@ export const MarkdownToHtml = async (markdownContent: string, scripts?: string[]
     .use(rehypeHighlight)
   // .use(rehypeStringify)
     .use(rehypeReplaceGetBlobAndFixFootnote)
-    .use(rehypeReact, production)
+    .use(rehypeReact, production as any) // for some reason, production needs to be castable to boolean, according to the compiler
     .process(markdownContent)
 }
 
