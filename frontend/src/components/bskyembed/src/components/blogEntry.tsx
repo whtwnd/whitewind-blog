@@ -24,13 +24,13 @@ export function BlogEntry ({ entry, uri, profile }: BlogEntryProps): ReactNode {
   }, [entry])
 
   const aturi = new AtUri(uri)
-  const href = `/${aturi.hostname}/${entry.title !== undefined ? `entries/${entry.title}` : aturi.rkey}`
+  const href = `/${aturi.hostname}/${entry.title !== undefined ? `entries/${encodeURIComponent(entry.title)}` : aturi.rkey}`
 
   return (
     <Container>
       <div className='flex-1 flex-col flex gap-2'>
         <div className='flex gap-2.5 items-center cursor-pointer'>
-          <Link href={`/profile/${aturi.hostname}`} className='rounded-full'>
+          <Link href={`https://whtwnd.com/${aturi.hostname}`} className='rounded-full'>
             <div className='w-10 h-10 overflow-hidden rounded-full bg-neutral-300 shrink-0'>
               <img
                 src={profile?.avatar}
@@ -39,20 +39,20 @@ export function BlogEntry ({ entry, uri, profile }: BlogEntryProps): ReactNode {
           </Link>
           <div>
             <Link
-              href={`/profile/${aturi.hostname}`}
+              href={`https://whtwnd.com/${aturi.hostname}`}
               className='font-bold text-[17px] leading-5 line-clamp-1 hover:underline underline-offset-2 decoration-2'
             >
               <p>{profile?.displayName}</p>
             </Link>
             <p>
               <Link
-                href={`/profile/${aturi.hostname}`}
+                href={`https://whtwnd.com/${aturi.hostname}`}
                 className='text-[15px] text-textLight hover:underline'
               >
                 @{profile?.handle}
               </Link>
               ・
-              <Link href={href}>
+              <Link href={`https://whtwnd.com${href}`}>
                 <time
                   dateTime={entry.createdAt !== undefined ? new Date(entry.createdAt).toISOString() : ''}
                   className='text-textLight mt-1 text-sm hover:underline'
