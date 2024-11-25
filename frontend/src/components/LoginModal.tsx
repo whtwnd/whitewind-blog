@@ -50,8 +50,7 @@ export const LoginModal: FC<ILoginModalProps> = ({ open, onClose }) => {
       if (pds === undefined) {
         throw new Error('Unable to resolve PDS')
       }
-      const client = createClient(pds)
-      await manager.createSession(did, data.password, client)
+      await manager.createSession(did, data.password, pds)
     }
     login()
       .then(() => {

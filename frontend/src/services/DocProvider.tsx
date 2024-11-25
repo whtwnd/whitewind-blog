@@ -1,6 +1,4 @@
-import * as xrpc from '@/api'
-import { ServiceClient } from '@atproto/xrpc'
-import { ComWhtwndBlogEntry } from '@/api'
+import { AtpBaseClient, ComWhtwndBlogEntry, ComWhtwndBlogGetEntryMetadataByName } from '@/api'
 import * as prod from 'react/jsx-runtime'
 
 import { AtUri, isValidRecordKey } from '@atproto/syntax'
@@ -172,14 +170,11 @@ export const MarkdownToHtml = async (markdownContent: string, scripts?: string[]
     .process(markdownContent)
 }
 
-export const createClient = (hostname: string): xrpc.AtpServiceClient => {
-  const baseClient = new xrpc.AtpBaseClient()
-  const serviceClient = new ServiceClient(baseClient.xrpc, `https://${hostname}`)
-  const atpServiceClient = new xrpc.AtpServiceClient(baseClient, serviceClient)
-  return atpServiceClient
+export const createClient = (hostname: string): AtpBaseClient => {
+  return new AtpBaseClient(`https://${hostname}`)
 }
 
-export type MetaData = xrpc.ComWhtwndBlogGetEntryMetadataByName.Response
+export type MetaData = ComWhtwndBlogGetEntryMetadataByName.Response
 
 export async function ResolveEntryMetadata (authorIdentity: string, entryTitle: string): Promise<MetaData> {
   const appViewClient = createClient(process.env.NEXT_PUBLIC_API_HOSTNAME as string)

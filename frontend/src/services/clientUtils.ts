@@ -1,16 +1,13 @@
-import * as xrpc from '@/api'
 import { isValidHandle } from '@atproto/syntax'
-import { ServiceClient } from '@atproto/xrpc'
 import type { DidDocument } from '@atproto/identity'
+import { AtpBaseClient } from '@/api'
+import { AppBskyRichtextFacet } from '@atproto/api'
 
-export const createClient = (hostname: string): xrpc.AtpServiceClient => {
-  const baseClient = new xrpc.AtpBaseClient()
-  const serviceClient = new ServiceClient(baseClient.xrpc, `https://${hostname}`)
-  const atpServiceClient = new xrpc.AtpServiceClient(baseClient, serviceClient)
-  return atpServiceClient
+export const createClient = (hostname: string): AtpBaseClient => {
+  return new AtpBaseClient(`https://${hostname}`)
 }
 
-export const resolveHandle = async (identifier: string, client: xrpc.AtpServiceClient): Promise<string> => {
+export const resolveHandle = async (identifier: string, client: AtpBaseClient): Promise<string> => {
   let did = identifier
   if (isValidHandle(identifier)) {
     const resolveResult = await client.com.atproto.identity.resolveHandle({ handle: identifier })
@@ -19,7 +16,7 @@ export const resolveHandle = async (identifier: string, client: xrpc.AtpServiceC
   return did
 }
 
-export const resolvePDSClient = async (identifier: string, client: xrpc.AtpServiceClient): Promise<string> => {
+export const resolvePDSClient = async (identifier: string, client: AtpBaseClient): Promise<string> => {
   if (isValidHandle(identifier)) {
     identifier = await resolveHandle(identifier, client)
   }
@@ -56,7 +53,7 @@ export const resolvePDSClient = async (identifier: string, client: xrpc.AtpServi
   throw new Error('#atproto_pds section was not found on the DID document')
 }
 
-export const transformPost = (text: string): { text: string, facets: xrpc.AppBskyRichtextFacet.Main[] } => {
+export const transformPost = (text: string): { text: string, facets: AppBskyRichtextFacet.Main[] } => {
   // Encode the string into UTF-8 bytes
   const encoder = new TextEncoder()
 
@@ -79,7 +76,7 @@ export const transformPost = (text: string): { text: string, facets: xrpc.AppBsk
 
     return positions
   }
-  const facets: xrpc.AppBskyRichtextFacet.Main[] = []
+  const facets: AppBskyRichtextFacet.Main[] = []
   const matches = findUrlPositions(text).sort((a, b) => a.start - b.start)
 
   // split text by matched urls

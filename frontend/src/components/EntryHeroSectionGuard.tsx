@@ -30,7 +30,7 @@ export const BlogViewerGuard: FC<Omit<BlogViewerProps, 'mdHtml'>> = (props) => {
       return
     }
     const client = createClient(authorInfo.pds ?? 'bsky.social')
-    const sess = await manager.getSession(authorInfo.did, client)
+    const sess = await manager.getSession(authorInfo.did, authorInfo.pds ?? 'bsky.social')
     if (sess === undefined || props.aturi === undefined) {
       setIsAuthor(false)
       return

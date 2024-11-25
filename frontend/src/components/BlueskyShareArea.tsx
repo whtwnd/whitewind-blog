@@ -1,4 +1,5 @@
 'use client'
+import { AtpBaseClient } from '@/api'
 import { LoginModal } from '@/components/LoginModal'
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
 import { EntryContext } from '@/contexts/EntryContext'
@@ -6,7 +7,7 @@ import { HeaderContext } from '@/contexts/HeaderContext'
 import { SessionContext } from '@/contexts/SessionContext'
 import { createClient, resolvePDSClient, transformPost } from '@/services/clientUtils'
 import { validateContent } from '@/services/validator'
-import { AppBskyFeedPost, BlobRef, BskyAgent, ComAtprotoRepoUploadBlob } from '@atproto/api'
+import { Agent, AppBskyFeedPost, BlobRef, ComAtprotoRepoUploadBlob } from '@atproto/api'
 import { Card, Checkbox, Label, Spinner, Textarea } from 'flowbite-react'
 import { FC, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -47,21 +48,13 @@ export const BlueskyShareArea: FC<IBlueskyShareButtonProps> = () => {
       setPostState('posting')
       const client = createClient('bsky.social')
       const pds = await resolvePDSClient(curProfile.did, client)
-      const pdsClient = createClient(pds)
-      const sess = await manager.getSession(curProfile.did, pdsClient)
+      const sess = await manager.getSession(curProfile.did, pds)
       if (sess === undefined) {
         requestAuth?.()
         setPostState('idle')
         return
       }
-      pdsClient.setHeader('Authorization', `Bearer ${sess.accessJwt}`)
-      const agent = new BskyAgent({ service: `https://${pds}` })
-      const resumeResult = await agent.resumeSession(sess)
-      if (!resumeResult.success) {
-        requestAuth?.()
-        setPostState('idle')
-        return
-      }
+      const pdsClient = new AtpBaseClient(async (url: string, init?: RequestInit) => await sess.fetchHandler(url, init))
 
       const { text: transformed, facets } = transformPost(data.comment)
 
@@ -106,6 +99,8 @@ export const BlueskyShareArea: FC<IBlueskyShareButtonProps> = () => {
             }
           : undefined
       }
+
+      const agent = new Agent(sess)
       const result = await agent.post(post)
       console.log(result)
       setPostState('postSuccess')
