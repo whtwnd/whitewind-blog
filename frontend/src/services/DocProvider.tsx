@@ -1,11 +1,8 @@
-import * as xrpc from '@/api'
-import { ServiceClient } from '@atproto/xrpc'
-import { ComWhtwndBlogEntry } from '@/api'
+import { AtpBaseClient, ComWhtwndBlogEntry, ComWhtwndBlogGetEntryMetadataByName } from '@/api'
 import * as prod from 'react/jsx-runtime'
 
 import { AtUri, isValidRecordKey } from '@atproto/syntax'
 
-// import rehypeStringify from "rehype-stringify";
 import rehypeReact from 'rehype-react'
 import remarkParse from 'remark-parse'
 import remarkGfm from 'remark-gfm'
@@ -24,11 +21,8 @@ import strip from 'strip-markdown'
 import { GetReplacedGetBlobURL } from '@/services/commonUtils'
 
 const production = {
-  // @ts-expect-error: the react types are missing.
   Fragment: prod.Fragment,
-  // @ts-expect-error: the react types are missing.
   jsx: prod.jsx,
-  // @ts-expect-error: the react types are missing.
   jsxs: prod.jsxs,
   components: {
     script: () => <></>,
@@ -168,18 +162,15 @@ export const MarkdownToHtml = async (markdownContent: string, scripts?: string[]
     .use(rehypeHighlight)
   // .use(rehypeStringify)
     .use(rehypeReplaceGetBlobAndFixFootnote)
-    .use(rehypeReact, production)
+    .use(rehypeReact, production as any) // for some reason, production needs to be castable to boolean, according to the compiler
     .process(markdownContent)
 }
 
-export const createClient = (hostname: string): xrpc.AtpServiceClient => {
-  const baseClient = new xrpc.AtpBaseClient()
-  const serviceClient = new ServiceClient(baseClient.xrpc, `https://${hostname}`)
-  const atpServiceClient = new xrpc.AtpServiceClient(baseClient, serviceClient)
-  return atpServiceClient
+export const createClient = (hostname: string): AtpBaseClient => {
+  return new AtpBaseClient(`https://${hostname}`)
 }
 
-export type MetaData = xrpc.ComWhtwndBlogGetEntryMetadataByName.Response
+export type MetaData = ComWhtwndBlogGetEntryMetadataByName.Response
 
 export async function ResolveEntryMetadata (authorIdentity: string, entryTitle: string): Promise<MetaData> {
   const appViewClient = createClient(process.env.NEXT_PUBLIC_API_HOSTNAME as string)

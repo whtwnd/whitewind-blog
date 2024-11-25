@@ -2,7 +2,6 @@
 
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
 import { SessionContext } from '@/contexts/SessionContext'
-import { createClient } from '@/services/clientUtils'
 import BlogListView from '@/views/BlogListView'
 import { Spinner } from 'flowbite-react'
 import { FC, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
@@ -32,8 +31,7 @@ export const BlogListViewClient: FC<IBlogListViewClientProps> = ({ children, has
       setIsAuthor(false)
       return
     }
-    const client = createClient(authorInfo.pds ?? 'bsky.social')
-    void manager.getSession(authorInfo.did, client).then(result => {
+    void manager.getSession(authorInfo.did, authorInfo.pds ?? 'bsky.social').then(result => {
       setIsAuthor(result !== undefined)
     })
   }, [hasNonPublic, manager, authorInfo])

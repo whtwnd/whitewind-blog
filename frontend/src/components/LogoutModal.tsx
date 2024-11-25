@@ -39,8 +39,7 @@ export const LogoutModal: FC<ILogoutModalProps> = ({ identity, open, onClose }) 
       if (pds === undefined) {
         throw new Error('Unable to resolve PDS')
       }
-      const client = createClient(pds)
-      await manager.deleteSession(did, client)
+      await manager.deleteSession(did, pds)
     }
     logout()
       .then(() => {

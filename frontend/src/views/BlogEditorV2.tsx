@@ -1,5 +1,5 @@
 'use client'
-import { ComAtprotoRepoUploadBlob } from '@/api'
+import { AtpBaseClient, ComAtprotoRepoUploadBlob } from '@/api'
 import { BlobMetadata } from '@/api/types/com/whtwnd/blog/defs'
 import AuthorCard from '@/components/AuthorCard'
 import { BottomAuthorCard } from '@/components/BottomAuthorCard'
@@ -43,7 +43,7 @@ import {
   IoRadioButtonOnOutline,
   IoRadioButtonOffOutline
 } from 'react-icons/io5'
-import { AtUri } from '@atproto/api'
+import { AtUri, CredentialSession } from '@atproto/api'
 import { useRouter } from 'next/navigation'
 import { CTAButton } from '@/components/CTAButton'
 import '@/views/BlogEditorV2.css'
@@ -258,12 +258,11 @@ export const BlogEditorV2: FC = () => {
 
     // Use selected profile in header
     const did = authorInfo.did
-    const client = createClient(authorInfo.pds)
 
     // login
-    let sess
+    let sess: CredentialSession | undefined
     try {
-      sess = await sessManager.getSession(did, client)
+      sess = await sessManager.getSession(did, authorInfo.pds)
     } catch (err) {
       showToast({ message: `Failed to login (${(err as Error).message})`, severity: 'error' })
     }
@@ -273,8 +272,7 @@ export const BlogEditorV2: FC = () => {
       setIsBusy(false)
       return
     }
-
-    client.setHeader('Authorization', `Bearer ${sess?.accessJwt}`)
+    const client = new AtpBaseClient(async (url: string, init?: RequestInit) => await sess.fetchHandler(url, init))
 
     // upload image if any
     let newBlobMetadata: BlobMetadata | undefined
@@ -496,7 +494,7 @@ export const BlogEditorV2: FC = () => {
     const did = curProfile.did
     let pds: string | undefined
     try {
-      const bskyClient = createClient('public.api.bsky.app')
+      const bskyClient = new AtpBaseClient('public.api.bsky.app')
       pds = authorInfo.did !== did ? await resolvePDSClient(did, bskyClient) : authorInfo.pds
       if (pds === undefined) {
         console.error('pds is undefined')
@@ -508,12 +506,11 @@ export const BlogEditorV2: FC = () => {
       setIsBusy(false)
       return
     }
-    const client = createClient(pds)
 
     // login
-    let sess
+    let sess: CredentialSession | undefined
     try {
-      sess = await sessManager.getSession(did, client)
+      sess = await sessManager.getSession(did, pds)
     } catch (err) {
       setToastContent({ message: `Failed to login (${(err as Error).message})`, severity: 'error' })
     }
@@ -523,8 +520,7 @@ export const BlogEditorV2: FC = () => {
       setIsBusy(false)
       return
     }
-
-    client.setHeader('Authorization', `Bearer ${sess?.accessJwt}`)
+    const client = new AtpBaseClient(async (url: string, init?: RequestInit) => await sess.fetchHandler(url, init))
 
     // delete record
     try {

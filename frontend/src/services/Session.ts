@@ -1,12 +1,10 @@
-import { AtpServiceClient } from '@/api'
-import type { OutputSchema as RefreshSessionOutputSchema } from '@/api/types/com/atproto/server/refreshSession'
-import { createClient } from '@/services/clientUtils'
+import { AtpSessionData, CredentialSession } from '@atproto/api'
 
 const SessionDB = 'WhiteWind'
 const SessionStore = 'Session'
 const DBVersion = 1
 
-interface UserData extends RefreshSessionOutputSchema {
+interface UserData extends AtpSessionData {
   lastSelected: string
 }
 
@@ -17,15 +15,18 @@ interface GetIdentityResult {
 }
 
 export interface SessionManager {
-  getSession: (did: string, client: AtpServiceClient) => Promise<UserData | undefined>
-  createSession: (identifier: string, password: string, client: AtpServiceClient) => Promise<UserData | undefined>
-  deleteSession: (did: string, client: AtpServiceClient) => Promise<void>
+  getSession: (did: string, pds: string) => Promise<CredentialSession | undefined>
+  createSession: (identifier: string, password: string, pds: string) => Promise<CredentialSession>
+  deleteSession: (did: string, pds: string) => Promise<void>
   getIdentities: () => Promise<GetIdentityResult[]>
   setLastSelected: (lastSelected: string, did: string) => Promise<void>
 }
 
 export const GenerateSessionManager = (): SessionManager => {
   let db: IDBDatabase | undefined
+
+  const sessions = new Map<string, CredentialSession>()
+
   const init = async (): Promise<void> => {
     const request = indexedDB.open(SessionDB, DBVersion)
     await new Promise<void>((resolve, reject) => {
@@ -77,15 +78,20 @@ export const GenerateSessionManager = (): SessionManager => {
     })
   }
 
-  const getSession = async (did: string, client: AtpServiceClient): Promise<UserData | undefined> => {
+  const getSession = async (did: string, pds: string): Promise<CredentialSession | undefined> => {
+    const ret = sessions.get(did)
+    if (ret !== undefined) {
+      return ret
+    }
+
     if (db === undefined) {
       await init()
       if (db === undefined) {
         throw new Error('Could not open session')
       }
     }
-    const sess = await getSessionStorageData(did)
-    if (sess === undefined) {
+    const userData = await getSessionStorageData(did)
+    if (userData === undefined) {
       return undefined
     }
 
@@ -103,16 +109,15 @@ export const GenerateSessionManager = (): SessionManager => {
       return expiry > Date.now() / 1000 + 60 // 60 seconds buffer
     }
     // accessJwt is valid
-    if (isJwtValid(sess.accessJwt)) {
-      return sess
+    if (isJwtValid(userData.accessJwt)) {
+      return await refreshSession(did, userData, pds)
     }
     // both accessJwt and refreshJwt is invalid
-    if (!isJwtValid(sess.refreshJwt)) {
+    if (!isJwtValid(userData.refreshJwt)) {
       return undefined
     }
     // accessJwt is invalid but refreshJwt is valid. Try to refresh.
-    const refreshed = await refreshSession(did, sess.refreshJwt, client)
-    return { ...refreshed, lastSelected: sess.lastSelected }
+    return await refreshSession(did, userData, pds)
   }
 
   const storeSession = async (did: string, sess: UserData): Promise<void> => {
@@ -135,54 +140,48 @@ export const GenerateSessionManager = (): SessionManager => {
     })
   }
 
-  const createSession = async (did: string, password: string, client: AtpServiceClient): Promise<UserData> => {
-    const ret = await client.com.atproto.server.createSession({
-      identifier: did,
-      password
-    })
-    ret.data.email = undefined
-    ret.data.emailConfirmed = undefined
-    const sess = ret.data as UserData
-    sess.lastSelected = new Date().toISOString()
-    await storeSession(did, sess)
-    return sess
-  }
-
-  const refreshSession = async (did: string, refreshJwt: string, client: AtpServiceClient): Promise<RefreshSessionOutputSchema> => {
-    const ret = await client.com.atproto.server.refreshSession(undefined, {
-      headers: {
-        Authorization: `Bearer ${refreshJwt}`
+  const createSession = async (did: string, password: string, pds: string): Promise<CredentialSession> => {
+    const credentialSession = new CredentialSession(new URL(`https://${pds}`), globalThis.fetch, async (evt, session) => {
+      if ((evt === 'create' || evt === 'update') && session !== undefined) {
+        await storeSession(did, { ...session, lastSelected: new Date().toISOString() })
       }
     })
-    const sess = ret.data as UserData
-    sess.lastSelected = new Date().toISOString()
-    await storeSession(did, sess)
-    return ret.data
+    await credentialSession.login({ identifier: did, password })
+    sessions.set(did, credentialSession)
+    return credentialSession
   }
 
-  const deleteSession = async (did: string, client: AtpServiceClient): Promise<void> => {
+  const refreshSession = async (did: string, sess: UserData, pds: string): Promise<CredentialSession> => {
+    let credentialSession = sessions.get(did)
+    if (credentialSession === undefined) {
+      credentialSession = new CredentialSession(new URL(`https://${pds}`), globalThis.fetch, async (evt, session) => {
+        if ((evt === 'create' || evt === 'update') && session !== undefined) {
+          await storeSession(did, { ...session, lastSelected: new Date().toISOString() })
+        }
+      })
+      sessions.set(did, credentialSession)
+    }
+    await credentialSession.resumeSession(sess)
+    return credentialSession
+  }
+
+  const deleteSession = async (did: string, pds: string): Promise<void> => {
     if (db === undefined) {
       await init()
       if (db === undefined) {
         throw new Error('Could not open session')
       }
     }
-    let sess: UserData | undefined
+    let sess: CredentialSession | undefined
     try {
-      sess = await getSession(did, client)
+      sess = await getSession(did, pds)
       if (sess !== undefined) {
-        client.setHeader('Authorization', `Bearer ${sess.refreshJwt}`)
-        await client.com.atproto.server.deleteSession()
+        await sess.logout()
+      } else {
+        console.log(`Session was not found for ${did} ${pds}`)
       }
     } catch (err) {
       console.warn(err)
-    }
-    if (sess === undefined) {
-      try {
-        sess = await getSessionStorageData(did)
-      } catch (err) {
-        console.warn(err)
-      }
     }
     if (sess === undefined) {
       // no such session is stored
@@ -241,7 +240,7 @@ export const GenerateSessionManager = (): SessionManager => {
         throw new Error('Could not open session')
       }
     }
-    const cur = await getSession(did, createClient('bsky.social'))
+    const cur = await getSessionStorageData(did)
     if (cur === undefined) {
       return
     }
