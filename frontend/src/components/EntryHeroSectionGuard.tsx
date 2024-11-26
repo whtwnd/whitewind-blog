@@ -1,7 +1,6 @@
 'use client'
 
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
-import { SessionContext } from '@/contexts/SessionContext'
 import { createClient } from '@/services/clientUtils'
 import BlogViewer, { BlogViewerProps } from '@/views/BlogViewer'
 import { AtUri } from '@atproto/api'
@@ -10,10 +9,13 @@ import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } fro
 import { ComWhtwndBlogEntry } from '@/api'
 import { MarkdownToHtml } from '@/services/DocProvider'
 import { NO_THEME, ThemeMapping } from '@/components/themes'
+import { useSetAtom, useStore } from 'jotai'
+import { getSessionAtom, seenUsersAtom } from '@/atoms'
 
 export const BlogViewerGuard: FC<Omit<BlogViewerProps, 'mdHtml'>> = (props) => {
   const authorInfo = useContext(AuthorInfoContext)
-  const manager = useContext(SessionContext)
+  const store = useStore()
+  const getSession = useSetAtom(getSessionAtom)
   const [isAuthor, setIsAuthor] = useState<boolean | undefined>(undefined)
   const [mdHtml, setMdHtml] = useState<JSX.Element | undefined>()
   const [theme, setTheme] = useState<ComWhtwndBlogEntry.Record['theme']>()
@@ -30,8 +32,18 @@ export const BlogViewerGuard: FC<Omit<BlogViewerProps, 'mdHtml'>> = (props) => {
       return
     }
     const client = createClient(authorInfo.pds ?? 'bsky.social')
-    const sess = await manager.getSession(authorInfo.did, authorInfo.pds ?? 'bsky.social')
-    if (sess === undefined || props.aturi === undefined) {
+    // check if the user exists in the seenUsers
+    const seen = store.get(seenUsersAtom)
+    if (seen[authorInfo.did] === undefined || props.aturi === undefined) {
+      setIsAuthor(false)
+      return
+    }
+    // check if it can actually login
+    const sess = await getSession(authorInfo.did)
+    if (sess === undefined) {
+      // cannot login. session is expired or deleted by somewhere else or falsified
+      // FYI: the users should be automatically navigated to oauth login page when they select profile on Header
+      // So this usually should not happen
       setIsAuthor(false)
       return
     }
@@ -44,7 +56,7 @@ export const BlogViewerGuard: FC<Omit<BlogViewerProps, 'mdHtml'>> = (props) => {
     setMdHtml(mdHtml.result)
     setTheme(docRaw.theme)
     setIsAuthor(true)
-  }, [authorInfo.did, authorInfo.pds, manager, props.aturi])
+  }, [authorInfo.did, authorInfo.pds, getSession, props.aturi])
 
   // has draft
   // check if the user has session of the author

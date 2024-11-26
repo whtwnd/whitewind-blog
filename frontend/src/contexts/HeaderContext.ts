@@ -4,8 +4,8 @@ import { Dispatch, SetStateAction, createContext } from 'react'
 export interface IHeaderContextValue {
   curProfile?: ProfileViewDetailed
   setCurProfile: Dispatch<SetStateAction<ProfileViewDetailed | undefined>>
-  requestAuth: () => void
-  setRequestAuth: Dispatch<SetStateAction<() => void>>
+  requestAuth: (redirectUri?: string) => void
+  setRequestAuth: Dispatch<SetStateAction<(redirectUri?: string) => void>>
 }
 
 export const HeaderContext = createContext<IHeaderContextValue>({ setCurProfile: () => {}, requestAuth: () => {}, setRequestAuth: () => {} })

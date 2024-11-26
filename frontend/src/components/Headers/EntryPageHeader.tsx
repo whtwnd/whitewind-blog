@@ -1,8 +1,9 @@
 'use client'
 
+import { identitiesAtom } from '@/atoms'
 import Header from '@/components/Headers/Header'
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
-import { SessionContext } from '@/contexts/SessionContext'
+import { useAtomValue } from 'jotai'
 import { FC, useCallback, useContext, useEffect, useState } from 'react'
 
 const OtherEntriesFromThisAuthor: FC = () => {
@@ -21,13 +22,12 @@ const OtherEntriesFromThisAuthor: FC = () => {
 
 const EditEntry: FC = () => {
   const { did } = useContext(AuthorInfoContext)
-  const manager = useContext(SessionContext)
+  const identities = useAtomValue(identitiesAtom)
   const [isEditable, setIsEditable] = useState(false)
 
   const LoadProfiles = useCallback(async () => {
-    const ids = await manager.getIdentities()
-    setIsEditable(ids.map(id => id.did).find(val => val === did) !== undefined)
-  }, [manager, did])
+    setIsEditable(identities.map(id => id.did).find(val => val === did) !== undefined)
+  }, [identities, did])
 
   useEffect(() => {
     void LoadProfiles()
