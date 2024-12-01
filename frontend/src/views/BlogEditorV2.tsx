@@ -13,7 +13,6 @@ import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
 import { EntryContext } from '@/contexts/EntryContext'
 import { HeaderContext } from '@/contexts/HeaderContext'
 import { MarkdownToHtml } from '@/services/DocProvider'
-import { GenerateSessionManager } from '@/services/Session'
 import { createClient, resolvePDSClient } from '@/services/clientUtils'
 import { validateOGPDimension, validateOGPURL, validateTitle } from '@/services/validator'
 import BlogViewer from '@/views/BlogViewer'
@@ -43,10 +42,13 @@ import {
   IoRadioButtonOnOutline,
   IoRadioButtonOffOutline
 } from 'react-icons/io5'
-import { AtUri, CredentialSession } from '@atproto/api'
+import { AtUri } from '@atproto/api'
 import { useRouter } from 'next/navigation'
 import { CTAButton } from '@/components/CTAButton'
 import '@/views/BlogEditorV2.css'
+import { useSetAtom } from 'jotai'
+import { OAuthSession } from '@atproto/oauth-client-browser'
+import { getSessionAtom } from '@/atoms'
 
 interface IMenuItemProps {
   icon?: ReactNode
@@ -174,6 +176,7 @@ export const BlogEditorV2: FC = () => {
   const entryInfo = useContext(EntryContext)
   const authorInfo = useContext(AuthorInfoContext)
   const { curProfile, requestAuth } = useContext(HeaderContext)
+  const getSession = useSetAtom(getSessionAtom)
 
   // UI states
   // necessary for preview
@@ -192,8 +195,6 @@ export const BlogEditorV2: FC = () => {
   const [content, setContent] = useState<string>(entryInfo.entry?.content ?? '')
   const [blobs, setBlobs] = useState(entryInfo.entry?.blobs)
   const [visibility, setVisibility] = useState(entryInfo.entry?.isDraft === true ? 'author' : (entryInfo.entry?.visibility ?? 'author'))
-
-  const sessManager = useMemo(GenerateSessionManager, [])
 
   const router = useRouter()
 
@@ -260,9 +261,9 @@ export const BlogEditorV2: FC = () => {
     const did = authorInfo.did
 
     // login
-    let sess: CredentialSession | undefined
+    let sess: OAuthSession | undefined
     try {
-      sess = await sessManager.getSession(did, authorInfo.pds)
+      sess = await getSession(did)
     } catch (err) {
       showToast({ message: `Failed to login (${(err as Error).message})`, severity: 'error' })
     }
@@ -372,7 +373,7 @@ export const BlogEditorV2: FC = () => {
     } else {
       showToast({ message: 'Succeeded in writing the entry!', severity: 'success' })
     }
-  }, [isBusy, blobs, content, entryInfo.rkey, requestAuth, sessManager, visibility, authorInfo.did, authorInfo.handle, router, authorInfo.pds, setToastContent])
+  }, [isBusy, blobs, content, entryInfo.rkey, requestAuth, getSession, visibility, authorInfo.did, authorInfo.handle, router, authorInfo.pds, setToastContent])
 
   const onUploadClick = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
     const { files } = event.target
@@ -508,9 +509,9 @@ export const BlogEditorV2: FC = () => {
     }
 
     // login
-    let sess: CredentialSession | undefined
+    let sess: OAuthSession | undefined
     try {
-      sess = await sessManager.getSession(did, pds)
+      sess = await getSession(did)
     } catch (err) {
       setToastContent({ message: `Failed to login (${(err as Error).message})`, severity: 'error' })
     }
@@ -533,7 +534,7 @@ export const BlogEditorV2: FC = () => {
       setToastContent({ message: `Failed to delete the entry (${(err as Error).message})`, severity: 'error' })
       setIsBusy(false)
     }
-  }, [isBusy, authorInfo.did, authorInfo.handle, authorInfo.pds, curProfile, entryInfo.rkey, requestAuth, router, sessManager, setToastContent, clearTimers])
+  }, [isBusy, authorInfo.did, authorInfo.handle, authorInfo.pds, curProfile, entryInfo.rkey, requestAuth, router, getSession, setToastContent, clearTimers])
 
   // Pages
   const ViewerCache = useMemo(() => <BlogViewer

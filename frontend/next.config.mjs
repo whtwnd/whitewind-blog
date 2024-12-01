@@ -90,6 +90,15 @@ const nextConfig = {
         ]
       },
       {
+        source: '/oauth/callback',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'max-age=3600'
+          }
+        ]
+      },
+      {
         source: '/edit',
         headers: [
           {

@@ -1,14 +1,15 @@
 'use client'
 import { AtpBaseClient } from '@/api'
+import { getSessionAtom } from '@/atoms'
 import { LoginModal } from '@/components/LoginModal'
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
 import { EntryContext } from '@/contexts/EntryContext'
 import { HeaderContext } from '@/contexts/HeaderContext'
-import { SessionContext } from '@/contexts/SessionContext'
-import { createClient, resolvePDSClient, transformPost } from '@/services/clientUtils'
+import { transformPost } from '@/services/clientUtils'
 import { validateContent } from '@/services/validator'
 import { Agent, AppBskyFeedPost, BlobRef, ComAtprotoRepoUploadBlob } from '@atproto/api'
 import { Card, Checkbox, Label, Spinner, Textarea } from 'flowbite-react'
+import { useSetAtom } from 'jotai'
 import { FC, useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -29,7 +30,7 @@ export const BlueskyShareArea: FC<IBlueskyShareButtonProps> = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [failMessage, setFailMessage] = useState('')
   const { handleSubmit, formState, register } = useForm<FormValues>()
-  const manager = useContext(SessionContext)
+  const getSession = useSetAtom(getSessionAtom)
   const { curProfile, requestAuth } = useContext(HeaderContext)
   const { entry } = useContext(EntryContext)
   const authorInfo = useContext(AuthorInfoContext)
@@ -46,9 +47,7 @@ export const BlueskyShareArea: FC<IBlueskyShareButtonProps> = () => {
         return
       }
       setPostState('posting')
-      const client = createClient('bsky.social')
-      const pds = await resolvePDSClient(curProfile.did, client)
-      const sess = await manager.getSession(curProfile.did, pds)
+      const sess = await getSession(curProfile.did)
       if (sess === undefined) {
         requestAuth?.()
         setPostState('idle')
@@ -177,3 +176,5 @@ export const BlueskyShareArea: FC<IBlueskyShareButtonProps> = () => {
     </Card>
   )
 }
+
+export default BlueskyShareArea

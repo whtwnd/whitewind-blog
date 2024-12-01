@@ -7,10 +7,15 @@
 	"service": "devcontainer",
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
-		"ghcr.io/devcontainers/features/aws-cli:1": {},
-		"ghcr.io/devcontainers/features/terraform:1": {},
 		"ghcr.io/devcontainers-contrib/features/typescript:2": {},
-		"ghcr.io/devcontainers-contrib/features/pnpm:2": {}
+		"ghcr.io/devcontainers/features/aws-cli:1": {},
+		"ghcr.io/devcontainers/features/node:1": {
+			"nodeGypDependencies": true,
+			"installYarnUsingApt": true,
+			"version": "lts",
+			"pnpmVersion": "latest",
+			"nvmVersion": "latest"
+		}
 	},
 	"postCreateCommand": "export SHELL=/usr/bin/bash && pnpm setup && export PNPM_HOME=/home/vscode/.local/share/pnpm && export PATH=$PNPM_HOME:$PATH && pnpm install -g @atproto/lex-cli prettier",
 	"workspaceFolder": "/workspaces",

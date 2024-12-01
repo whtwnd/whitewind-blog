@@ -1,10 +1,11 @@
 'use client'
 
-import { SessionContext } from '@/contexts/SessionContext'
 import { createClient, resolveHandle, resolvePDSClient } from '@/services/clientUtils'
 import { Modal, Spinner } from 'flowbite-react'
-import { FC, useContext, useState } from 'react'
+import { FC, useState } from 'react'
 import { isValidHandle } from '@atproto/syntax'
+import { useSetAtom } from 'jotai'
+import { signOutAtom } from '@/atoms'
 
 export interface ILogoutModalProps {
   identity: string
@@ -18,7 +19,7 @@ export const LogoutModal: FC<ILogoutModalProps> = ({ identity, open, onClose }) 
   const [logoutState, setLogoutState] = useState<LogoutState>('idle')
   const [failMessage, setFailMessage] = useState('')
 
-  const manager = useContext(SessionContext)
+  const signOut = useSetAtom(signOutAtom)
 
   const closeHandler = (): void => {
     setLogoutState('idle')
@@ -39,7 +40,7 @@ export const LogoutModal: FC<ILogoutModalProps> = ({ identity, open, onClose }) 
       if (pds === undefined) {
         throw new Error('Unable to resolve PDS')
       }
-      await manager.deleteSession(did, pds)
+      await signOut(did)
     }
     logout()
       .then(() => {

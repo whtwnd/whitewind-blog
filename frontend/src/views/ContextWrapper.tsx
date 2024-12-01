@@ -1,14 +1,9 @@
 'use client'
 
-import { ComWhtwndBlogEntry } from '@/api'
-import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
-import { CommentContext, MentioningRecord } from '@/contexts/CommentContext'
-import { EntryContext } from '@/contexts/EntryContext'
-import { SessionContextWrapper } from '@/contexts/SessionContext'
-import { HeaderContextWrapper } from '@/views/HeaderContextWrapper'
-import { ProfileViewDetailed } from '@atproto/api/dist/client/types/app/bsky/actor/defs'
-import { jsonToLex } from '@atproto/lexicon'
-import { FC, ReactNode, useMemo, useState } from 'react'
+import dynamic from 'next/dynamic'
+import { FC, ReactNode, Suspense } from 'react'
+
+const ContextWrapperBody = dynamic(async () => await import('./ContextWrapperBody'), { ssr: false })
 
 export interface IContextWrapperProps {
   children: ReactNode
@@ -19,41 +14,13 @@ export interface IContextWrapperProps {
   entryString?: string
   rkey?: string
   cid?: string
+  fallback?: ReactNode
 }
 
-export const ContextWrapper: FC<IContextWrapperProps> = ({
-  children,
-  pds,
-  did,
-  handle,
-  profileString,
-  entryString,
-  rkey,
-  cid
-}) => {
-  const [entry, setEntry] = useState(entryString !== undefined ? jsonToLex(entryString) as ComWhtwndBlogEntry.Record : undefined)
-
-  const profile = profileString !== undefined ? jsonToLex(profileString) as ProfileViewDetailed : undefined
-  const [comments, setComments] = useState<MentioningRecord[]>([])
-
-  const contextValue = useMemo(() => {
-    return {
-      comments,
-      setComments
-    }
-  }, [comments])
-
+export const ContextWrapper: FC<IContextWrapperProps> = (props) => {
   return (
-    <AuthorInfoContext.Provider value={{ did, handle, profile, pds }}>
-      <EntryContext.Provider value={{ entry, rkey, cid, setEntry }}>
-        <SessionContextWrapper>
-          <CommentContext.Provider value={contextValue}>
-            <HeaderContextWrapper>
-              {children}
-            </HeaderContextWrapper>
-          </CommentContext.Provider>
-        </SessionContextWrapper>
-      </EntryContext.Provider>
-    </AuthorInfoContext.Provider>
+    <Suspense fallback={props.fallback}>
+      <ContextWrapperBody {...props} />
+    </Suspense>
   )
 }

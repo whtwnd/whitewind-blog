@@ -1,0 +1,20 @@
+{
+  "client_id": "https://whtwnd.com/oauth/client-metadata.json",
+  "application_type": "web",
+  "client_name": "WhiteWind atproto long-form article platform",
+  "client_uri": "https://whtwnd.com",
+  "logo_uri": "https://whtwnd.com/whtwnd.svg",
+  "dpop_bound_access_tokens": true,
+  "grant_types": [
+    "authorization_code",
+    "refresh_token"
+  ],
+  "redirect_uris": [
+    "https://whtwnd.com/oauth/callback"
+  ],
+  "response_types": [
+    "code"
+  ],
+  "scope": "atproto transition:generic",
+  "token_endpoint_auth_method": "none"
+}
