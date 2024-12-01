@@ -2,6 +2,7 @@ import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import clientMetadata from '@/../public/oauth/client-metadata.json'
 import { BrowserOAuthClient, OAuthSession } from '@atproto/oauth-client-browser'
+import { currentStoreAtom } from '@/atoms'
 
 export interface AuthState {
   ident: string
@@ -37,12 +38,20 @@ const isAuthState = (obj: Record<string, any> | undefined): obj is AuthState => 
   return typeof obj?.ident === 'string' && typeof obj.redirect === 'string'
 }
 
-export const oauthClientAtom = atom(_get => new BrowserOAuthClient({ clientMetadata: process.env.NODE_ENV === 'production' ? clientMetadata : loopbackMetadata, handleResolver: 'https://public.api.bsky.app' } as any))
+const rawOAuthClientAtom = atom(async () => {
+  const client = new BrowserOAuthClient({ clientMetadata: process.env.NODE_ENV === 'production' ? clientMetadata : loopbackMetadata, handleResolver: 'https://public.api.bsky.app' } as any)
+  const initResult = await client.init()
+  return { client, initResult }
+})
 
-export const clientInitResultAsyncAtom = atom<Promise<InitResult>>(
-  async get => {
-    const client = get(oauthClientAtom)
-    return await client.init()
+export const oauthClientAtom = atom(
+  async (get) => {
+    const { client, initResult } = await get(rawOAuthClientAtom)
+    const store = get(currentStoreAtom)
+    if (initResult !== undefined) {
+      await store.set(writeInitResultAtom, initResult)
+    }
+    return client
   }
 )
 
@@ -95,12 +104,12 @@ export const setLastSelectedSeenUsersAtom = atom(
 export const writeInitResultAtom = atom(
   null,
   (get, set, initResult: InitResult) => {
-    if (initResult === undefined) {
+    if (initResult?.state === undefined || initResult?.state === null) {
       return
     }
 
     let ident: string = initResult.session.sub
-    const state = typeof initResult.state === 'string' ? JSON.parse(initResult.state) : initResult.session.sub
+    const state = JSON.parse(initResult.state)
     if (isAuthState(state)) {
       ident = state.ident
       set(rawRedirectHrefAtom, state.redirect)
@@ -120,10 +129,7 @@ export const writeInitResultAtom = atom(
 export const signInAtom = atom(
   null,
   async (get, _set, { ident, redirect }: { ident: string, redirect?: string }) => {
-    // init if not done yet
-    await get(clientInitResultAsyncAtom)
-
-    const client = get(oauthClientAtom)
+    const client = await get(oauthClientAtom)
     if (client === undefined) {
       throw new Error('Client is not available')
     }
@@ -137,8 +143,8 @@ export const signInAtom = atom(
 
 export const getSessionAtom = atom(
   null,
-  async (get, set, did: string) => {
-    const client = get(oauthClientAtom)
+  async (get, _set, did: string) => {
+    const client = await get(oauthClientAtom)
     try {
       return await client.restore(did)
     } catch (err) {
@@ -150,7 +156,7 @@ export const getSessionAtom = atom(
 export const signOutAtom = atom(
   null,
   async (get, set, did: string) => {
-    const client = get(oauthClientAtom)
+    const client = await get(oauthClientAtom)
     await client.revoke(did)
     set(deleteSeenUserAtom, did)
   }
