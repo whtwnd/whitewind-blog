@@ -39,7 +39,7 @@ export const validateIdentity = async (value: string | boolean | number | undefi
         const hostname = value.replace('did:web:', '').replace(':', '/')
         const url = new URL(`https://${hostname}/.well-known/did.json`)
         const json = await (await fetch(url)).json()
-        if (json.did !== value) {
+        if (json.id !== value) {
           return 'Invalid DID'
         }
         return true
