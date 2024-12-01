@@ -13,7 +13,7 @@ import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
 import { EntryContext } from '@/contexts/EntryContext'
 import { HeaderContext } from '@/contexts/HeaderContext'
 import { MarkdownToHtml } from '@/services/DocProvider'
-import { createClient, resolvePDSClient } from '@/services/clientUtils'
+import { createClient } from '@/services/clientUtils'
 import { validateOGPDimension, validateOGPURL, validateTitle } from '@/services/validator'
 import BlogViewer from '@/views/BlogViewer'
 import { BlobRef } from '@atproto/lexicon'
@@ -493,20 +493,6 @@ export const BlogEditorV2: FC = () => {
     setIsBusy(true)
 
     const did = curProfile.did
-    let pds: string | undefined
-    try {
-      const bskyClient = new AtpBaseClient('public.api.bsky.app')
-      pds = authorInfo.did !== did ? await resolvePDSClient(did, bskyClient) : authorInfo.pds
-      if (pds === undefined) {
-        console.error('pds is undefined')
-        setIsBusy(false)
-        return
-      }
-    } catch (err) {
-      setToastContent({ message: `Failed to resolve PDS (${(err as Error).message})`, severity: 'error' })
-      setIsBusy(false)
-      return
-    }
 
     // login
     let sess: OAuthSession | undefined
