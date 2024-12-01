@@ -37,7 +37,7 @@ const isAuthState = (obj: Record<string, any> | undefined): obj is AuthState => 
   return typeof obj?.ident === 'string' && typeof obj.redirect === 'string'
 }
 
-export const oauthClientAtom = atom(_get => new BrowserOAuthClient({ clientMetadata: process.env.NODE_ENV === 'production' ? clientMetadata : loopbackMetadata, handleResolver: 'https://bsky.social' } as any))
+export const oauthClientAtom = atom(_get => new BrowserOAuthClient({ clientMetadata: process.env.NODE_ENV === 'production' ? clientMetadata : loopbackMetadata, handleResolver: 'https://public.api.bsky.app' } as any))
 
 export const clientInitResultAsyncAtom = atom<Promise<InitResult>>(
   async get => {
