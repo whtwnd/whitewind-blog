@@ -35,7 +35,7 @@
     "@emotion/styled": "^11.13.5",
     "@mui/icons-material": "^5.15.10",
     "@mui/material": "^5.16.7",
-    "@mui/material-nextjs": "^5.15.11",
+    "@mui/material-nextjs": "^6.1.9",
     "@svgr/webpack": "^8.1.0",
     "@types/unist": "^3.0.2",
     "@uiw/react-md-editor": "^4.0.4",
