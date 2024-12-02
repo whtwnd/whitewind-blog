@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@atproto/api": "^0.13.14",
+    "@atproto/api": "^0.13.18",
     "@atproto/identity": "^0.3.2",
     "@atproto/lexicon": "^0.4.3",
     "@atproto/oauth-client-browser": "^0.3.2",
