@@ -24,7 +24,7 @@
     ]
   },
   "dependencies": {
-    "@atproto/api": "^0.13.14",
+    "@atproto/api": "^0.13.18",
     "@atproto/identity": "^0.3.2",
     "@atproto/lexicon": "^0.4.3",
     "@atproto/oauth-client-browser": "^0.3.2",
@@ -48,7 +48,7 @@
     "highlight.js": "^11.10.0",
     "html-react-parser": "^5.1.7",
     "jotai": "^2.10.3",
-    "multiformats": "^13.3.0",
+    "multiformats": "^13.3.1",
     "next": "^14.2.10",
     "next-nprogress-bar": "^2.3.15",
     "next-remove-imports": "^1.0.12",
@@ -68,7 +68,7 @@
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
     "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.0",
+    "remark-rehype": "^11.1.1",
     "strip-markdown": "^6.0.0",
     "unified": "^11.0.5",
     "unist-util-inspect": "^8.1.0",
@@ -87,7 +87,7 @@
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
     "postcss-nesting": "^13.0.1",
-    "tailwindcss": "^3.4.14",
+    "tailwindcss": "^3.4.15",
     "ts-standard": "^12.0.2",
     "typescript": "^5.7.2"
   }
