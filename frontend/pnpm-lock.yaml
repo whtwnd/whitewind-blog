@@ -81,8 +81,8 @@ importers:
         specifier: ^2.10.3
         version: 2.10.3(@types/react@18.3.12)(react@18.3.1)
       multiformats:
-        specifier: ^13.3.0
-        version: 13.3.0
+        specifier: ^13.3.1
+        version: 13.3.1
       next:
         specifier: ^14.2.10
         version: 14.2.10(@babel/core@7.24.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3436,8 +3436,8 @@ packages:
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
 
-  multiformats@13.3.0:
-    resolution: {integrity: sha512-CBiqvsufgmpo01VT5ze94O+uc+Pbf6f/sThlvWss0sBZmAOu6GQn5usrYV2sf2mr17FWYc0rO8c/CNe2T90QAA==}
+  multiformats@13.3.1:
+    resolution: {integrity: sha512-QxowxTNwJ3r5RMctoGA5p13w5RbRT2QDkoM+yFlqfLiioBp78nhDjnRLvmSBI9+KAqN4VdgOVWM9c0CHd86m3g==}
 
   multiformats@9.9.0:
     resolution: {integrity: sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==}
@@ -8800,7 +8800,7 @@ snapshots:
 
   ms@2.1.2: {}
 
-  multiformats@13.3.0: {}
+  multiformats@13.3.1: {}
 
   multiformats@9.9.0: {}
 
