@@ -4,10 +4,9 @@ import ResolvePDS from '@/services/PDSResolver'
 import { IContextWrapperProps } from '@/views/ContextWrapper'
 import { BskyAgent, lexToJson } from '@atproto/api'
 import { ProfileViewDetailed } from '@atproto/api/dist/client/types/app/bsky/actor/defs'
-import { isThreadViewPost } from '@atproto/api/dist/client/types/app/bsky/feed/defs'
 import { DidResolver, HandleResolver } from '@atproto/identity'
 import { AtUri, isValidHandle } from '@atproto/syntax'
-import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb'
+import { AttributeValue, DynamoDBClient, ScanCommand, ScanCommandInput } from '@aws-sdk/client-dynamodb'
 import { Metadata } from 'next'
 import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types'
 
@@ -95,72 +94,29 @@ export async function PrepareContext ({ ident, rkey, cid }: IPrepareContextArgs)
 
 export const GetStats = async (): Promise<Map<string, number>> => {
   const client = new DynamoDBClient({ region: 'ap-northeast-1' })
-  const params = {
-    TableName: 'com.whtwnd.blog.mentions'
-  }
-  const command = new ScanCommand(params)
-  const data = await client.send(command)
+  // TODO use query instead of scan
+  let lastEvaluatedKey: Record<string, AttributeValue> | undefined
+  const items: Array<Record<string, AttributeValue>> = []
+  do {
+    const params: ScanCommandInput = {
+      TableName: 'com.whtwnd.blog.mentions',
+      ProjectionExpression: 'subjectAtUri',
+      ExclusiveStartKey: lastEvaluatedKey
+    }
+    const command = new ScanCommand(params)
+    const data = await client.send(command)
+    if (data.Items != null) {
+      items.push(...data.Items)
+    }
+    lastEvaluatedKey = data.LastEvaluatedKey
+  } while (lastEvaluatedKey !== undefined)
 
   // rough estimation of top entries
-  const statsRough = new Map<string, [number, string[]]>()
-  data.Items?.forEach(item => {
-    const subject = item.subjectAtUri.S as string
-    const cur = statsRough.get(subject) ?? [0, [item.postAtUri.S as string]]
-    statsRough.set(subject, [cur[0] + 1, [...cur[1], item.postAtUri.S as string]])
-  })
-  const top15 = Array.from(statsRough.entries())
-    .sort((a, b) => {
-      return -a[1][0] + b[1][0]
-    })
-    .slice(0, 15)
-  const flattened: Array<{ subject: string, uri: string }> = []
-  for (const [subject, [count, uris]] of top15) {
-    void count
-    for (const uri of uris) {
-      flattened.push({ subject, uri })
-    }
-  }
-
   const stats = new Map<string, number>()
-  const agent = new BskyAgent({ service: 'https://public.api.bsky.app' })
-  const threads = await Promise.all(flattened.map(async ({ subject, uri }) => {
-    if (new AtUri(uri).collection !== 'app.bsky.feed.post') {
-      return undefined
-    }
-    try {
-      const result = await agent.getPostThread({
-        uri,
-        parentHeight: 0,
-        depth: 1000
-      })
-      return { uri: subject, data: result.data }
-    } catch (err) {
-      console.error(err)
-      return undefined
-    }
-  }) ?? [])
-
-  const seen = new Set<string>()
-  if (threads === undefined) {
-    return stats
-  }
-  while (threads.length > 0) {
-    const t = threads.pop()
-    if (t === undefined) {
-      continue
-    }
-    const { uri, data } = t
-    if (!isThreadViewPost(data.thread)) {
-      continue
-    }
-    if (!seen.has(data.thread.post.uri)) {
-      stats.set(uri, (stats.get(uri) ?? 0) + 1)
-    }
-    seen.add(data.thread.post.uri)
-    data.thread.replies?.forEach(reply => {
-      threads.push({ uri, data: { success: true, thread: reply } })
-    })
-  }
+  items.forEach(item => {
+    const subject = item.subjectAtUri.S as string
+    stats.set(subject, (stats.get(subject) ?? 0) + 1)
+  })
   return stats
 }
 
