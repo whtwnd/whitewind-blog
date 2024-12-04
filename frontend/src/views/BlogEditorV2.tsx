@@ -609,7 +609,7 @@ export const BlogEditorV2: FC = () => {
     })
 
     return pics !== undefined && pics.length > 0
-      ? <div className='p-4 w-full grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 items-center'>{pics}</div>
+      ? <div className='p-4 w-full max-h-full overflow-auto grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 items-center'>{pics}</div>
       : (
         <div className='p-4 w-full h-full flex justify-center items-center'>
           <h1 className='font-medium text-gray-400 text-2xl'>No pictures</h1>
