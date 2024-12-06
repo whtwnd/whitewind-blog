@@ -26,8 +26,9 @@ export const BlogCard: React.FC<BlogCardProps> = ({ authorInfo, entryInfo, noRou
   const l = entry.title?.length ?? 0
   const sizeClass = l < 50 ? 0 : l < 100 ? 1 : 2
   const titleSize = titleSizeMap.get(sizeClass) as string
-  let entryHref = `/${authorInfo.handle ?? authorInfo.did as string}/`
-  entryHref += entry.title !== undefined ? `entries/${encodeURIComponent(entry.title)}?rkey=${entryInfo.rkey as string}` : (entryInfo.rkey as string)
+  const entryHref = `/${authorInfo.handle ?? authorInfo.did as string}/${entryInfo.rkey as string}`
+  // legacy URL: included title but some too long titles were rejected by AWS WAF
+  // entryHref += entry.title !== undefined ? `entries/${encodeURIComponent(entry.title)}?rkey=${entryInfo.rkey as string}` : (entryInfo.rkey as string)
 
   let ogp: string | undefined = entry.ogp?.url
   if (ogp !== undefined) {
