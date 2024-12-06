@@ -3,6 +3,7 @@
 import { identitiesAtom } from '@/atoms'
 import Header from '@/components/Headers/Header'
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
+import { EntryContext } from '@/contexts/EntryContext'
 import { useAtomValue } from 'jotai'
 import { FC, useCallback, useContext, useEffect, useState } from 'react'
 
@@ -21,7 +22,8 @@ const OtherEntriesFromThisAuthor: FC = () => {
 }
 
 const EditEntry: FC = () => {
-  const { did } = useContext(AuthorInfoContext)
+  const { did, handle } = useContext(AuthorInfoContext)
+  const { rkey } = useContext(EntryContext)
   const identities = useAtomValue(identitiesAtom)
   const [isEditable, setIsEditable] = useState(false)
 
@@ -35,8 +37,12 @@ const EditEntry: FC = () => {
   if (!isEditable) {
     return <></>
   }
+  const ident = handle ?? did
+  if (ident === undefined || rkey === undefined) {
+    return <></>
+  }
   return (
-    <a href={window.location.href + '/edit'}>
+    <a href={`/${ident}/${rkey}/edit`}>
       <div className='py-2 pl-3 pr-4 flex flex-row items-center content-center gap-1 stroke-gray-700 transition duration-200 hover:text-gray-400 hover:stroke-gray-400'>
         <svg className='w-6 h-6 text-gray-800' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'>
           <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z' />
