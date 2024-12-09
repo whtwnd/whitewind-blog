@@ -21,8 +21,8 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
       '@atproto/syntax':
-        specifier: ^0.3.0
-        version: 0.3.0
+        specifier: ^0.3.1
+        version: 0.3.1
       '@atproto/xrpc':
         specifier: ^0.6.3
         version: 0.6.3
@@ -275,9 +275,6 @@ packages:
 
   '@atproto/oauth-types@0.2.1':
     resolution: {integrity: sha512-hDisUXzcq5KU1HMuCYZ8Kcz7BePl7V11bFjjgZvND3mdSphiyBpJ8MCNn3QzAa6cXpFo0w9PDcYMAlCCRZHdVw==}
-
-  '@atproto/syntax@0.3.0':
-    resolution: {integrity: sha512-Weq0ZBxffGHDXHl9U7BQc2BFJi/e23AL+k+i5+D9hUq/bzT4yjGsrCejkjq0xt82xXDjmhhvQSZ0LqxyZ5woxA==}
 
   '@atproto/syntax@0.3.1':
     resolution: {integrity: sha512-fzW0Mg1QUOVCWUD3RgEsDt6d1OZ6DdFmbKcDdbzUfh0t4rhtRAC05KbZYmxuMPWDAiJ4BbbQ5dkAc/mNypMXkw==}
@@ -4575,8 +4572,6 @@ snapshots:
     dependencies:
       '@atproto/jwk': 0.1.1
       zod: 3.23.8
-
-  '@atproto/syntax@0.3.0': {}
 
   '@atproto/syntax@0.3.1': {}
 
