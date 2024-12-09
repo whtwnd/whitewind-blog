@@ -37,7 +37,7 @@
     "@mui/material": "^5.16.7",
     "@mui/material-nextjs": "^5.15.11",
     "@svgr/webpack": "^8.1.0",
-    "@types/unist": "^3.0.2",
+    "@types/unist": "^3.0.3",
     "@uiw/react-md-editor": "^4.0.4",
     "Menu": "link:@mui/icons-material/Menu",
     "date-fns": "^4.1.0",
