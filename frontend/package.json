@@ -52,7 +52,7 @@
     "next": "^14.2.10",
     "next-nprogress-bar": "^2.3.15",
     "next-remove-imports": "^1.0.12",
-    "preact": "^10.20.2",
+    "preact": "^10.25.4",
     "react": "^18.3.1",
     "react-anchor-link-smooth-scroll": "^1.0.12",
     "react-dom": "^18.3.1",
