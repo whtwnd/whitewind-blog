@@ -33,11 +33,11 @@ const RetrieveEntries = async (metadata: EntryMetadata[], top = 10, orderby: 'da
 
   const authors = Array.from(new Set(metadata.slice(0, top).map(m => m.authorDid)))
   const [pdses, profiles] = await Promise.all([
-    Promise.all(authors.map(async author => await ResolvePDS(author))),
-    Promise.all(authors.map(async author => await agent.getProfile({ actor: author })))
+    Promise.allSettled(authors.map(async author => await ResolvePDS(author))),
+    Promise.allSettled(authors.map(async author => await agent.getProfile({ actor: author })))
   ])
-  const pdsMap = new Map(authors.map((author, i) => [author, pdses[i]]))
-  const profileMap = new Map(authors.map((author, i) => [author, profiles[i].data]))
+  const pdsMap = new Map(authors.map((author, i) => [author, pdses[i].status==='fulfilled' ? pdses[i].value : undefined]))
+  const profileMap = new Map(authors.map((author, i) => [author, profiles[i].status==='fulfilled' ? profiles[i].value.data : undefined]))
 
   let reserved = metadata.slice(top)
   const target = metadata.slice(0, top)
