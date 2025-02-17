@@ -28,7 +28,7 @@
     "@atproto/identity": "^0.3.2",
     "@atproto/lexicon": "^0.4.3",
     "@atproto/oauth-client-browser": "^0.3.2",
-    "@atproto/syntax": "^0.3.0",
+    "@atproto/syntax": "^0.3.3",
     "@atproto/xrpc": "^0.6.3",
     "@aws-sdk/client-dynamodb": "^3.699.0",
     "@emotion/react": "^11.11.3",
