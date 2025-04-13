@@ -31,32 +31,35 @@ We shall not be liable for any damage caused by the use of a User ID and passwor
 Users may use the Service free of charge.
 
 ## Article 5 (Prohibited Acts)
-Users shall not engage in any of the following acts when using the Service:
 
-- Acts violating laws or public order and morals.
-- Acts related to criminal activity.
-- Acts that destroy or obstruct the function of servers or networks belonging to us, other users, or third parties.
-- Acts likely to interfere with the operation of the Service.
-- Acts involving the collection or storage of personal information of other users.
+Users must not engage in any of the following actions when using the Service:
+
+- Actions that violate laws, regulations, or public order and morals.
+- Actions related to criminal activities.
+- Actions that destroy or interfere with the servers or networks of this Service, other users, or third parties.
+- Actions that may interfere with the operation of our services.
+- Collecting or storing personal information about other users.
 - Unauthorized access or attempts thereof.
-- Acts impersonating other users.
-- Acts providing direct or indirect benefits to antisocial forces related to the Service.
-- Acts infringing intellectual property rights, portrait rights, privacy, honor, or other rights or interests of ours, other users, or third parties.
-- Acts posting or transmitting on the Service content that includes or that we judge to include:
-  - Excessively violent expressions.
-  - Explicit sexual expressions.
-  - Expressions leading to discrimination based on race, nationality, beliefs, gender, social status, family origin, etc.
-  - Expressions that encourage or promote suicide, self-harm, or drug abuse.
-  - Other antisocial content that discomforts others.
-- Acts aiming or judged by us to aim for:
-  - Commercial activities, advertising, solicitation, or other profit-seeking acts (excluding those approved by us).
-  - Acts aiming at sexual or obscene behavior.
-  - Acts aiming for encounters or relationships with strangers of the opposite sex.
-  - Acts aimed at harassment or defamation of other users.
-  - Acts causing disadvantage, damage, or discomfort to us, other users, or third parties.
-  - Acts using the Service for purposes other than intended.
-  - Religious activities or solicitation to religious groups.
-  - Other acts we deem inappropriate.
+- Impersonating other users.
+- Directly or indirectly providing benefits to anti-social forces in connection with this Service.
+- Actions infringing upon intellectual property rights, portrait rights, privacy, honor, or any other rights or interests of the Service provider, other users, or third parties.
+- Posting or transmitting content that includes, or is deemed by the Service provider to include, the following expressions:
+  - Excessively violent content.
+  - Explicit sexual content.
+  - Expressions leading to discrimination based on race, nationality, creed, gender, social status, or lineage.
+  - Expressions that induce or promote suicide, self-harm, or drug abuse.
+  - Other antisocial content causing discomfort to others.
+- Actions for the following purposes, or deemed by the Service provider as having such purposes:
+  - Commercial activities, advertising, solicitation, or other profit-oriented activities (except those approved by the Service provider).
+  - Activities aimed at sexual or obscene acts.
+  - Activities aimed at meeting or dating unrelated individuals of the opposite sex.
+  - Harassment or defamation targeting other users.
+  - Actions intended to cause disadvantage, damage, or discomfort to the Service provider, other users, or third parties.
+  - Using the Service for purposes other than the intended usage.
+  - Religious activities or solicitation for religious organizations.
+  - Any other activities deemed inappropriate by the Service provider.
+
+If content created outside of the Service falls under the above categories, the Service provider may refuse its publication at their discretion.
 
 ## Article 6 (Suspension of Service Provision)
 We may suspend or interrupt provision of all or part of the Service without prior notice if we determine that any of the following reasons exist:
