@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-const picRelatedHeaders = [
+const apiHeaders = [
   {
     source: '/api/og',
     headers: [
@@ -12,6 +12,15 @@ const picRelatedHeaders = [
   },
   {
     source: '/api/cache',
+    headers: [
+      {
+        key: 'Cache-Control',
+        value: 'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400'
+      }
+    ]
+  },
+  {
+    source: '/api/notification',
     headers: [
       {
         key: 'Cache-Control',
@@ -35,12 +44,20 @@ const nextConfig = {
     })
     return config
   },
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
   images: {
     disableStaticImages: true // importした画像の型定義設定を無効にする
   },
   headers: async () => {
     // eslint-disable-next-line
-        return process.env.NODE_ENV === 'development' ? picRelatedHeaders : [
+        return process.env.NODE_ENV === 'development' ? apiHeaders : [
       // default cache header
       {
         source: '/:authorIdentity*',
@@ -60,7 +77,7 @@ const nextConfig = {
           }
         ]
       },
-      ...picRelatedHeaders,
+      ...apiHeaders,
       // override cache header
       {
         source: '/_next/static/:staticFile*',
