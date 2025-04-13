@@ -3,7 +3,16 @@
 import { AuthorInfoContext } from '@/contexts/AuthorInfoContext'
 import { createClient } from '@/services/clientUtils'
 import { AtUri } from '@atproto/api'
-import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type JSX
+} from 'react'
 import { ComWhtwndBlogEntry } from '@/api'
 import { MarkdownToHtml } from '@/services/DocProvider'
 import { BlogViewerPage } from '@/services/commonComponentUtils'

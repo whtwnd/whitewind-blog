@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import lightTheme from '@/theme'
 import { ProgressBarWrapper } from '@/components/ProgressBarWrapper'
 import GoogleAnalytics from '@/components/GoogleAnalytics'
-import { Suspense } from 'react'
+import { Suspense, type JSX } from 'react'
 import '@/app/globals.css'
 import { TailwindIndicator } from '@/components/TailwindIndicator'
 import Script from 'next/script'
@@ -34,12 +34,14 @@ export const metadata: Metadata = {
   icons: { icon: '/whtwnd.svg' }
 }
 
-export default function RootLayout ({
-  children
-}: {
-  children: React.ReactNode
-}): JSX.Element {
-  const nonce = headers().get('x-nonce')
+export default async function RootLayout (
+  {
+    children
+  }: {
+    children: React.ReactNode
+  }
+): Promise<JSX.Element> {
+  const nonce = (await headers()).get('x-nonce')
   const GAScripts = (
     <><Script
       strategy='lazyOnload'

@@ -11,6 +11,7 @@ import { SearchBar } from '@/components/SearchBar'
 import Footer from '@/components/Footer'
 import { GetStats } from '@/services/serverUtils'
 import TopPageHeader from '@/components/Headers/TopPageHeader'
+import type { JSX } from 'react'
 export const metadata: Metadata = {
   title: 'WhiteWind atproto blog',
   description: 'WhiteWind is an atproto blog service that anyone with a Bluesky account can use for free, without providing any personal information. You can write blogs in Markdown syntax and publish them on the internet.'
@@ -36,8 +37,8 @@ const RetrieveEntries = async (metadata: EntryMetadata[], top = 10, orderby: 'da
     Promise.allSettled(authors.map(async author => await ResolvePDS(author))),
     Promise.allSettled(authors.map(async author => await agent.getProfile({ actor: author })))
   ])
-  const pdsMap = new Map(authors.map((author, i) => [author, pdses[i].status==='fulfilled' ? pdses[i].value : undefined]))
-  const profileMap = new Map(authors.map((author, i) => [author, profiles[i].status==='fulfilled' ? profiles[i].value.data : undefined]))
+  const pdsMap = new Map(authors.map((author, i) => [author, pdses[i].status === 'fulfilled' ? pdses[i].value : undefined]))
+  const profileMap = new Map(authors.map((author, i) => [author, profiles[i].status === 'fulfilled' ? profiles[i].value.data : undefined]))
 
   let reserved = metadata.slice(top)
   const target = metadata.slice(0, top)

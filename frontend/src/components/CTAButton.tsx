@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, type JSX } from 'react'
 
 export interface ICTAButtonProps {
   text?: string

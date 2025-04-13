@@ -5,7 +5,16 @@ import { createClient } from '@/services/clientUtils'
 import BlogViewer, { BlogViewerProps } from '@/views/BlogViewer'
 import { AtUri } from '@atproto/api'
 import { Spinner } from 'flowbite-react'
-import { FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  FC,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type JSX
+} from 'react'
 import { ComWhtwndBlogEntry } from '@/api'
 import { MarkdownToHtml } from '@/services/DocProvider'
 import { NO_THEME, ThemeMapping } from '@/components/themes'

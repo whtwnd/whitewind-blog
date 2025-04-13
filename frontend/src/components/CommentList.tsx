@@ -36,7 +36,7 @@ export interface FallbackData {
 export const CommentList: FC<{ entryUri: string, pds?: string }> = ({ entryUri }) => {
   const [mentions, setMentions] = useState<MentioningRecord[]>([])
   const appViewClient = useRef(createClient(process.env.NEXT_PUBLIC_API_HOSTNAME as string))
-  const promise = useRef<Promise<void> | undefined>()
+  const promise = useRef<Promise<void> | undefined>(undefined)
   const { setComments } = useContext(CommentContext)
 
   useEffect(() => {

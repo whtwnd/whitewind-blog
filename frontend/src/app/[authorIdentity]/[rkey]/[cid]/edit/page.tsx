@@ -5,7 +5,8 @@ export const metadata: Metadata = {
   title: 'Blog editor'
 }
 
-export default async function Page ({ params }: { params: { authorIdentity: string, rkey: string } }): Promise<void> {
+export default async function Page (props: { params: Promise<{ authorIdentity: string, rkey: string }> }): Promise<void> {
+  const params = await props.params
   params.authorIdentity = decodeURIComponent(params.authorIdentity)
   permanentRedirect(`/${params.authorIdentity}/${params.rkey}/edit`)
 }

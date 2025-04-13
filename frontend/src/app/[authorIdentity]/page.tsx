@@ -7,13 +7,15 @@ import { ProfileViewDetailed } from '@atproto/api/dist/client/types/app/bsky/act
 import { jsonToLex } from '@atproto/lexicon'
 import { Metadata } from 'next'
 import dynamic from 'next/dynamic'
+import type { JSX } from 'react'
 const BlogListView = dynamic(async () => await import('@/views/BlogListView'))
 
 interface IPageProps {
-  params: { authorIdentity: string }
+  params: Promise<{ authorIdentity: string }>
 }
 
-export async function generateMetadata ({ params }: IPageProps): Promise<Metadata> {
+export async function generateMetadata (props: IPageProps): Promise<Metadata> {
+  const params = await props.params
   const authorIdentity = decodeURIComponent(params.authorIdentity)
   let title = `Blog entries of ${authorIdentity}`
   try {
@@ -30,7 +32,8 @@ export async function generateMetadata ({ params }: IPageProps): Promise<Metadat
 
 export const fetchCache = 'default-no-store'
 
-export default async function Page ({ params }: IPageProps): Promise<JSX.Element> {
+export default async function Page (props: IPageProps): Promise<JSX.Element> {
+  const params = await props.params
   const ident = decodeURIComponent(params.authorIdentity)
   const { contextWrapperProps } = await PrepareContext({ ident })
   const authorInfo = {
