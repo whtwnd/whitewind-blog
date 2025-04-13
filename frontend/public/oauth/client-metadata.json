@@ -16,5 +16,7 @@
     "code"
   ],
   "scope": "atproto transition:generic",
-  "token_endpoint_auth_method": "none"
+  "token_endpoint_auth_method": "none",
+  "tos_uri": "https://github.com/whtwnd/whitewind-blog/blob/main/docs/terms-of-use.md",
+  "policy_uri": "https://github.com/whtwnd/whitewind-blog/blob/main/docs/privacy-policy.md"
 }
