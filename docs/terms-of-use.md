@@ -12,11 +12,11 @@ If the provisions of these Terms conflict with the Individual Provisions, the In
 Additionally, if a translation of these Terms conflicts with the Japanese version, the Japanese version shall prevail.
 
 ## Article 2 (Account)
-To use the Service, an account registered on the PLC server operated by Bluesky PBLLC ("Bluesky") or an account using did:web is required.
+To use the Service, an account registered on the PLC server operated by Bluesky PBLLC ("Bluesky") or an account using did:web and the access to the PDS are required.
 
-We shall bear no responsibility whatsoever if your account becomes unusable for reasons unrelated to the use of the Service, such as violations of Bluesky's Terms of Service.
+We shall bear no responsibility whatsoever if your account or PDS becomes unusable for reasons unrelated to the use of the Service, such as violations of Bluesky's Terms of Service.
 
-Moreover, even if your account becomes unusable due to reasons arising from the use of the Service, we shall not bear responsibility unless caused intentionally or through gross negligence on our part.
+Moreover, even if your account or PDS become unusable due to reasons arising from the use of the Service, we shall not bear responsibility unless caused intentionally or through gross negligence on our part.
 
 ## Article 3 (Management of User ID and Password)
 Users shall appropriately manage their User ID and password for the Service under their own responsibility.
