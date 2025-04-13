@@ -12,6 +12,7 @@ import { jsonToLex } from '@atproto/lexicon'
 import { Provider } from 'jotai'
 import dynamic from 'next/dynamic'
 import React, { ReactNode, Suspense, useMemo, useState } from 'react'
+import { NotificationModal } from '@/components/NotificationModal'
 const OAuthClientInitializer = dynamic(async () => await import('../components/OAuthClientInitializer'), { ssr: false })
 
 export interface IContextWrapperProps {
@@ -62,6 +63,7 @@ export const ContextWrapper = ({
                     <OAuthClientInitializer />
                   </Suspense>
               }
+              <NotificationModal/>
             </HeaderContextWrapper>
           </CommentContext.Provider>
         </EntryContext.Provider>

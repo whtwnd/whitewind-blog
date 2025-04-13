@@ -20,6 +20,8 @@ import { remark } from 'remark'
 import strip from 'strip-markdown'
 import { GetReplacedGetBlobURL } from '@/services/commonUtils'
 
+import type { JSX } from 'react'
+
 const production = {
   Fragment: prod.Fragment,
   jsx: prod.jsx,
@@ -75,7 +77,7 @@ const recursiveScriptDetector = (node: Element, scripts: string[]): boolean => {
 
 const GenerateRehypeScriptDetect = (scripts: string[]): Plugin<any, Root, Node> => {
   const rehypeScriptDetector: Plugin<any, Root, Node> = () => {
-    return (tree) => {
+    return (tree: Root) => {
       tree.children = tree.children.filter(child => {
         if (child.type !== 'element') {
           return true
@@ -114,7 +116,7 @@ const replaceGetBlobAndFixFootnote = (child: Node): void => {
 }
 
 const rehypeReplaceGetBlobAndFixFootnote: Plugin<any, Root, Node> = () => {
-  return (tree) => {
+  return (tree: Root) => {
     tree.children.forEach(child => replaceGetBlobAndFixFootnote(child))
   }
 }

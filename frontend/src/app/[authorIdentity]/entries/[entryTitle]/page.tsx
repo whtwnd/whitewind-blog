@@ -6,18 +6,23 @@ import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { PageSkeleton } from '@/app/[authorIdentity]/[rkey]/page'
 
+import type { JSX } from 'react'
+
 export const fetchCache = 'default-no-store'
 
 interface IPageProps {
-  params: { authorIdentity: string, entryTitle: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  params: Promise<{ authorIdentity: string, entryTitle: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export async function generateMetadata ({ params }: IPageProps): Promise<Metadata | undefined> {
+export async function generateMetadata (props: IPageProps): Promise<Metadata | undefined> {
+  const params = await props.params
   return await GenerateMetadata(params.authorIdentity, params.entryTitle)
 }
 
-export default async function Page ({ params, searchParams }: IPageProps): Promise<JSX.Element> {
+export default async function Page (props: IPageProps): Promise<JSX.Element> {
+  const searchParams = await props.searchParams
+  const params = await props.params
   const ident = decodeURIComponent(params.authorIdentity)
   const paramsRkey = searchParams.rkey as string | undefined
   try {

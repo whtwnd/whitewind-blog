@@ -4,6 +4,8 @@ import 'github-markdown-css/github-markdown-light.css'
 import { LoadingView } from '@/components/LoadingView'
 import { ContextWrapper } from '@/views/ContextWrapper'
 
+import type { JSX } from 'react'
+
 export const fetchCache = 'default-no-store'
 
 export const metadata: Metadata = {

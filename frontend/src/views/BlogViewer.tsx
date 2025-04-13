@@ -5,7 +5,7 @@ import { Card } from 'flowbite-react'
 // import { useContext } from 'react';
 import 'highlight.js/styles/github.css'
 import 'github-markdown-css/github-markdown-light.css'
-import React, { ReactNode, Suspense, FC } from 'react'
+import React, { ReactNode, Suspense, FC, type JSX } from 'react'
 import { MarkdownToHtml } from '@/services/DocProvider'
 import { NoTheme } from '@/components/themes/NoTheme'
 import { ThemeProps } from '@/components/themes/types'
@@ -29,7 +29,7 @@ export interface BlogViewerProps {
   ogpUrl?: string
 }
 
-export function EnsureMdHtmlAvailable (markdown: string, component?: React.FC<{ mdHtml: JSX.Element }>, viewerProps?: Omit<BlogViewerProps, 'mdHtml'>, fallback?: ReactNode): ReactNode {
+export function EnsureMdHtmlAvailable (markdown: string, component?: (prop:{ mdHtml: JSX.Element })=>JSX.Element, viewerProps?: Omit<BlogViewerProps, 'mdHtml'>, fallback?: ReactNode): ReactNode {
   let converted: JSX.Element | undefined
   const detectedScripts: string[] = []
   const promise = MarkdownToHtml(markdown, detectedScripts).then((md) => {

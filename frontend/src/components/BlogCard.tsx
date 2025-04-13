@@ -1,12 +1,11 @@
 import * as React from 'react'
 import * as xrpc from '@/api'
-import dynamic from 'next/dynamic'
 import { IAuthorInfoContextValue } from '@/contexts/AuthorInfoContext'
 import { IEntryContextValue } from '@/contexts/EntryContext'
 import { DefaultCardHeader } from '@/components/DefaultCardHeader'
 import { GetReplacedGetBlobURL } from '@/services/commonUtils'
 import VisibilityBadge from '@/components/VisibilityBadge'
-const LocalTime = dynamic(async () => await import('@/components/LocalTime'), { ssr: false })
+import LocalTime from '@/components/LocalTime'
 
 export interface BlogCardProps {
   authorInfo: IAuthorInfoContextValue

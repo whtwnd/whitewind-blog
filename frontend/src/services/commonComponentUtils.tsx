@@ -9,7 +9,7 @@ import { IAuthorInfoContextValue } from '@/contexts/AuthorInfoContext'
 import BlogViewer from '@/views/BlogViewer'
 import { AtUri } from '@atproto/api'
 import Script from 'next/script'
-import { FC } from 'react'
+import { FC, type JSX } from 'react'
 
 export interface BuildBlogViewerArgs {
   docRaw: ComWhtwndBlogEntry.Record

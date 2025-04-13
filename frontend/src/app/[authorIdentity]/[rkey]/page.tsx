@@ -11,16 +11,26 @@ import { notFound } from 'next/navigation'
 import BlogViewerGuard from '@/views/BlogViewerGuard'
 import { BlogViewerPage } from '@/services/commonComponentUtils'
 
+import type { JSX } from 'react'
+
 export const fetchCache = 'default-no-store'
 
 interface IPageProps {
-  params: { authorIdentity: string, rkey: string }
+  params: Promise<{ authorIdentity: string, rkey: string }>
 }
-export async function generateMetadata ({ params }: IPageProps): Promise<Metadata | undefined> {
+export async function generateMetadata (props: IPageProps): Promise<Metadata | undefined> {
+  const params = await props.params
   return await GenerateMetadata(params.authorIdentity, undefined, params.rkey)
 }
 
-export default async function Page ({ params: { authorIdentity, rkey } }: { params: { authorIdentity: string, rkey: string } }): Promise<JSX.Element> {
+export default async function Page (props: { params: Promise<{ authorIdentity: string, rkey: string }> }): Promise<JSX.Element> {
+  const params = await props.params
+
+  const {
+    authorIdentity,
+    rkey
+  } = params
+
   return await PageSkeleton(authorIdentity, rkey)
 }
 
@@ -56,7 +66,7 @@ export async function PageSkeleton (authorIdentity: string, rkey: string, cid?: 
     profile: jsonToLex(contextWrapperProps.profileString) as ProfileViewDetailed,
     pds: contextWrapperProps.pds
   }
-  const nonce = headers().get('x-nonce')
+  const nonce = (await headers()).get('x-nonce')
 
   return (
     <ContextWrapper {...contextWrapperProps}>

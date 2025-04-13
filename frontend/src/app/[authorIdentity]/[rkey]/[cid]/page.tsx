@@ -2,16 +2,34 @@ import { GenerateMetadata } from '@/services/serverUtils'
 import { Metadata } from 'next'
 import { PageSkeleton } from '@/app/[authorIdentity]/[rkey]/page'
 
+import type { JSX } from 'react'
+
 export const fetchCache = 'default-no-store'
 
 interface IPageProps {
-  params: { authorIdentity: string, rkey: string, cid: string }
+  params: Promise<{ authorIdentity: string, rkey: string, cid: string }>
 }
 
-export async function generateMetadata ({ params: { authorIdentity, rkey, cid } }: IPageProps): Promise<Metadata | undefined> {
+export async function generateMetadata (props: IPageProps): Promise<Metadata | undefined> {
+  const params = await props.params
+
+  const {
+    authorIdentity,
+    rkey,
+    cid
+  } = params
+
   return await GenerateMetadata(authorIdentity, undefined, rkey, cid)
 }
 
-export default async function Page ({ params: { authorIdentity, rkey, cid } }: IPageProps): Promise<JSX.Element> {
+export default async function Page (props: IPageProps): Promise<JSX.Element> {
+  const params = await props.params
+
+  const {
+    authorIdentity,
+    rkey,
+    cid
+  } = params
+
   return await PageSkeleton(authorIdentity, rkey, cid)
 }

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { schemaDict } from '@/api/lexicons'
 import { Stack, Typography } from '@mui/material'
-import { ReactNode } from 'react'
+import { ReactNode, type JSX } from 'react'
 import ThreeColumnBlogView from '@/components/ThreeColumnBlogView'
 import { MarkdownToHtml } from '@/services/DocProvider'
 import 'highlight.js/styles/github.css'

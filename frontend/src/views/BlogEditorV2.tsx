@@ -20,7 +20,21 @@ import { BlobRef } from '@atproto/lexicon'
 import type { Record as BlogEntry } from '@/api/types/com/whtwnd/blog/entry'
 import MDEditor from '@uiw/react-md-editor'
 import { Dropdown, Modal, Select, TextInput, Toast, Tooltip } from 'flowbite-react'
-import { ChangeEvent, EventHandler, FC, FormEvent, MouseEventHandler, ReactNode, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ChangeEvent,
+  EventHandler,
+  FC,
+  FormEvent,
+  MouseEventHandler,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type JSX
+} from 'react'
 import { useForm, useFormState } from 'react-hook-form'
 import {
   IoCloudUploadOutline, IoSettingsOutline,
@@ -92,7 +106,7 @@ interface IPictureCardProps {
 }
 const PictureCard: FC<IPictureCardProps> = ({ headerUrl, blobUrl, name, onDeleteClick }) => {
   const [showCheckmark, setShowCheckMark] = useState(false)
-  const checkMarkTimer = useRef<ReturnType<typeof setTimeout>>()
+  const checkMarkTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const [modalOpen, setModalOpen] = useState(false)
 
   const onCopyClick: EventHandler<FormEvent> = (e) => {
@@ -215,9 +229,9 @@ export const BlogEditorV2: FC = () => {
 
   const PREVIEW_TIMER_MILLISECONDS = 500
   const AUTOSAVE_TIMER_MILLISECONDS = 10 * 1000
-  const previewTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>()
-  const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>()
-  const toastHideTimer = useRef<ReturnType<typeof setTimeout>>()
+  const previewTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const autosaveTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const toastHideTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
   const contentRef = useRef(content)
   const [mdHtml, setMdHtml] = useState<JSX.Element | undefined>()
 

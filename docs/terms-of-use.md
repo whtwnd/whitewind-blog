@@ -1,0 +1,124 @@
+# Terms of Service
+
+These Terms of Service (hereinafter referred to as "these Terms") set forth the conditions for the use of the services (hereinafter referred to as "the Service") provided by Kota Nakashima (hereinafter referred to as "we," "us," or "our") on this website. Registered users (hereinafter referred to as "Users") must use the Service in accordance with these Terms.
+
+## Article 1 (Application)
+These Terms shall apply to all relationships related to the use of the Service between Users and us.
+
+In addition to these Terms, we may establish various other rules and provisions regarding the Service (hereinafter referred to as "Individual Provisions"). These Individual Provisions, regardless of their names, constitute part of these Terms.
+
+If the provisions of these Terms conflict with the Individual Provisions, the Individual Provisions shall prevail unless otherwise specified therein.
+
+Additionally, if a translation of these Terms conflicts with the Japanese version, the Japanese version shall prevail.
+
+## Article 2 (Account)
+To use the Service, an account registered on the PLC server operated by Bluesky PBLLC ("Bluesky") or an account using did:web is required.
+
+We shall bear no responsibility whatsoever if your account becomes unusable for reasons unrelated to the use of the Service, such as violations of Bluesky's Terms of Service.
+
+Moreover, even if your account becomes unusable due to reasons arising from the use of the Service, we shall not bear responsibility unless caused intentionally or through gross negligence on our part.
+
+## Article 3 (Management of User ID and Password)
+Users shall appropriately manage their User ID and password for the Service under their own responsibility.
+
+Users may not transfer or lend their User ID and password to a third party or share them with third parties under any circumstances.
+
+We will consider a login using a combination of User ID and password matching the registered information as a login by the User who registered the ID.
+
+We shall not be liable for any damage caused by the use of a User ID and password by a third party unless due to our intentional or gross negligence.
+
+## Article 4 (Usage Fees and Payment Methods)
+Users may use the Service free of charge.
+
+## Article 5 (Prohibited Acts)
+Users shall not engage in any of the following acts when using the Service:
+
+- Acts violating laws or public order and morals.
+- Acts related to criminal activity.
+- Acts that destroy or obstruct the function of servers or networks belonging to us, other users, or third parties.
+- Acts likely to interfere with the operation of the Service.
+- Acts involving the collection or storage of personal information of other users.
+- Unauthorized access or attempts thereof.
+- Acts impersonating other users.
+- Acts providing direct or indirect benefits to antisocial forces related to the Service.
+- Acts infringing intellectual property rights, portrait rights, privacy, honor, or other rights or interests of ours, other users, or third parties.
+- Acts posting or transmitting on the Service content that includes or that we judge to include:
+  - Excessively violent expressions.
+  - Explicit sexual expressions.
+  - Expressions leading to discrimination based on race, nationality, beliefs, gender, social status, family origin, etc.
+  - Expressions that encourage or promote suicide, self-harm, or drug abuse.
+  - Other antisocial content that discomforts others.
+- Acts aiming or judged by us to aim for:
+  - Commercial activities, advertising, solicitation, or other profit-seeking acts (excluding those approved by us).
+  - Acts aiming at sexual or obscene behavior.
+  - Acts aiming for encounters or relationships with strangers of the opposite sex.
+  - Acts aimed at harassment or defamation of other users.
+  - Acts causing disadvantage, damage, or discomfort to us, other users, or third parties.
+  - Acts using the Service for purposes other than intended.
+  - Religious activities or solicitation to religious groups.
+  - Other acts we deem inappropriate.
+
+## Article 6 (Suspension of Service Provision)
+We may suspend or interrupt provision of all or part of the Service without prior notice if we determine that any of the following reasons exist:
+
+- Maintenance, inspection, or updates of computer systems related to the Service.
+- Difficulty providing the Service due to force majeure such as earthquakes, lightning, fires, power outages, or natural disasters.
+- Accidental stoppage of computers or telecommunications lines.
+- Other reasons we judge to make the provision of the Service difficult.
+
+We shall not be liable for any disadvantage or damage suffered by Users or third parties due to suspension or interruption of the Service.
+
+## Article 7 (Copyright)
+The Service acts as an intermediary for storing and displaying articles and other data on PDS servers operated or borrowed by Users themselves.
+
+Users may only post or upload through the Service texts, images, videos, and other information to which they hold the necessary intellectual property rights or have obtained permission from the rightful owner.
+
+Copyright in texts, images, videos, and other content uploaded by Users via the Service shall remain with the Users or other existing rights holders.
+
+## Article 8 (Restrictions on Use and Account Deletion)
+We may restrict all or part of a User's access to the Service without prior notice if the User:
+
+- Violates any provision of these Terms.
+- Does not respond to communications from us within a certain period.
+- Is otherwise deemed inappropriate by us for the continued use of the Service.
+
+If any of the above apply, Users immediately lose the benefit of term for all debts owed to us and must promptly repay all outstanding debts.
+
+We bear no responsibility for any damage suffered by Users resulting from actions we take under this article.
+
+## Article 9 (Account Cancellation)
+To cancel an account used on Bluesky's PLC server or did:web for using the Service, follow the cancellation procedures established by Bluesky or delete the did:web record.
+
+We bear no responsibility regarding cancellation procedures.
+
+## Article 10 (Disclaimer and Limitation of Liability)
+We provide no express or implied guarantee that the Service is free from factual or legal defects (including safety, reliability, accuracy, completeness, validity, fitness for a particular purpose, security-related flaws, errors, bugs, or infringement of rights).
+
+We shall not be liable for any damage caused to Users due to the Service, except where due to our intentional acts or gross negligence.
+
+However, this disclaimer does not apply when the contract between us and the User (including these Terms) constitutes a consumer contract under the Consumer Contract Act.
+
+Even in such cases, we shall not be liable for damages arising from special circumstances (including foreseeable damage) due to ordinary negligence.
+
+Our liability for damages caused by ordinary negligence is limited to the amount of fees received from the User in the month the damage occurred.
+
+We shall not be liable for transactions, communications, or disputes between Users and third parties related to the Service.
+
+## Article 11 (Changes to Service Content)
+We may change, add, or discontinue the content of the Service with prior notice, and Users consent to this.
+
+## Article 12 (Changes to Terms of Service)
+We may change these Terms without individual User consent when such changes are reasonable and appropriate.
+
+## Article 13 (Handling of Personal Information)
+We handle personal information acquired through the Service in accordance with our Privacy Policy.
+
+## Article 14 (Notifications and Communications)
+Notifications or communications between Users and us shall follow methods determined by us.
+
+## Article 15 (Prohibition on Transfer of Rights and Obligations)
+Users may not transfer or pledge rights or obligations under these Terms without prior written consent from us.
+
+## Article 16 (Governing Law and Jurisdiction)
+These Terms are governed by Japanese law. Any disputes related to the Service shall be subject to the exclusive jurisdiction of the courts located where we have our principal office.
+
