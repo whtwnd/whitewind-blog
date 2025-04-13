@@ -110,18 +110,23 @@ We shall not be liable for transactions, communications, or disputes between Use
 ## Article 11 (Changes to Service Content)
 We may change, add, or discontinue the content of the Service with prior notice, and Users consent to this.
 
-## Article 12 (Changes to Terms of Service)
-We may change these Terms without individual User consent when such changes are reasonable and appropriate.
+## Article 12 (Amendment of Terms of Use)  
+We may revise these Terms without obtaining individual consent from users in the following cases:  
+- When the changes to these Terms are in the general interest of the users.  
+- When the changes to these Terms do not contradict the purpose of the service usage agreement, and are reasonable in light of the necessity of the change, the appropriateness of the revised content, and other relevant circumstances.  
 
-## Article 13 (Handling of Personal Information)
-We handle personal information acquired through the Service in accordance with our Privacy Policy.
+We will notify users in advance of any such changes, including the intent to revise the Terms, the content of the revised Terms, and the effective date of the changes.
 
-## Article 14 (Notifications and Communications)
-Notifications or communications between Users and us shall follow methods determined by us.
+## Article 13 (Handling of Personal Information)  
+We will handle personal information obtained through the use of this service appropriately in accordance with our Privacy Policy.
 
-## Article 15 (Prohibition on Transfer of Rights and Obligations)
-Users may not transfer or pledge rights or obligations under these Terms without prior written consent from us.
+## Article 14 (Notices and Communication)  
+Notices or communications between the user and us shall be conducted in a manner specified by us.  
+Unless the user notifies us of a change in the contact details in a manner separately designated by us, we will consider the currently registered contact information to be valid and send notices or communications to that address. Such notices or communications shall be deemed to have reached the user at the time of dispatch.
 
-## Article 16 (Governing Law and Jurisdiction)
-These Terms are governed by Japanese law. Any disputes related to the Service shall be subject to the exclusive jurisdiction of the courts located where we have our principal office.
+## Article 15 (Prohibition of Assignment of Rights and Obligations)  
+Users may not transfer or provide as collateral their position under the usage agreement or any rights or obligations under these Terms to a third party without our prior written consent.
 
+## Article 16 (Governing Law and Jurisdiction)  
+The interpretation of these Terms shall be governed by the laws of Japan.  
+In the event of a dispute related to this service, the court with jurisdiction over the location of our head office shall have exclusive agreed jurisdiction.
