@@ -112,8 +112,8 @@ importers:
         specifier: ^7.54.2
         version: 7.54.2(react@19.1.0)
       react-icons:
-        specifier: ^5.2.1
-        version: 5.2.1(react@19.1.0)
+        specifier: ^5.5.0
+        version: 5.5.0(react@19.1.0)
       react-infinite-scroller:
         specifier: ^1.2.6
         version: 1.2.6(react@19.1.0)
@@ -2565,8 +2565,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.5.136:
-    resolution: {integrity: sha512-kL4+wUTD7RSA5FHx5YwWtjDnEEkIIikFgWHR4P6fqjw1PPLlqYkxeOb++wAauAssat0YClCy8Y3C5SxgSkjibQ==}
+  electron-to-chromium@1.5.137:
+    resolution: {integrity: sha512-/QSJaU2JyIuTbbABAo/crOs+SuAZLS+fVVS10PVrIT9hrRkmZl8Hb0xPSkKRUUWHQtYzXHpQUW3Dy5hwMzGZkA==}
 
   electron-to-chromium@1.5.41:
     resolution: {integrity: sha512-dfdv/2xNjX0P8Vzme4cfzHqnPm5xsZXwsolTYr0eyW18IUmNyG08vL+fttvinTfhKfIKdRoqkDIC9e9iWQCNYQ==}
@@ -3938,6 +3938,11 @@ packages:
 
   react-icons@5.2.1:
     resolution: {integrity: sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==}
+    peerDependencies:
+      react: '*'
+
+  react-icons@5.5.0:
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
     peerDependencies:
       react: '*'
 
@@ -7428,7 +7433,7 @@ snapshots:
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001713
-      electron-to-chromium: 1.5.136
+      electron-to-chromium: 1.5.137
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.4)
 
@@ -7719,7 +7724,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.5.136: {}
+  electron-to-chromium@1.5.137: {}
 
   electron-to-chromium@1.5.41: {}
 
@@ -9483,6 +9488,10 @@ snapshots:
       react: 19.1.0
 
   react-icons@5.2.1(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+
+  react-icons@5.5.0(react@19.1.0):
     dependencies:
       react: 19.1.0
 
