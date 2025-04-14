@@ -19,8 +19,8 @@ importers:
         specifier: ^0.3.2
         version: 0.3.2
       '@atproto/lexicon':
-        specifier: ^0.4.3
-        version: 0.4.3
+        specifier: ^0.4.10
+        version: 0.4.10
       '@atproto/oauth-client-browser':
         specifier: ^0.3.2
         version: 0.3.2
@@ -250,6 +250,9 @@ packages:
   '@atproto/common-web@0.3.1':
     resolution: {integrity: sha512-N7wiTnus5vAr+lT//0y8m/FaHHLJ9LpGuEwkwDAeV3LCiPif4m/FS8x/QOYrx1PdZQwKso95RAPzCGWQBH5j6Q==}
 
+  '@atproto/common-web@0.4.1':
+    resolution: {integrity: sha512-Ghh+djHYMAUCktLKwr2IuGgtjcwSWGudp+K7+N7KBA9pDDloOXUEY8Agjc5SHSo9B1QIEFkegClU5n+apn2e0w==}
+
   '@atproto/crypto@0.3.0':
     resolution: {integrity: sha512-bhcxRTL4fgRY2YX/St0x4o0oDUp18QIPD7ek+7v8UKA0HpsCGQYbo8w9d9hUvwwty5X5p00cYF2tbggUWaPy7A==}
 
@@ -268,8 +271,8 @@ packages:
   '@atproto/jwk@0.1.1':
     resolution: {integrity: sha512-6h/bj1APUk7QcV9t/oA6+9DB5NZx9SZru9x+/pV5oHFI9Xz4ZuM5+dq1PfsJV54pZyqdnZ6W6M717cxoC7q7og==}
 
-  '@atproto/lexicon@0.4.3':
-    resolution: {integrity: sha512-lFVZXe1S1pJP0dcxvJuHP3r/a+EAIBwwU7jUK+r8iLhIja+ml6NmYv8KeFHmIJATh03spEQ9s02duDmFVdCoXg==}
+  '@atproto/lexicon@0.4.10':
+    resolution: {integrity: sha512-uDbP20vetBgtXPuxoyRcvOGBt2gNe1dFc9yYKcb6jWmXfseHiGTnIlORJOLBXIT2Pz15Eap4fLxAu6zFAykD5A==}
 
   '@atproto/oauth-client-browser@0.3.2':
     resolution: {integrity: sha512-Nt9tPxeJTwsX8i6du0dSMonymHHpOVnt67bfA49LpwAS39nNd9zY6yjOrqj0suRwFhoGpvO2e+I35lqe30L+Ig==}
@@ -285,6 +288,9 @@ packages:
 
   '@atproto/syntax@0.3.4':
     resolution: {integrity: sha512-8CNmi5DipOLaVeSMPggMe7FCksVag0aO6XZy9WflbduTKM4dFZVCs4686UeMLfGRXX+X966XgwECHoLYrovMMg==}
+
+  '@atproto/syntax@0.4.0':
+    resolution: {integrity: sha512-b9y5ceHS8YKOfP3mdKmwAx5yVj9294UN7FG2XzP6V5aKUdFazEYRnR9m5n5ZQFKa3GNvz7de9guZCJ/sUTcOAA==}
 
   '@atproto/xrpc@0.6.3':
     resolution: {integrity: sha512-S3tRvOdA9amPkKLll3rc4vphlDitLrkN5TwWh5Tu/jzk7mnobVVE3akYgICV9XCNHKjWM+IAPxFFI2qi+VW6nQ==}
@@ -2565,8 +2571,8 @@ packages:
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  electron-to-chromium@1.5.136:
-    resolution: {integrity: sha512-kL4+wUTD7RSA5FHx5YwWtjDnEEkIIikFgWHR4P6fqjw1PPLlqYkxeOb++wAauAssat0YClCy8Y3C5SxgSkjibQ==}
+  electron-to-chromium@1.5.137:
+    resolution: {integrity: sha512-/QSJaU2JyIuTbbABAo/crOs+SuAZLS+fVVS10PVrIT9hrRkmZl8Hb0xPSkKRUUWHQtYzXHpQUW3Dy5hwMzGZkA==}
 
   electron-to-chromium@1.5.41:
     resolution: {integrity: sha512-dfdv/2xNjX0P8Vzme4cfzHqnPm5xsZXwsolTYr0eyW18IUmNyG08vL+fttvinTfhKfIKdRoqkDIC9e9iWQCNYQ==}
@@ -4630,6 +4636,9 @@ packages:
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
+  zod@3.24.2:
+    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -4651,20 +4660,20 @@ snapshots:
       '@atproto-labs/simple-store': 0.1.1
       '@atproto-labs/simple-store-memory': 0.1.1
       '@atproto/did': 0.1.3
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto-labs/fetch@0.1.1':
     dependencies:
       '@atproto-labs/pipe': 0.1.0
     optionalDependencies:
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto-labs/handle-resolver@0.1.4':
     dependencies:
       '@atproto-labs/simple-store': 0.1.1
       '@atproto-labs/simple-store-memory': 0.1.1
       '@atproto/did': 0.1.3
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto-labs/identity-resolver@0.1.6':
     dependencies:
@@ -4684,7 +4693,7 @@ snapshots:
   '@atproto/api@0.13.18':
     dependencies:
       '@atproto/common-web': 0.3.1
-      '@atproto/lexicon': 0.4.3
+      '@atproto/lexicon': 0.4.10
       '@atproto/syntax': 0.3.4
       '@atproto/xrpc': 0.6.4
       await-lock: 2.2.2
@@ -4697,7 +4706,7 @@ snapshots:
       graphemer: 1.4.0
       multiformats: 9.9.0
       uint8arrays: 3.0.0
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto/common-web@0.3.1':
     dependencies:
@@ -4705,6 +4714,13 @@ snapshots:
       multiformats: 9.9.0
       uint8arrays: 3.0.0
       zod: 3.23.8
+
+  '@atproto/common-web@0.4.1':
+    dependencies:
+      graphemer: 1.4.0
+      multiformats: 9.9.0
+      uint8arrays: 3.0.0
+      zod: 3.24.2
 
   '@atproto/crypto@0.3.0':
     dependencies:
@@ -4714,7 +4730,7 @@ snapshots:
 
   '@atproto/did@0.1.3':
     dependencies:
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto/identity@0.3.2':
     dependencies:
@@ -4737,15 +4753,15 @@ snapshots:
   '@atproto/jwk@0.1.1':
     dependencies:
       multiformats: 9.9.0
-      zod: 3.23.8
+      zod: 3.24.2
 
-  '@atproto/lexicon@0.4.3':
+  '@atproto/lexicon@0.4.10':
     dependencies:
-      '@atproto/common-web': 0.3.1
-      '@atproto/syntax': 0.3.4
+      '@atproto/common-web': 0.4.1
+      '@atproto/syntax': 0.4.0
       iso-datestring-validator: 2.2.2
       multiformats: 9.9.0
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto/oauth-client-browser@0.3.2':
     dependencies:
@@ -4771,25 +4787,27 @@ snapshots:
       '@atproto/oauth-types': 0.2.1
       '@atproto/xrpc': 0.6.4
       multiformats: 9.9.0
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto/oauth-types@0.2.1':
     dependencies:
       '@atproto/jwk': 0.1.1
-      zod: 3.23.8
+      zod: 3.24.2
 
   '@atproto/syntax@0.3.1': {}
 
   '@atproto/syntax@0.3.4': {}
 
+  '@atproto/syntax@0.4.0': {}
+
   '@atproto/xrpc@0.6.3':
     dependencies:
-      '@atproto/lexicon': 0.4.3
+      '@atproto/lexicon': 0.4.10
       zod: 3.23.8
 
   '@atproto/xrpc@0.6.4':
     dependencies:
-      '@atproto/lexicon': 0.4.3
+      '@atproto/lexicon': 0.4.10
       zod: 3.23.8
 
   '@aws-crypto/sha256-browser@5.2.0':
@@ -7428,7 +7446,7 @@ snapshots:
   browserslist@4.24.4:
     dependencies:
       caniuse-lite: 1.0.30001713
-      electron-to-chromium: 1.5.136
+      electron-to-chromium: 1.5.137
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.24.4)
 
@@ -7719,7 +7737,7 @@ snapshots:
 
   eastasianwidth@0.2.0: {}
 
-  electron-to-chromium@1.5.136: {}
+  electron-to-chromium@1.5.137: {}
 
   electron-to-chromium@1.5.41: {}
 
@@ -10412,5 +10430,7 @@ snapshots:
   yocto-queue@1.0.0: {}
 
   zod@3.23.8: {}
+
+  zod@3.24.2: {}
 
   zwitch@2.0.4: {}
