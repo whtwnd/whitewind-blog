@@ -112,8 +112,8 @@ importers:
         specifier: ^7.54.2
         version: 7.54.2(react@19.1.0)
       react-icons:
-        specifier: ^5.2.1
-        version: 5.2.1(react@19.1.0)
+        specifier: ^5.5.0
+        version: 5.5.0(react@19.1.0)
       react-infinite-scroller:
         specifier: ^1.2.6
         version: 1.2.6(react@19.1.0)
@@ -3944,6 +3944,11 @@ packages:
 
   react-icons@5.2.1:
     resolution: {integrity: sha512-zdbW5GstTzXaVKvGSyTaBalt7HSfuK5ovrzlpyiWHAFXndXTdd/1hdDHI4xBM1Mn7YriT6aqESucFl9kEXzrdw==}
+    peerDependencies:
+      react: '*'
+
+  react-icons@5.5.0:
+    resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
     peerDependencies:
       react: '*'
 
@@ -9501,6 +9506,10 @@ snapshots:
       react: 19.1.0
 
   react-icons@5.2.1(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+
+  react-icons@5.5.0(react@19.1.0):
     dependencies:
       react: 19.1.0
 
