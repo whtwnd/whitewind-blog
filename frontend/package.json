@@ -26,7 +26,7 @@
   "dependencies": {
     "@atproto/api": "^0.13.18",
     "@atproto/identity": "^0.3.2",
-    "@atproto/lexicon": "^0.4.3",
+    "@atproto/lexicon": "^0.4.10",
     "@atproto/oauth-client-browser": "^0.3.2",
     "@atproto/syntax": "^0.3.4",
     "@atproto/xrpc": "^0.6.3",
