@@ -41,7 +41,7 @@
     "@uiw/react-md-editor": "^4.0.4",
     "Menu": "link:@mui/icons-material/Menu",
     "date-fns": "^4.1.0",
-    "flowbite": "^2.5.2",
+    "flowbite": "^3.1.2",
     "flowbite-react": "^0.10.2",
     "github-markdown-css": "^5.5.1",
     "hast-util-is-javascript": "^3.0.1",
