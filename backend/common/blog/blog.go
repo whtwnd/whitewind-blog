@@ -1,13 +1,12 @@
 package blog
 
 import (
+	"context"
 	"fmt"
 	"sort"
 	"time"
 	"whtwnd/common/com_autogen"
 	"whtwnd/common/whtwnd_autogen"
-
-	"context"
 
 	"github.com/bluesky-social/indigo/atproto/identity"
 	"github.com/bluesky-social/indigo/atproto/syntax"
@@ -19,6 +18,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
+
+const opTimeout = 15 * time.Second
 
 // com.whtwnd.blog.metadata
 type BlogMetadataItem struct {
@@ -40,23 +41,27 @@ type Mentioning struct {
 }
 
 func GetEntryMetadataByName(author *syntax.AtIdentifier, entryTitle string) (*BlogMetadataItem, error) {
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	ctx, cancel := context.WithTimeout(context.Background(), opTimeout)
+	defer cancel()
+
+	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return nil, err
 	}
 	client := dynamodb.NewFromConfig(cfg)
 
 	var did syntax.DID
-	fmt.Printf("[GetEntryMetadataByName] author=%s entryTitle=%s\n", author, entryTitle)
 	if author.IsHandle() {
-		handle, _ := author.AsHandle()
+		handle, err := author.AsHandle()
+		if err != nil {
+			return nil, err
+		}
 		directory := identity.DefaultDirectory()
-		ident, err := directory.LookupHandle(context.TODO(), handle)
+		ident, err := directory.LookupHandle(ctx, handle)
 		if err != nil {
 			return nil, err
 		}
 		did = ident.DID
-		fmt.Printf("[GetEntry] Obtained did: %s", did)
 	} else {
 		did, err = author.AsDID()
 		if err != nil {
@@ -73,7 +78,7 @@ func GetEntryMetadataByName(author *syntax.AtIdentifier, entryTitle string) (*Bl
 		return nil, err
 	}
 	indexName := "entryTitleToRkey"
-	response, err := client.Query(context.TODO(), &dynamodb.QueryInput{
+	response, err := client.Query(ctx, &dynamodb.QueryInput{
 		TableName:                 aws.String("com.whtwnd.blog.metadata"),
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
@@ -99,6 +104,9 @@ func GetEntryMetadataByName(author *syntax.AtIdentifier, entryTitle string) (*Bl
 }
 
 func NotifyOfNewEntry(entryUri *syntax.ATURI) error {
+	ctx, cancel := context.WithTimeout(context.Background(), opTimeout)
+	defer cancel()
+
 	// get pds location
 	authority := entryUri.Authority()
 	var err error
@@ -106,7 +114,7 @@ func NotifyOfNewEntry(entryUri *syntax.ATURI) error {
 	handle := syntax.HandleInvalid
 	directory := identity.DefaultDirectory()
 
-	ident, err := directory.Lookup(context.TODO(), authority)
+	ident, err := directory.Lookup(ctx, authority)
 	if err != nil {
 		return err
 	}
@@ -132,7 +140,7 @@ func NotifyOfNewEntry(entryUri *syntax.ATURI) error {
 		"repo":       entryUri.Authority(),
 		"rkey":       entryUri.RecordKey(),
 	}
-	if err := client.Do(context.TODO(), xrpc.Query, "", "com.atproto.repo.getRecord", params, nil, &out); err != nil {
+	if err := client.Do(ctx, xrpc.Query, "", "com.atproto.repo.getRecord", params, nil, &out); err != nil {
 		return err
 	}
 
@@ -156,12 +164,12 @@ func NotifyOfNewEntry(entryUri *syntax.ATURI) error {
 	if err != nil {
 		return err
 	}
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return err
 	}
 	dynamoClient := dynamodb.NewFromConfig(cfg)
-	_, err = dynamoClient.PutItem(context.TODO(), &dynamodb.PutItemInput{
+	_, err = dynamoClient.PutItem(ctx, &dynamodb.PutItemInput{
 		TableName: aws.String("com.whtwnd.blog.metadata"),
 		Item:      item,
 	})
@@ -173,17 +181,23 @@ func NotifyOfNewEntry(entryUri *syntax.ATURI) error {
 }
 
 func GetMentionsByEntry(postAtUri syntax.ATURI) ([]string, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), opTimeout)
+	defer cancel()
+
 	ident := postAtUri.Authority()
 	var did syntax.DID
 	var err error
 	if ident.IsHandle() {
-		handle, _ := ident.AsHandle()
-		directory := identity.DefaultDirectory()
-		ident, err := directory.LookupHandle(context.TODO(), handle)
+		handle, err := ident.AsHandle()
 		if err != nil {
 			return nil, err
 		}
-		did = ident.DID
+		directory := identity.DefaultDirectory()
+		resolved, err := directory.LookupHandle(ctx, handle)
+		if err != nil {
+			return nil, err
+		}
+		did = resolved.DID
 	} else {
 		did, err = ident.AsDID()
 		if err != nil {
@@ -193,18 +207,18 @@ func GetMentionsByEntry(postAtUri syntax.ATURI) ([]string, error) {
 	postAtUriStr := fmt.Sprintf("at://%s/%s/%s", did, postAtUri.Collection(), postAtUri.RecordKey())
 
 	// query
-	cfg, err := config.LoadDefaultConfig(context.TODO())
+	cfg, err := config.LoadDefaultConfig(ctx)
 	if err != nil {
 		return nil, err
 	}
-	client := dynamodb.NewFromConfig(cfg)
+	dynamoClient := dynamodb.NewFromConfig(cfg)
 	uriEx := expression.Key("subjectAtUri").Equal(expression.Value(postAtUriStr))
 	builder := expression.NewBuilder().WithKeyCondition(uriEx)
 	expr, err := builder.Build()
 	if err != nil {
 		return nil, err
 	}
-	response, err := client.Query(context.TODO(), &dynamodb.QueryInput{
+	response, err := dynamoClient.Query(ctx, &dynamodb.QueryInput{
 		TableName:                 aws.String("com.whtwnd.blog.mentions"),
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
