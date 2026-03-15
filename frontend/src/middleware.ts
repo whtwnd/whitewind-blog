@@ -15,15 +15,15 @@ export function middleware (request: NextRequest): NextResponse {
 `
 
   const cspHeaderProd = `
-  default-src 'self'; 
-  script-src 'self' 'nonce-${nonce}' strict-dynamic 'unsafe-inline' embed.bsky.app;
-  script-src-elem 'self' 'nonce-${nonce}' 'unsafe-inline' www.googletagmanager.com embed.bsky.app platform.twitter.com www.instagram.com;
-  style-src 'self' 'unsafe-inline'; 
+  default-src 'self';
+  script-src 'self' 'nonce-${nonce}' strict-dynamic;
+  script-src-elem 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://embed.bsky.app https://platform.twitter.com https://www.instagram.com;
+  style-src 'self' 'unsafe-inline';
   img-src 'self' blob: data: https:;
   font-src 'self' data:;
-  connect-src 'self' https: */xrpc/; 
-  object-src 'none'; 
-  frame-src 'self' embed.bsky.app platform.twitter.com www.youtube.com www.instagram.com bandcamp.com
+  connect-src 'self' https: */xrpc/;
+  object-src 'none';
+  frame-src 'self' https://embed.bsky.app https://platform.twitter.com https://www.youtube.com https://www.instagram.com https://bandcamp.com
 `
   const cspHeader = process.env.NODE_ENV === 'development' ? cspHeaderDev : cspHeaderProd
   // Replace newline characters and spaces
@@ -48,6 +48,10 @@ export function middleware (request: NextRequest): NextResponse {
     'Content-Security-Policy',
     contentSecurityPolicyHeaderValue
   )
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
 
   return response
 }
