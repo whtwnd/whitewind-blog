@@ -59,7 +59,7 @@ func Main(body string, queryParam map[string]string) (lambda.Response, error) {
 		Body:            string(ret),
 		Headers: map[string]string{
 			"Access-Control-Allow-Headers": "Content-Type",
-			"Access-Control-Allow-Origin":  "*",
+			"Access-Control-Allow-Origin":  "https://whtwnd.com",
 			"Access-Control-Allow-Methods": "OPTIONS,GET",
 		},
 	}, nil
